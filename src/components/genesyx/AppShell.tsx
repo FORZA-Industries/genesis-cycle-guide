@@ -13,11 +13,12 @@ interface AppShellProps {
  */
 export function AppShell({ children, tabBar, bgClassName }: AppShellProps) {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-[oklch(0.94_0.01_285)] via-[oklch(0.96_0.005_285)] to-[oklch(0.93_0.02_330)] flex items-center justify-center p-0 sm:p-6">
+    <div className="min-h-screen w-full bg-[oklch(0.93_0.005_280)] flex items-center justify-center p-0 sm:p-8">
       <div
         className={cn(
-          "relative mx-auto w-full max-w-[420px] overflow-hidden bg-background shadow-none sm:shadow-[0_30px_80px_-20px_rgba(77,77,170,0.35)]",
-          "h-[100dvh] sm:h-[860px] sm:rounded-[44px] sm:border sm:border-black/10",
+          "relative mx-auto w-full max-w-[420px] overflow-hidden bg-background",
+          "h-[100dvh] sm:h-[860px] sm:rounded-[48px]",
+          "sm:shadow-[0_40px_100px_-30px_rgba(20,20,40,0.35),0_0_0_1px_rgba(0,0,0,0.06)]",
           bgClassName
         )}
       >
