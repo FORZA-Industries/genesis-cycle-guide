@@ -16,7 +16,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
       <ScreenHeader title="Profile" />
 
       <div className="px-5 space-y-4">
-        <div className="flex items-center gap-4 rounded-3xl border border-border/60 bg-card p-5 gx-card-shadow">
+        <div className="flex items-center gap-4 rounded-3xl bg-card p-5 gx-card-shadow">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-baby-lavender)] to-[var(--color-electric-pink)] text-lg font-semibold text-white">
             A
           </div>
@@ -53,7 +53,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
 
         <div>
           <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">Preferences</p>
-          <div className="overflow-hidden rounded-2xl border border-border/60 bg-card">
+          <div className="overflow-hidden rounded-2xl bg-card gx-soft-shadow">
             <Row label="Push Notifications">
               <Switch checked={notif} onCheckedChange={setNotif} />
             </Row>
@@ -65,7 +65,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
 
         <MenuGroup title="About" items={profileMenu.about} />
 
-        <button className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border/60 bg-card py-4 text-[14px] font-semibold text-destructive">
+        <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-card gx-soft-shadow py-4 text-[14px] font-semibold text-destructive">
           <LogOut className="h-4 w-4" /> Log out
         </button>
       </div>
@@ -77,7 +77,7 @@ function MenuGroup({ title, items }: { title: string; items: { label: string }[]
   return (
     <div>
       <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">{title}</p>
-      <div className="overflow-hidden rounded-2xl border border-border/60 bg-card">
+      <div className="overflow-hidden rounded-2xl bg-card gx-soft-shadow">
         {items.map((it, i) => (
           <Row key={it.label} label={it.label} last={i === items.length - 1}>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />

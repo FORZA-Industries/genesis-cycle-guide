@@ -42,7 +42,7 @@ export function PregnancyTransition({ onSwitch, onLater }: { onSwitch: () => voi
 
 function FeatureCard({ Icon, title, desc }: { Icon: typeof Baby; title: string; desc: string }) {
   return (
-    <div className="flex items-start gap-4 rounded-3xl border border-border/60 bg-card p-4 gx-card-shadow">
+    <div className="flex items-start gap-4 rounded-3xl bg-card gx-soft-shadow p-4 gx-card-shadow">
       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color-mix(in_oklab,var(--powder-pink)_25%,white)] text-[var(--color-electric-pink)]">
         <Icon className="h-5 w-5" />
       </div>

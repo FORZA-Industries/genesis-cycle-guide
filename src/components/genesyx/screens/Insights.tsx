@@ -30,7 +30,7 @@ export function InsightsScreen() {
 
       <div className="px-5 space-y-4">
         {/* Cycle regularity */}
-        <div className="rounded-3xl border border-border/60 bg-card p-5 gx-card-shadow">
+        <div className="rounded-3xl bg-card gx-soft-shadow p-5 gx-card-shadow">
           <div className="flex items-baseline justify-between">
             <p className="font-display text-[16px] font-semibold tracking-tight">Cycle regularity</p>
             <span className="text-[12px] font-medium text-primary">Last 7 cycles</span>
@@ -49,7 +49,7 @@ export function InsightsScreen() {
         </div>
 
         {/* Symptom heatmap */}
-        <div className="rounded-3xl border border-border/60 bg-card p-5 gx-card-shadow">
+        <div className="rounded-3xl bg-card gx-soft-shadow p-5 gx-card-shadow">
           <p className="font-display text-[16px] font-semibold tracking-tight">Symptom patterns</p>
           <div className="mt-4 grid grid-cols-7 gap-1.5">
             {Array.from({ length: 35 }).map((_, i) => {
@@ -70,7 +70,7 @@ export function InsightsScreen() {
         </div>
 
         {/* Nutrition consistency */}
-        <div className="rounded-3xl border border-border/60 bg-card p-5 gx-card-shadow">
+        <div className="rounded-3xl bg-card gx-soft-shadow p-5 gx-card-shadow">
           <p className="font-display text-[16px] font-semibold tracking-tight">Nutrition consistency</p>
           <div className="mt-5 flex items-end gap-2 h-24">
             {nutritionBars.map((v, i) => (

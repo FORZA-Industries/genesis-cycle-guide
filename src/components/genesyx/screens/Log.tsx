@@ -105,7 +105,7 @@ export function LogScreen({ onClose }: { onClose: () => void }) {
             onChange={(e) => setNotes(e.target.value)}
             placeholder="A short note for future you…"
             rows={3}
-            className="w-full resize-none rounded-2xl border border-border/60 bg-card p-4 text-[14px] outline-none placeholder:text-muted-foreground focus:border-primary"
+            className="w-full resize-none rounded-2xl bg-card gx-soft-shadow p-4 text-[14px] outline-none placeholder:text-muted-foreground focus:border-primary"
           />
         </Section>
 
@@ -137,7 +137,7 @@ function MiniCard({ Icon, label, value, tone }: { Icon: typeof Moon; label: stri
     pink: "bg-[color-mix(in_oklab,var(--powder-pink)_28%,white)] text-[var(--color-electric-pink)]",
   };
   return (
-    <button className="rounded-2xl border border-border/60 bg-card p-4 text-left gx-soft-shadow">
+    <button className="rounded-2xl bg-card gx-soft-shadow p-4 text-left gx-soft-shadow">
       <div className={cn("flex h-9 w-9 items-center justify-center rounded-xl", map[tone])}>
         <Icon className="h-4.5 w-4.5" />
       </div>
