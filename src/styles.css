@@ -130,6 +130,7 @@
     letter-spacing: -0.025em;
   }
   body { letter-spacing: -0.005em; }
+}
 
 /* Subtle screen transition */
 @keyframes gx-fade-up {
