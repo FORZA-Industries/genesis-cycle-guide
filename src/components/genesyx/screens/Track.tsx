@@ -17,24 +17,24 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
   return (
     <div className="gx-screen pb-4">
       <ScreenHeader title="May 2026" subtitle="Cycle 24 · Day 13" trailing={
-        <button className="flex h-9 w-9 items-center justify-center rounded-full bg-card border border-border/60">
+        <button className="flex h-9 w-9 items-center justify-center rounded-full bg-card gx-hairline">
           <Pencil className="h-4 w-4" />
         </button>
       }/>
 
       <div className="px-5">
-        <div className="rounded-3xl border border-border/60 bg-card p-5 gx-card-shadow">
-          <div className="grid grid-cols-7 gap-1.5 text-center text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground">
+        <div className="rounded-[28px] bg-card p-5 gx-card-shadow">
+          <div className="grid grid-cols-7 gap-1.5 text-center text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
             {["S","M","T","W","T","F","S"].map((d, i) => <div key={i}>{d}</div>)}
           </div>
-          <div className="mt-2 grid grid-cols-7 gap-1.5">
+          <div className="mt-3 grid grid-cols-7 gap-1.5">
             {cycleDays.map((cd) => (
               <div
                 key={cd.day}
                 className={cn(
-                  "flex aspect-square items-center justify-center rounded-2xl text-[13px] font-medium",
+                  "flex aspect-square items-center justify-center rounded-xl text-[13px] font-medium",
                   dayClass[cd.type],
-                  cd.day === today && "outline outline-2 outline-foreground/70 outline-offset-1"
+                  cd.day === today && "ring-2 ring-foreground ring-offset-2 ring-offset-card"
                 )}
                 aria-label={`Day ${cd.day} ${cd.type}`}
               >
@@ -43,7 +43,7 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
             ))}
           </div>
 
-          <div className="mt-5 grid grid-cols-2 gap-2 text-[11.5px]">
+          <div className="mt-5 grid grid-cols-2 gap-x-3 gap-y-2 text-[11.5px]">
             <Legend color="powder-pink" label="Period" />
             <Legend color="powder-blue" label="Fertile window" />
             <Legend color="primary" label="Ovulation" textWhite />
@@ -51,15 +51,15 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
           </div>
         </div>
 
-        <div className="mt-4 rounded-3xl border border-border/60 bg-gradient-to-br from-[color-mix(in_oklab,var(--electric-lavender)_15%,white)] to-[color-mix(in_oklab,var(--powder-pink)_15%,white)] p-5">
-          <p className="text-[12px] font-medium uppercase tracking-wider text-primary">Current phase</p>
-          <p className="mt-1 font-display text-[22px] font-semibold tracking-tight">Ovulatory Phase</p>
-          <p className="mt-1.5 text-[13.5px] leading-relaxed text-foreground/80">
-            You're at peak fertility. Energy is naturally higher — a good moment for nourishing meals and gentle movement.
+        <div className="mt-3 rounded-[28px] bg-card p-5 gx-card-shadow">
+          <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-primary">Current phase</p>
+          <p className="mt-1.5 font-display text-[22px] font-semibold tracking-tight">Ovulatory Phase</p>
+          <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
+            Peak fertility. Energy is naturally higher — a good moment for nourishing meals and gentle movement.
           </p>
-          <div className="mt-3 flex flex-wrap gap-2 text-[11.5px]">
+          <div className="mt-4 flex flex-wrap gap-1.5 text-[11.5px]">
             {["High estrogen", "Peak energy", "LH rising"].map((t) => (
-              <span key={t} className="rounded-full bg-white/70 px-2.5 py-1 text-foreground/80">{t}</span>
+              <span key={t} className="rounded-full bg-muted px-2.5 py-1 text-foreground/75">{t}</span>
             ))}
           </div>
         </div>
@@ -67,7 +67,7 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
         <Button
           onClick={onLog}
           size="lg"
-          className="mt-4 h-14 w-full rounded-2xl bg-primary text-base font-semibold text-primary-foreground hover:bg-primary/90"
+          className="mt-5 h-14 w-full rounded-2xl bg-primary text-[15px] font-semibold text-primary-foreground hover:bg-primary/90"
         >
           <Plus className="mr-1 h-5 w-5" /> Add to today's log
         </Button>
