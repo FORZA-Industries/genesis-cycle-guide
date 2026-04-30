@@ -40,7 +40,7 @@ export function QuizResults({
         </p>
       </div>
 
-      <div className="mt-7 rounded-3xl border border-border/60 bg-card p-5 gx-card-shadow">
+      <div className="mt-7 rounded-3xl bg-card gx-soft-shadow p-5 gx-card-shadow">
         <div className="space-y-4">
           {insights.map(({ Icon, label, value }) => (
             <div key={label} className="flex items-start gap-4">

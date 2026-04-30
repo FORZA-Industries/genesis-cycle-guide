@@ -76,7 +76,7 @@ export function OnboardingIntro({ onContinue, onBack }: { onContinue: () => void
 
       <div className="mt-8 space-y-3">
         {benefits.map(({ Icon, title, desc, tint }) => (
-          <div key={title} className="flex items-start gap-4 rounded-3xl border border-border/60 bg-card p-4 gx-card-shadow">
+          <div key={title} className="flex items-start gap-4 rounded-3xl bg-card gx-soft-shadow p-4 gx-card-shadow">
             <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${tints[tint]}`}>
               <Icon className="h-5 w-5" />
             </div>
