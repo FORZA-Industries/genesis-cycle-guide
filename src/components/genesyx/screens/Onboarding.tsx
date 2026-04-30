@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { BrandLogo, BrandOrb } from "./BrandLogo";
+import { BrandLogo, BrandOrb } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
 
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
