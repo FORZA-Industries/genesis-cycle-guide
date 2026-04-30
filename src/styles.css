@@ -127,9 +127,9 @@
   }
   h1, h2, h3, h4, h5, .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
   }
-}
+  body { letter-spacing: -0.005em; }
 
 /* Subtle screen transition */
 @keyframes gx-fade-up {
