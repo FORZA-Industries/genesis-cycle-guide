@@ -135,42 +135,57 @@ export function WaitlistScreen({ onContinue, onBack }: { onContinue: () => void;
         <ChevronLeft className="h-5 w-5" />
       </button>
 
-      <h1 className="mt-2 font-display text-[26px] font-semibold leading-tight tracking-tight">
-        The Genesyx Fertility Nutrition Guide
-      </h1>
-      <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">
-        A free companion eBook to help you start eating with intention.
-      </p>
-
-      {/* eBook preview */}
-      <div className="mt-6 rounded-3xl border border-border/60 bg-gradient-to-br from-[color-mix(in_oklab,var(--electric-lavender)_18%,white)] via-[color-mix(in_oklab,var(--powder-pink)_22%,white)] to-[color-mix(in_oklab,var(--powder-blue)_22%,white)] p-6 gx-card-shadow">
-        <div className="mx-auto flex h-48 w-36 flex-col justify-between rounded-2xl bg-card p-4 shadow-[0_24px_48px_-16px_rgba(77,77,170,0.35)]">
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Genesyx</p>
-            <p className="mt-2 font-display text-[15px] font-semibold leading-tight tracking-tight text-foreground">
-              The Fertility Nutrition Guide
-            </p>
+      {/* Hero eBook — the strongest moment */}
+      <div className="mt-4 flex flex-col items-center">
+        <div className="relative">
+          {/* Soft halo */}
+          <div className="absolute inset-0 -z-10 translate-y-6 scale-110 rounded-[40px] bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--electric-lavender)_22%,transparent),transparent_70%)] blur-2xl" />
+          <div className="relative flex h-56 w-44 flex-col justify-between rounded-[22px] bg-gradient-to-b from-[oklch(0.99_0_0)] to-[color-mix(in_oklab,var(--powder-pink)_8%,white)] p-5 shadow-[0_30px_60px_-22px_rgba(77,77,170,0.45),0_0_0_1px_rgba(0,0,0,0.05)]">
+            {/* Spine */}
+            <div className="absolute left-0 top-0 h-full w-[3px] rounded-l-[22px] bg-gradient-to-b from-primary/40 via-primary/15 to-transparent" />
+            <div>
+              <p className="text-[9.5px] font-semibold uppercase tracking-[0.22em] text-primary">Genesyx</p>
+              <p className="mt-3 font-display text-[17px] font-semibold leading-[1.1] tracking-tight text-foreground">
+                The Fertility Nutrition Guide
+              </p>
+              <p className="mt-2 text-[10.5px] leading-relaxed text-muted-foreground">
+                A gentle companion for eating with intention.
+              </p>
+            </div>
+            <div className="flex items-end justify-between">
+              <span className="text-[9px] font-medium uppercase tracking-[0.18em] text-muted-foreground">Edition 01</span>
+              <BrandOrb className="h-7 w-7" />
+            </div>
           </div>
-          <BrandOrb className="h-10 w-10 self-end" />
         </div>
+
+        <p className="mt-7 text-[11px] font-medium uppercase tracking-[0.16em] text-primary">Free with early access</p>
+        <h1 className="mt-2 max-w-[18ch] text-center font-display text-[26px] font-semibold leading-[1.1] tracking-tight">
+          A gentle guide to fertility nutrition
+        </h1>
+        <p className="mt-2 max-w-[30ch] text-center text-[13.5px] leading-relaxed text-muted-foreground">
+          Sent straight to your inbox when you join the Genesyx waiting list.
+        </p>
       </div>
 
-      <ul className="mt-6 space-y-2.5 text-[14px] text-foreground/85">
+      <ul className="mt-7 space-y-3 text-[13.5px] text-foreground/85">
         {[
           "Early access to Genesyx",
           "Personalised fertility-prep tools",
           "Nutrition and supplement guidance",
         ].map((b) => (
-          <li key={b} className="flex items-start gap-2.5">
-            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+          <li key={b} className="flex items-start gap-3">
+            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--electric-lavender)_10%,white)]">
+              <Check className="h-3 w-3 text-primary" />
+            </span>
             <span>{b}</span>
           </li>
         ))}
       </ul>
 
-      <div className="mt-6">
-        <label htmlFor="wl-email" className="text-[13px] font-medium text-foreground">Email address</label>
-        <div className="relative mt-1.5">
+      <div className="mt-7">
+        <label htmlFor="wl-email" className="text-[12px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Email address</label>
+        <div className="relative mt-2">
           <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="wl-email"
@@ -178,24 +193,24 @@ export function WaitlistScreen({ onContinue, onBack }: { onContinue: () => void;
             placeholder="you@example.com"
             value={email}
             onChange={(e) => { setEmail(e.target.value); setError(""); }}
-            className="h-13 rounded-2xl border-border/70 bg-card pl-11 text-[15px]"
+            className="h-14 rounded-2xl border-transparent bg-card pl-11 text-[15px] gx-hairline focus-visible:border-primary focus-visible:ring-0"
             aria-invalid={!!error}
           />
         </div>
         {error && <p className="mt-2 text-[12.5px] font-medium text-destructive">{error}</p>}
       </div>
 
-      <div className="mt-auto pt-6 space-y-3">
+      <div className="mt-auto pt-7 space-y-3">
         <Button
           onClick={submit}
           size="lg"
-          className="h-14 w-full rounded-2xl bg-primary text-base font-semibold text-primary-foreground hover:bg-primary/90"
+          className="h-14 w-full rounded-2xl bg-primary text-[15px] font-semibold text-primary-foreground hover:bg-primary/90"
         >
           Join the Waiting List
         </Button>
         <p className="flex items-center justify-center gap-1.5 text-center text-[11.5px] text-muted-foreground">
           <Lock className="h-3 w-3" />
-          We respect your privacy. Unsubscribe at any time.
+          We respect your privacy. Unsubscribe anytime.
         </p>
       </div>
     </div>
