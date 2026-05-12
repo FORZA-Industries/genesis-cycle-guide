@@ -22,26 +22,10 @@ export function AppShell({ children, tabBar, bgClassName }: AppShellProps) {
           bgClassName
         )}
       >
-        {/* Status bar spacer (iOS-style) */}
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between px-7 pt-3 text-[12px] font-semibold text-foreground"
-          style={{ paddingTop: "max(env(safe-area-inset-top), 12px)" }}
-        >
-          <span>9:41</span>
-          <div className="flex items-center gap-1.5">
-            <span className="inline-block h-2 w-3 rounded-[2px] bg-foreground/80" />
-            <span className="inline-block h-2 w-2 rounded-full bg-foreground/80" />
-            <span className="inline-block h-2 w-5 rounded-[3px] border border-foreground/60" />
-          </div>
-        </div>
-
-        {/* iOS notch */}
-        <div className="pointer-events-none absolute left-1/2 top-2 z-40 h-6 w-28 -translate-x-1/2 rounded-full bg-black/90 hidden sm:block" />
-
         {/* Scrollable content */}
         <div
           className="gx-scroll relative h-full w-full overflow-y-auto"
-          style={{ paddingTop: "max(env(safe-area-inset-top), 38px)" }}
+          style={{ paddingTop: "max(env(safe-area-inset-top), 12px)" }}
         >
           <div className={cn("min-h-full", tabBar && "pb-28")}>{children}</div>
         </div>
