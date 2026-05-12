@@ -1,17 +1,22 @@
 import { cn } from "@/lib/utils";
+import wordmark from "@/assets/genesyx-wordmark.png";
 
 interface BrandLogoProps {
   className?: string;
-  showMark?: boolean;
+  /** Wordmark height in px. Defaults to 18 (compact header). */
+  size?: number;
 }
 
-export function BrandLogo({ className, showMark = true }: BrandLogoProps) {
+export function BrandLogo({ className, size = 18 }: BrandLogoProps) {
   return (
-    <div className={cn("inline-flex items-center gap-2", className)}>
-      {showMark && <BrandOrb className="h-6 w-6" />}
-      <span className="font-display text-xl font-semibold tracking-tight text-foreground">
-        Genesyx
-      </span>
+    <div className={cn("inline-flex items-center", className)}>
+      <img
+        src={wordmark}
+        alt="Genesyx"
+        style={{ height: size, width: "auto" }}
+        className="select-none object-contain"
+        draggable={false}
+      />
     </div>
   );
 }
