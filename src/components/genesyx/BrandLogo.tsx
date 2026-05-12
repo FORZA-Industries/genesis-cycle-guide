@@ -7,7 +7,7 @@ interface BrandLogoProps {
   size?: number;
 }
 
-export function BrandLogo({ className, size = 18 }: BrandLogoProps) {
+export function BrandLogo({ className, size = 28 }: BrandLogoProps) {
   return (
     <div className={cn("inline-flex items-center", className)}>
       <img

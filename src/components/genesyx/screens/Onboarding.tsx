@@ -5,7 +5,7 @@ import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
     <div className="gx-screen flex h-full min-h-[760px] flex-col px-6 pt-6 pb-10">
-      <BrandLogo />
+      <BrandLogo size={32} />
 
       <div className="mt-10 flex flex-1 flex-col items-center justify-center text-center">
         <div className="relative">
