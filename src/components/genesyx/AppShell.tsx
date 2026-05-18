@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ interface AppShellProps {
  */
 export function AppShell({ children, tabBar, bgClassName }: AppShellProps) {
   return (
-    <div className="min-h-screen w-full bg-black flex items-center justify-center p-0 sm:p-8">
+    <div className="min-h-screen w-full bg-[oklch(0.93_0.005_280)] dark:bg-black flex items-center justify-center p-0 sm:p-8">
       <div
         className={cn(
           "relative mx-auto w-full max-w-[420px] overflow-hidden bg-background",
@@ -28,6 +29,13 @@ export function AppShell({ children, tabBar, bgClassName }: AppShellProps) {
           style={{ paddingTop: "max(env(safe-area-inset-top), 12px)" }}
         >
           <div className={cn("min-h-full", tabBar && "pb-28")}>{children}</div>
+        </div>
+
+        {/* Floating theme toggle */}
+        <div className="pointer-events-none absolute right-4 top-4 z-50" style={{ top: "max(env(safe-area-inset-top), 16px)" }}>
+          <div className="pointer-events-auto">
+            <ThemeToggle />
+          </div>
         </div>
 
         {tabBar}
