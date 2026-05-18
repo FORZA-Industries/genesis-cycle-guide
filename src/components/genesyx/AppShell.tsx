@@ -13,7 +13,7 @@ interface AppShellProps {
  */
 export function AppShell({ children, tabBar, bgClassName }: AppShellProps) {
   return (
-    <div className="min-h-screen w-full bg-[oklch(0.93_0.005_280)] flex items-center justify-center p-0 sm:p-8">
+    <div className="min-h-screen w-full bg-black flex items-center justify-center p-0 sm:p-8">
       <div
         className={cn(
           "relative mx-auto w-full max-w-[420px] overflow-hidden bg-background",
