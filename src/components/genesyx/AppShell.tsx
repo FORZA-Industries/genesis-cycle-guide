@@ -6,13 +6,14 @@ interface AppShellProps {
   showTabBar?: boolean;
   tabBar?: React.ReactNode;
   bgClassName?: string;
+  showThemeToggle?: boolean;
 }
 
 /**
  * Mobile device frame. Centered iPhone-style viewport on desktop,
  * full-bleed on actual mobile devices.
  */
-export function AppShell({ children, tabBar, bgClassName }: AppShellProps) {
+export function AppShell({ children, tabBar, bgClassName, showThemeToggle }: AppShellProps) {
   return (
     <div className="min-h-screen w-full bg-[oklch(0.93_0.005_280)] dark:bg-black flex items-center justify-center p-0 sm:p-8">
       <div
@@ -31,12 +32,13 @@ export function AppShell({ children, tabBar, bgClassName }: AppShellProps) {
           <div className={cn("min-h-full", tabBar && "pb-28")}>{children}</div>
         </div>
 
-        {/* Floating theme toggle */}
-        <div className="pointer-events-none absolute right-4 top-4 z-50" style={{ top: "max(env(safe-area-inset-top), 16px)" }}>
-          <div className="pointer-events-auto">
-            <ThemeToggle />
+        {showThemeToggle && (
+          <div className="pointer-events-none absolute right-4 z-50" style={{ top: "max(env(safe-area-inset-top), 16px)" }}>
+            <div className="pointer-events-auto">
+              <ThemeToggle />
+            </div>
           </div>
-        </div>
+        )}
 
         {tabBar}
       </div>
