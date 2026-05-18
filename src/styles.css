@@ -152,10 +152,14 @@
     inset 6px 8px 22px color-mix(in oklab, white 80%, transparent);
 }
 
-/* iOS-style hairline + lift (dark theme) */
-.gx-card-shadow { box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4), 0 10px 24px -14px rgba(0,0,0,0.6); }
-.gx-soft-shadow { box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.06); }
-.gx-hairline { box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.08); }
+/* iOS-style hairline + lift */
+.gx-card-shadow { box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.025), 0 6px 18px -10px rgba(20,20,40,0.06); }
+.gx-soft-shadow { box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04); }
+.gx-hairline { box-shadow: 0 0 0 0.5px rgba(0,0,0,0.06); }
+
+.dark .gx-card-shadow { box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4), 0 10px 24px -14px rgba(0,0,0,0.6); }
+.dark .gx-soft-shadow { box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.06); }
+.dark .gx-hairline { box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.08); }
 
 /* Hide scrollbar inside phone frame */
 .gx-scroll::-webkit-scrollbar { display: none; }
