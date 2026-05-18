@@ -14,7 +14,7 @@ export function BrandLogo({ className, size = 28 }: BrandLogoProps) {
         src={wordmark}
         alt="Genesyx"
         style={{ height: size, width: "auto" }}
-        className="select-none object-contain invert"
+        className="select-none object-contain dark:invert"
         draggable={false}
       />
     </div>
