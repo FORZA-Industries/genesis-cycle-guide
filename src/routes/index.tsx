@@ -38,7 +38,6 @@ function Index() {
     <>
       <AppShell
         tabBar={isApp ? <BottomTabBar active={tab} onChange={setTab} /> : undefined}
-        showThemeToggle={isApp}
       >
         {flow === "splash" && (
           <SplashScreen onStart={() => setFlow("intro")} onSignIn={() => setFlow("app")} />
