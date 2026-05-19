@@ -5,11 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { profileMenu } from "../mockData";
 import { ChevronRight, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "../ThemeToggle";
 
 export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
   const [focus, setFocus] = useState<"prep" | "preg">("prep");
   const [notif, setNotif] = useState(true);
-  const [dark, setDark] = useState(false);
+  const { theme, toggle } = useTheme();
+  const dark = theme === "dark";
 
   return (
     <div className="gx-screen pb-4">
@@ -58,7 +60,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
               <Switch checked={notif} onCheckedChange={setNotif} />
             </Row>
             <Row label="Dark Mode" last>
-              <Switch checked={dark} onCheckedChange={setDark} />
+              <Switch checked={dark} onCheckedChange={toggle} />
             </Row>
           </div>
         </div>
