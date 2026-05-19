@@ -60,7 +60,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
               <Switch checked={notif} onCheckedChange={setNotif} />
             </Row>
             <Row label="Dark Mode" last>
-              <Switch checked={dark} onCheckedChange={setDark} />
+              <Switch checked={dark} onCheckedChange={toggle} />
             </Row>
           </div>
         </div>
