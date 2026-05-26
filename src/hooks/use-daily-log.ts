@@ -51,7 +51,7 @@ export function useDailyLog(date: string = todayISO()) {
   useEffect(() => subscribe(refresh), [refresh]);
 
   const save = useCallback(
-    async (input: Parameters<typeof upsertFn>[0]["data"]) => {
+    async (input: Omit<Parameters<typeof upsertFn>[0]["data"], "date">) => {
       await upsertFn({ data: { ...input, date } });
       emitLogChange();
     },
