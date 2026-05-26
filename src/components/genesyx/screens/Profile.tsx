@@ -41,6 +41,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
   const dark = theme === "dark";
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const deleteAccountFn = useServerFn(deleteAccount);
 
   const initialName =
     (user?.user_metadata?.display_name as string | undefined) ??
