@@ -1,14 +1,27 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ScreenHeader } from "../ScreenHeader";
 import { Progress } from "@/components/ui/progress";
-import { nutritionFocus, articles } from "../mockData";
-import { Droplets, ChevronRight, Pill, Plus, Minus } from "lucide-react";
+import { articles } from "../mockData";
+import { Droplets, ChevronRight, Pill, Minus, Plus } from "lucide-react";
+import { useCycleSettings } from "@/hooks/use-cycle";
+import { getCyclePhase, phaseFoods, phaseLabel } from "@/lib/cycle";
+import { cn } from "@/lib/utils";
 
 export function NutritionScreen() {
+  const { settings, loading } = useCycleSettings();
+  const info = settings
+    ? getCyclePhase(settings.lastPeriodDate, settings.cycleLength, settings.periodLength)
+    : null;
+  const phase = info?.phase ?? "follicular";
+  const foods = info ? phaseFoods[phase] : [];
+  const [expanded, setExpanded] = useState<number | null>(null);
+
   return (
     <div className="gx-screen pb-6">
       <div className="px-6 pt-3 pb-6">
-        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-primary">Today · Ovulatory phase</p>
+        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-primary">
+          Today · {info ? phaseLabel[phase] : loading ? "Loading…" : "Set your cycle"}
+        </p>
         <h1 className="mt-2 font-display text-[32px] font-semibold leading-[1.05] tracking-tight">
           Your nutrition focus
         </h1>
@@ -44,28 +57,41 @@ export function NutritionScreen() {
           </div>
         </div>
 
-        {/* Foods — editorial list */}
+        {/* Foods — phase-driven, expandable */}
         <div className="rounded-[28px] bg-card overflow-hidden gx-card-shadow">
           <div className="px-5 pt-5 pb-3">
             <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Focus foods</p>
-            <p className="mt-1 font-display text-[18px] font-semibold tracking-tight">Four gentle priorities today</p>
+            <p className="mt-1 font-display text-[18px] font-semibold tracking-tight">
+              {info ? `Gentle priorities for your ${phaseLabel[phase].toLowerCase()}` : "Set up your cycle to see your foods"}
+            </p>
           </div>
-          <ul>
-            {nutritionFocus.map((f, i) => (
-              <li key={f.title}>
-                <button className="flex w-full items-start gap-4 px-5 py-4 text-left active:bg-muted/40">
-                  <FoodGlyph index={i} />
-                  <div className="min-w-0 flex-1">
-                    <p className="font-display text-[15.5px] font-semibold tracking-tight text-foreground">{f.title}</p>
-                    <p className="mt-0.5 text-[13px] leading-relaxed text-muted-foreground line-clamp-2">{f.desc}</p>
-                  </div>
-                  <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground/60" />
-                </button>
-                {i < nutritionFocus.length - 1 && <div className="mx-5 h-px bg-border/60" />}
-              </li>
-            ))}
-          </ul>
+          {foods.length > 0 && (
+            <ul>
+              {foods.map((f, i) => {
+                const open = expanded === i;
+                return (
+                  <li key={f.title}>
+                    <button
+                      type="button"
+                      onClick={() => setExpanded(open ? null : i)}
+                      aria-expanded={open}
+                      className="flex w-full items-start gap-4 px-5 py-4 text-left transition-colors active:bg-muted/40"
+                    >
+                      <FoodGlyph index={i % 4} />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-display text-[15.5px] font-semibold tracking-tight text-foreground">{f.title}</p>
+                        <p className={cn("mt-0.5 text-[13px] leading-relaxed text-muted-foreground", !open && "line-clamp-2")}>{f.desc}</p>
+                      </div>
+                      <ChevronRight className={cn("mt-1 h-4 w-4 shrink-0 text-muted-foreground/60 transition-transform", open && "rotate-90")} />
+                    </button>
+                    {i < foods.length - 1 && <div className="mx-5 h-px bg-border/60" />}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
+
 
         {/* Supplements — refined */}
         <div className="rounded-[28px] bg-card p-5 gx-card-shadow">
