@@ -1,10 +1,17 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Check, ChevronLeft } from "lucide-react";
+import { Check, ChevronLeft, Sparkles } from "lucide-react";
 import { quizQuestions } from "../mockData";
 import { cn } from "@/lib/utils";
 import { BrandOrb } from "../BrandLogo";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export function QuizFlow({
   onComplete,
@@ -16,18 +23,33 @@ export function QuizFlow({
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const [factOpen, setFactOpen] = useState(false);
 
   const total = quizQuestions.length;
   const q = quizQuestions[step];
   const selected = answers[q.id];
+  const fact = "fact" in q ? (q as { fact?: { title: string; body: string } }).fact : undefined;
 
-  const next = () => {
+  const advance = () => {
     if (step + 1 < total) {
       setStep(step + 1);
     } else {
       setLoading(true);
       setTimeout(() => onComplete(answers), 1600);
     }
+  };
+
+  const next = () => {
+    if (fact) {
+      setFactOpen(true);
+    } else {
+      advance();
+    }
+  };
+
+  const closeFact = () => {
+    setFactOpen(false);
+    advance();
   };
 
   const back = () => {
@@ -107,6 +129,28 @@ export function QuizFlow({
           {step + 1 === total ? "See My Summary" : "Continue"}
         </Button>
       </div>
+
+      <Dialog open={factOpen} onOpenChange={(o) => !o && closeFact()}>
+        <DialogContent className="max-w-[340px] rounded-3xl border-0 bg-card p-6 gx-card-shadow">
+          <DialogHeader className="space-y-3 text-left">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[color-mix(in_oklab,var(--electric-lavender)_14%,white)]">
+              <Sparkles className="h-5 w-5 text-primary" />
+            </div>
+            <DialogTitle className="font-display text-[20px] font-semibold tracking-tight">
+              {fact?.title ?? "Did you know?"}
+            </DialogTitle>
+            <DialogDescription className="text-[14px] leading-relaxed text-foreground/75">
+              {fact?.body}
+            </DialogDescription>
+          </DialogHeader>
+          <Button
+            onClick={closeFact}
+            className="mt-2 h-12 w-full rounded-2xl bg-primary text-[15px] font-semibold text-primary-foreground hover:bg-primary/90"
+          >
+            Continue
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
