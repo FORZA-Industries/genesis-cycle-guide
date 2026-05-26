@@ -218,8 +218,7 @@ function EditNameDialog({
   const [saving, setSaving] = useState(false);
   const save = useServerFn(updateDisplayName);
 
-  // Reset value when opened
-  if (open && name === "" && initial) setName(initial);
+  useEffect(() => { if (open) setName(initial); }, [open, initial]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
