@@ -71,7 +71,13 @@ export function LogScreen({ onClose }: { onClose: () => void }) {
   ];
 
   const onSave = async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session) {
+      toast.error("Please sign in to save your log.");
+      return;
+    }
     setSaving(true);
+
     try {
       await save({
         mood,
