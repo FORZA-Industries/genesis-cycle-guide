@@ -3,18 +3,15 @@ import type { CapacitorConfig } from "@capacitor/cli";
 /**
  * Genesyx — Capacitor configuration
  *
- * Strategy: hosted WebView. Because the app is a TanStack Start SSR app
- * (not a static export), the native shell loads the published URL inside
- * a WebView. This keeps your published web app and the Android app in
- * lockstep — ship a web update, the app updates.
- *
- * For a fully offline-capable build, switch to a static export and point
- * `webDir` at the build output instead of using `server.url`.
+ * Strategy: hosted WebView. The native shell loads the published Lovable
+ * URL inside a WebView so web updates ship instantly without re-submitting
+ * to Google Play. For a fully offline build, switch to a static export and
+ * remove the `server.url` block (webDir already points at `dist`).
  */
 const config: CapacitorConfig = {
-  appId: "app.lovable.genesyx",
+  appId: "com.genesyx.fertilityprep",
   appName: "Genesyx",
-  webDir: "dist", // not used while server.url is set; required by the CLI
+  webDir: "dist",
   server: {
     url: "https://genesis-cycle-guide.lovable.app",
     cleartext: false,
@@ -26,11 +23,13 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 1200,
-      backgroundColor: "#FAFAFA",
+      launchShowDuration: 2000,
+      backgroundColor: "#171614",
+      showSpinner: false,
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
-      showSpinner: false,
+      splashFullScreen: true,
+      splashImmersive: true,
     },
   },
 };
