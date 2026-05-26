@@ -105,7 +105,16 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
             {["S","M","T","W","T","F","S"].map((d, i) => <div key={i}>{d}</div>)}
           </div>
 
-          {!settings && !loading ? (
+          {loading ? (
+            <div className="mt-3 grid grid-cols-7 gap-1.5">
+              {Array.from({ length: 35 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="aspect-square rounded-full bg-muted/70 animate-pulse"
+                />
+              ))}
+            </div>
+          ) : !settings ? (
             <button
               type="button"
               onClick={() => setCycleOpen(true)}
@@ -187,8 +196,10 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
           </DialogHeader>
           <div className="text-[13.5px] leading-relaxed text-muted-foreground">
             {selectedIsPast
-              ? "No log entries for this day yet. Open Log to add your mood, energy, and symptoms."
-              : "Predicted phase based on your cycle. Actual symptoms may vary."}
+              ? "No log yet for this day. Open Log to add your mood, energy, and symptoms."
+              : selectedInfo
+                ? `Predicted: ${phaseLabel[selectedInfo.phase]}${selectedInfo.fertileWindow ? " · Fertile window" : ""}`
+                : "—"}
           </div>
         </DialogContent>
       </Dialog>
