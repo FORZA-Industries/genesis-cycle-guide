@@ -35,10 +35,10 @@ export function InsightsScreen() {
             <p className="font-display text-[16px] font-semibold tracking-tight">Cycle regularity</p>
             <span className="text-[12px] font-medium text-primary">Last 7 cycles</span>
           </div>
-          <div className="mt-5 flex items-end gap-2 h-28">
+          <div className="mt-5 flex items-end gap-2 h-32">
             {insightBars.map((v, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
-                <div className="w-full rounded-t-lg bg-gradient-to-t from-primary/80 to-primary/40" style={{ height: `${v}%` }} />
+              <div key={i} className="flex-1 flex h-full flex-col items-center justify-end gap-1.5">
+                <div className="w-full rounded-t-lg bg-linear-to-t from-primary/80 to-primary/40" style={{ height: `${v}%` }} />
                 <span className="text-[10px] text-muted-foreground">C{i + 1}</span>
               </div>
             ))}
@@ -72,11 +72,11 @@ export function InsightsScreen() {
         {/* Nutrition consistency */}
         <div className="rounded-3xl bg-card gx-soft-shadow p-5 gx-card-shadow">
           <p className="font-display text-[16px] font-semibold tracking-tight">Nutrition consistency</p>
-          <div className="mt-5 flex items-end gap-2 h-24">
+          <div className="mt-5 flex items-end gap-2 h-28">
             {nutritionBars.map((v, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
+              <div key={i} className="flex-1 flex h-full flex-col items-center justify-end gap-1.5">
                 <div
-                  className={cn("w-full rounded-t-lg bg-gradient-to-t from-[var(--color-electric-blue)] to-[var(--color-powder-blue)]")}
+                  className={cn("w-full rounded-t-lg bg-linear-to-t from-[var(--color-electric-blue)] to-[var(--color-powder-blue)]")}
                   style={{ height: `${v}%` }}
                 />
                 <span className="text-[10px] text-muted-foreground">{["M","T","W","T","F","S","S"][i]}</span>
