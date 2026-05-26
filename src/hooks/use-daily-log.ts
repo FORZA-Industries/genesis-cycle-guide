@@ -52,10 +52,11 @@ export function useDailyLog(date: string = todayISO()) {
 
   const save = useCallback(
     async (input: Omit<Parameters<typeof upsertFn>[0]["data"], "date">) => {
+      if (!user) throw new Error("Please sign in to save your log.");
       await upsertFn({ data: { ...input, date } });
       emitLogChange();
     },
-    [upsertFn, date],
+    [user, upsertFn, date],
   );
 
   return { log, loading, error, refresh, save };
