@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast, Toaster } from "@/components/ui/sonner";
+import { toast, Toaster } from "sonner";
 import { BrandLogo } from "@/components/genesyx/BrandLogo";
 import { Loader2 } from "lucide-react";
 
