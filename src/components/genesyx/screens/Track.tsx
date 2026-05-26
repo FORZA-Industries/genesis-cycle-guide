@@ -105,7 +105,16 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
             {["S","M","T","W","T","F","S"].map((d, i) => <div key={i}>{d}</div>)}
           </div>
 
-          {!settings && !loading ? (
+          {loading ? (
+            <div className="mt-3 grid grid-cols-7 gap-1.5">
+              {Array.from({ length: 35 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="aspect-square rounded-full bg-muted/70 animate-pulse"
+                />
+              ))}
+            </div>
+          ) : !settings ? (
             <button
               type="button"
               onClick={() => setCycleOpen(true)}
