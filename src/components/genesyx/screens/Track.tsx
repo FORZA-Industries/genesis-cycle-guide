@@ -196,8 +196,10 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
           </DialogHeader>
           <div className="text-[13.5px] leading-relaxed text-muted-foreground">
             {selectedIsPast
-              ? "No log entries for this day yet. Open Log to add your mood, energy, and symptoms."
-              : "Predicted phase based on your cycle. Actual symptoms may vary."}
+              ? "No log yet for this day. Open Log to add your mood, energy, and symptoms."
+              : selectedInfo
+                ? `Predicted: ${phaseLabel[selectedInfo.phase]}${selectedInfo.fertileWindow ? " · Fertile window" : ""}`
+                : "—"}
           </div>
         </DialogContent>
       </Dialog>
