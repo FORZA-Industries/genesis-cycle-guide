@@ -1,29 +1,58 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
+import { useServerFn } from "@tanstack/react-start";
+import { getProfilePrefs, updateTheme } from "@/lib/account.functions";
 
 const STORAGE_KEY = "gx-theme";
+type Theme = "light" | "dark";
 
-function applyTheme(theme: "light" | "dark") {
-  const root = document.documentElement;
-  root.classList.toggle("dark", theme === "dark");
+function applyTheme(theme: Theme) {
+  if (typeof document === "undefined") return;
+  document.documentElement.classList.toggle("dark", theme === "dark");
 }
 
 export function useTheme() {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const { user } = useAuth();
+  const [theme, setTheme] = useState<Theme>("dark");
+  const fetchPrefs = useServerFn(getProfilePrefs);
+  const saveTheme = useServerFn(updateTheme);
 
+  // Initial local read
   useEffect(() => {
-    const saved = (localStorage.getItem(STORAGE_KEY) as "light" | "dark" | null) ?? "dark";
+    const saved = (typeof window !== "undefined"
+      ? (localStorage.getItem(STORAGE_KEY) as Theme | null)
+      : null) ?? "dark";
     setTheme(saved);
     applyTheme(saved);
   }, []);
 
-  const toggle = () => {
-    const next = theme === "dark" ? "light" : "dark";
+  // When signed in, hydrate from profile (source of truth)
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    fetchPrefs()
+      .then((p) => {
+        if (cancelled) return;
+        const t: Theme = p.theme === "light" ? "light" : "dark";
+        setTheme(t);
+        applyTheme(t);
+        try { localStorage.setItem(STORAGE_KEY, t); } catch {}
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [user, fetchPrefs]);
+
+  const toggle = useCallback(() => {
+    const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
     applyTheme(next);
-    localStorage.setItem(STORAGE_KEY, next);
-  };
+    try { localStorage.setItem(STORAGE_KEY, next); } catch {}
+    if (user) {
+      saveTheme({ data: { theme: next } }).catch(() => {});
+    }
+  }, [theme, user, saveTheme]);
 
   return { theme, toggle };
 }

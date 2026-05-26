@@ -57,6 +57,7 @@ export type Database = {
           display_name: string | null
           id: string
           partner_id: string | null
+          theme: string
           updated_at: string
         }
         Insert: {
@@ -65,6 +66,7 @@ export type Database = {
           display_name?: string | null
           id: string
           partner_id?: string | null
+          theme?: string
           updated_at?: string
         }
         Update: {
@@ -73,6 +75,7 @@ export type Database = {
           display_name?: string | null
           id?: string
           partner_id?: string | null
+          theme?: string
           updated_at?: string
         }
         Relationships: [
