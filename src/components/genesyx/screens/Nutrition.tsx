@@ -1,20 +1,44 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { articles } from "../mockData";
 import { Droplets, ChevronRight, Pill, Minus, Plus } from "lucide-react";
 import { useCycleSettings } from "@/hooks/use-cycle";
+import { useDailyLog } from "@/hooks/use-daily-log";
 import { getCyclePhase, phaseFoods, phaseLabel } from "@/lib/cycle";
 import { cn } from "@/lib/utils";
 
+const WATER_TARGET = 2400;
+const WATER_STEP = 200;
+
 export function NutritionScreen() {
   const { settings, loading } = useCycleSettings();
+  const { log, save } = useDailyLog();
   const info = settings
     ? getCyclePhase(settings.lastPeriodDate, settings.cycleLength, settings.periodLength)
     : null;
   const phase = info?.phase ?? "follicular";
   const foods = info ? phaseFoods[phase] : [];
   const [expanded, setExpanded] = useState<number | null>(null);
+
+  const [waterMl, setWaterMl] = useState<number>(0);
+  useEffect(() => { if (log) setWaterMl(log.waterMl); }, [log]);
+
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const queueSave = (next: number) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      save({ waterMl: next }).catch(() => {});
+    }, 500);
+  };
+  const bump = (delta: number) => {
+    const next = Math.max(0, Math.min(10000, waterMl + delta));
+    setWaterMl(next);
+    queueSave(next);
+  };
+
+  const pct = Math.min(100, Math.round((waterMl / WATER_TARGET) * 100));
+  const remaining = Math.max(0, WATER_TARGET - waterMl);
 
   return (
     <div className="gx-screen pb-6">
