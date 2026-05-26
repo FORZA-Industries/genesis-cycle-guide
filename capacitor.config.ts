@@ -16,6 +16,7 @@ const config: CapacitorConfig = {
     url: "https://genesis-cycle-guide.lovable.app",
     cleartext: false,
     androidScheme: "https",
+    allowNavigation: [],
   },
   android: {
     allowMixedContent: false,

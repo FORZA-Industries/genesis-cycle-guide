@@ -145,7 +145,14 @@ Then in `signingConfigs.release` reference them as `keystoreProperties['storePas
 
 ## 4. Edit `android/app/src/main/AndroidManifest.xml`
 
-In the `<application>` opening tag, ensure these attributes (Capacitor includes most — add what's missing):
+**Permissions** — the only two permissions this app needs. Delete any others Capacitor adds (camera, geolocation, storage, etc.):
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+```
+
+**Application tag** — ensure these attributes (Capacitor includes most — add what's missing):
 
 ```xml
 <application
