@@ -28,6 +28,9 @@ export function PartnerSection() {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
+  const sendInviteFn = useServerFn(sendPartnerInvite);
+  const revokeInviteFn = useServerFn(revokePartnerInvite);
+  const unlinkPartnerFn = useServerFn(unlinkPartner);
 
   const load = async () => {
     if (!user) { setLoading(false); return; }
