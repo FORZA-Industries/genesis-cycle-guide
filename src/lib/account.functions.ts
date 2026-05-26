@@ -85,8 +85,9 @@ export const deleteAccount = createServerFn({ method: "POST" })
       { table: "profiles", col: "id" },
     ];
     for (const t of tablesToClear) {
-      const { error } = await supabaseAdmin.from(t.table).delete().eq(t.col, userId);
-      if (error && !/relation .* does not exist|schema cache/i.test(error.message)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabaseAdmin as any).from(t.table).delete().eq(t.col, userId);
+      if (error && !/relation .* does not exist|schema cache|Could not find the table/i.test(error.message)) {
         // eslint-disable-next-line no-console
         console.warn(`[account:delete:${t.table}]`, error.message);
       }
