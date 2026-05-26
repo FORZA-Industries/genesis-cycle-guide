@@ -8,6 +8,12 @@ import { toast } from "sonner";
 import { Loader2, Copy, Mail, Heart, X } from "lucide-react";
 import { z } from "zod";
 import { Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import {
+  sendPartnerInvite,
+  revokePartnerInvite,
+  unlinkPartner,
+} from "@/lib/partner.functions";
 
 type Profile = { id: string; display_name: string | null; partner_id: string | null };
 type Invite = { id: string; invitee_email: string; code: string; status: string; created_at: string; expires_at: string };
