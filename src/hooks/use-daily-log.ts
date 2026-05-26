@@ -16,9 +16,9 @@ const listeners = new Set<Listener>();
 export function emitLogChange() {
   listeners.forEach((l) => l());
 }
-function subscribe(l: Listener) {
+function subscribe(l: Listener): () => void {
   listeners.add(l);
-  return () => listeners.delete(l);
+  return () => { listeners.delete(l); };
 }
 
 export function useDailyLog(date: string = todayISO()) {
