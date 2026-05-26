@@ -140,9 +140,9 @@ export function WaitlistScreen({ onContinue, onBack }: { onContinue: () => void;
         <div className="relative">
           {/* Soft halo */}
           <div className="absolute inset-0 -z-10 translate-y-6 scale-110 rounded-[40px] bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--electric-lavender)_22%,transparent),transparent_70%)] blur-2xl" />
-          <div className="relative flex h-56 w-44 flex-col justify-between rounded-[22px] bg-gradient-to-b from-[oklch(0.99_0_0)] to-[color-mix(in_oklab,var(--powder-pink)_8%,white)] p-5 shadow-[0_30px_60px_-22px_rgba(77,77,170,0.45),0_0_0_1px_rgba(0,0,0,0.05)]">
+          <div className="relative flex h-56 w-44 flex-col justify-between rounded-[22px] bg-linear-to-b from-[oklch(0.99_0_0)] to-[color-mix(in_oklab,var(--powder-pink)_8%,white)] p-5 shadow-[0_30px_60px_-22px_rgba(77,77,170,0.45),0_0_0_1px_rgba(0,0,0,0.05)]">
             {/* Spine */}
-            <div className="absolute left-0 top-0 h-full w-[3px] rounded-l-[22px] bg-gradient-to-b from-primary/40 via-primary/15 to-transparent" />
+            <div className="absolute left-0 top-0 h-full w-[3px] rounded-l-[22px] bg-linear-to-b from-primary/40 via-primary/15 to-transparent" />
             <div>
               <p className="text-[9.5px] font-semibold uppercase tracking-[0.22em] text-primary">Genesyx</p>
               <p className="mt-3 font-display text-[17px] font-semibold leading-[1.1] tracking-tight text-foreground">

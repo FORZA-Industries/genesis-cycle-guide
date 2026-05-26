@@ -38,7 +38,7 @@ export function InsightsScreen() {
           <div className="mt-5 flex items-end gap-2 h-28">
             {insightBars.map((v, i) => (
               <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
-                <div className="w-full rounded-t-lg bg-gradient-to-t from-primary/80 to-primary/40" style={{ height: `${v}%` }} />
+                <div className="w-full rounded-t-lg bg-linear-to-t from-primary/80 to-primary/40" style={{ height: `${v}%` }} />
                 <span className="text-[10px] text-muted-foreground">C{i + 1}</span>
               </div>
             ))}
@@ -76,7 +76,7 @@ export function InsightsScreen() {
             {nutritionBars.map((v, i) => (
               <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
                 <div
-                  className={cn("w-full rounded-t-lg bg-gradient-to-t from-[var(--color-electric-blue)] to-[var(--color-powder-blue)]")}
+                  className={cn("w-full rounded-t-lg bg-linear-to-t from-[var(--color-electric-blue)] to-[var(--color-powder-blue)]")}
                   style={{ height: `${v}%` }}
                 />
                 <span className="text-[10px] text-muted-foreground">{["M","T","W","T","F","S","S"][i]}</span>

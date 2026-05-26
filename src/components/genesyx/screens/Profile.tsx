@@ -19,7 +19,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
 
       <div className="px-5 space-y-4">
         <div className="flex items-center gap-4 rounded-3xl bg-card p-5 gx-card-shadow">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-baby-lavender)] to-[var(--color-electric-pink)] text-lg font-semibold text-white">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-[var(--color-baby-lavender)] to-[var(--color-electric-pink)] text-lg font-semibold text-white">
             A
           </div>
           <div className="flex-1 min-w-0">
