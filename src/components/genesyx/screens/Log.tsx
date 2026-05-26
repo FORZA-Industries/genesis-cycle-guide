@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { Smile, Meh, Frown, Heart, Plus, Droplets, Moon, Pill, Apple, Check } from "lucide-react";
 import { toast } from "sonner";
 import { useDailyLog } from "@/hooks/use-daily-log";
+import { supabase } from "@/integrations/supabase/client";
+
 
 const SUPPLEMENTS = ["Folic acid", "Vitamin D", "Iron", "Omega-3"];
 const WATER_TARGET = 2400;
