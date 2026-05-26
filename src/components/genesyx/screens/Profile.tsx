@@ -6,12 +6,25 @@ import { profileMenu } from "../mockData";
 import { ChevronRight, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "../ThemeToggle";
+import { useAuth } from "@/hooks/use-auth";
+import { useNavigate } from "@tanstack/react-router";
+import { PartnerSection } from "../PartnerSection";
 
 export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
   const [focus, setFocus] = useState<"prep" | "preg">("prep");
   const [notif, setNotif] = useState(true);
   const { theme, toggle } = useTheme();
   const dark = theme === "dark";
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const displayName =
+    (user?.user_metadata?.display_name as string | undefined) ??
+    (user?.user_metadata?.full_name as string | undefined) ??
+    user?.email?.split("@")[0] ??
+    "Guest";
+  const emailLine = user?.email ?? "Sign in to sync your data";
+  const initial = displayName.slice(0, 1).toUpperCase();
 
   return (
     <div className="gx-screen pb-4">
