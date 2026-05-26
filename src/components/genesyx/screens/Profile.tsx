@@ -384,20 +384,6 @@ function ChangePasswordDialog({
   );
 }
 
-// Hoisted server-fn binding for the delete handler used in the AlertDialog above.
-// useServerFn must be called from a component body — we wrap it here in a
-// dedicated hook + module-level binding via a tiny wrapper component pattern.
-let _deleteAccountFnRef: (() => Promise<unknown>) | null = null;
-function _RegisterDeleteFn() {
-  const fn = useServerFn(deleteAccount);
-  _deleteAccountFnRef = () => fn({});
-  return null;
-}
-function deleteAccountServer() {
-  if (!_deleteAccountFnRef) throw new Error("Account service not ready");
-  return _deleteAccountFnRef();
-}
-
 function MenuGroup({ title, items }: { title: string; items: { label: string }[] }) {
   return (
     <div>
@@ -422,12 +408,3 @@ function Row({ label, children, last }: { label: string; children: React.ReactNo
   );
 }
 
-// Re-export with delete-fn registrar mounted alongside.
-export default function ProfileScreenWithRegistrar(props: { onPregnancy: () => void }) {
-  return (
-    <>
-      <_RegisterDeleteFn />
-      <ProfileScreen {...props} />
-    </>
-  );
-}
