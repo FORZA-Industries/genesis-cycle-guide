@@ -61,23 +61,23 @@ export function NutritionScreen() {
             <div>
               <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Hydration</p>
               <div className="mt-1.5 flex items-baseline gap-1.5">
-                <span className="font-display text-[28px] font-semibold tracking-tight">1.6</span>
-                <span className="text-[13px] text-muted-foreground">/ 2.4 L</span>
+                <span className="font-display text-[28px] font-semibold tracking-tight">{(waterMl / 1000).toFixed(1)}</span>
+                <span className="text-[13px] text-muted-foreground">/ {(WATER_TARGET / 1000).toFixed(1)} L</span>
               </div>
             </div>
             <div className="flex items-center gap-1.5">
-              <button aria-label="Remove" className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-foreground/70">
+              <button onClick={() => bump(-WATER_STEP)} aria-label="Remove" className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-foreground/70">
                 <Minus className="h-4 w-4" />
               </button>
-              <button aria-label="Add" className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <button onClick={() => bump(WATER_STEP)} aria-label="Add" className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
                 <Plus className="h-4 w-4" />
               </button>
             </div>
           </div>
-          <Progress value={66} className="mt-4 h-1.5 bg-muted [&>div]:bg-foreground" />
+          <Progress value={pct} className="mt-4 h-1.5 bg-muted [&>div]:bg-foreground" />
           <div className="mt-2 flex items-center gap-1.5 text-[12px] text-muted-foreground">
             <Droplets className="h-3.5 w-3.5" />
-            <span>800ml to go — about 3 more glasses</span>
+            <span>{remaining > 0 ? `${remaining}ml to go` : "Target reached — nice work"}</span>
           </div>
         </div>
 
