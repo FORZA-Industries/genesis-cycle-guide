@@ -1,20 +1,44 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { articles } from "../mockData";
 import { Droplets, ChevronRight, Pill, Minus, Plus } from "lucide-react";
 import { useCycleSettings } from "@/hooks/use-cycle";
+import { useDailyLog } from "@/hooks/use-daily-log";
 import { getCyclePhase, phaseFoods, phaseLabel } from "@/lib/cycle";
 import { cn } from "@/lib/utils";
 
+const WATER_TARGET = 2400;
+const WATER_STEP = 200;
+
 export function NutritionScreen() {
   const { settings, loading } = useCycleSettings();
+  const { log, save } = useDailyLog();
   const info = settings
     ? getCyclePhase(settings.lastPeriodDate, settings.cycleLength, settings.periodLength)
     : null;
   const phase = info?.phase ?? "follicular";
   const foods = info ? phaseFoods[phase] : [];
   const [expanded, setExpanded] = useState<number | null>(null);
+
+  const [waterMl, setWaterMl] = useState<number>(0);
+  useEffect(() => { if (log) setWaterMl(log.waterMl); }, [log]);
+
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const queueSave = (next: number) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      save({ waterMl: next }).catch(() => {});
+    }, 500);
+  };
+  const bump = (delta: number) => {
+    const next = Math.max(0, Math.min(10000, waterMl + delta));
+    setWaterMl(next);
+    queueSave(next);
+  };
+
+  const pct = Math.min(100, Math.round((waterMl / WATER_TARGET) * 100));
+  const remaining = Math.max(0, WATER_TARGET - waterMl);
 
   return (
     <div className="gx-screen pb-6">
@@ -37,23 +61,23 @@ export function NutritionScreen() {
             <div>
               <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Hydration</p>
               <div className="mt-1.5 flex items-baseline gap-1.5">
-                <span className="font-display text-[28px] font-semibold tracking-tight">1.6</span>
-                <span className="text-[13px] text-muted-foreground">/ 2.4 L</span>
+                <span className="font-display text-[28px] font-semibold tracking-tight">{(waterMl / 1000).toFixed(1)}</span>
+                <span className="text-[13px] text-muted-foreground">/ {(WATER_TARGET / 1000).toFixed(1)} L</span>
               </div>
             </div>
             <div className="flex items-center gap-1.5">
-              <button aria-label="Remove" className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-foreground/70">
+              <button onClick={() => bump(-WATER_STEP)} aria-label="Remove" className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-foreground/70">
                 <Minus className="h-4 w-4" />
               </button>
-              <button aria-label="Add" className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <button onClick={() => bump(WATER_STEP)} aria-label="Add" className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
                 <Plus className="h-4 w-4" />
               </button>
             </div>
           </div>
-          <Progress value={66} className="mt-4 h-1.5 bg-muted [&>div]:bg-foreground" />
+          <Progress value={pct} className="mt-4 h-1.5 bg-muted [&>div]:bg-foreground" />
           <div className="mt-2 flex items-center gap-1.5 text-[12px] text-muted-foreground">
             <Droplets className="h-3.5 w-3.5" />
-            <span>800ml to go — about 3 more glasses</span>
+            <span>{remaining > 0 ? `${remaining}ml to go` : "Target reached — nice work"}</span>
           </div>
         </div>
 

@@ -3,15 +3,20 @@ import { BrandOrb } from "../BrandLogo";
 import { ArrowRight, Droplets, Plus, Leaf } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useCycleSettings } from "@/hooks/use-cycle";
+import { useDailyLog, useStreak } from "@/hooks/use-daily-log";
 import { getCyclePhase, phaseHeroCopy, phaseLabel } from "@/lib/cycle";
 import { useState } from "react";
 import { CycleSettingsDialog } from "../CycleSettingsDialog";
+
+const WATER_TARGET_ML = 2400;
 
 export function HomeScreen({
   onLog, onPregnancy, onProfile,
 }: { onLog: () => void; onPregnancy: () => void; onProfile?: () => void }) {
   const { user } = useAuth();
   const { settings, loading } = useCycleSettings();
+  const { log } = useDailyLog();
+  const { streak } = useStreak();
   const [cycleOpen, setCycleOpen] = useState(false);
 
   const displayName =
@@ -99,13 +104,16 @@ export function HomeScreen({
           <Droplets className="h-4 w-4 text-[var(--color-electric-blue)]" />
           <p className="mt-3 text-[10.5px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Hydration</p>
           <p className="mt-0.5 font-display text-[18px] font-semibold leading-tight">
-            —<span className="text-muted-foreground text-[12px] font-normal"> / 2.4L</span>
+            {log && log.waterMl > 0 ? (log.waterMl / 1000).toFixed(1) + "L" : "—"}
+            <span className="text-muted-foreground text-[12px] font-normal"> / {(WATER_TARGET_ML / 1000).toFixed(1)}L</span>
           </p>
         </div>
         <div className="rounded-[20px] bg-card p-4 gx-soft-shadow">
           <Leaf className="h-4 w-4 text-primary" />
           <p className="mt-3 text-[10.5px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Streak</p>
-          <p className="mt-0.5 font-display text-[18px] font-semibold leading-tight">— <span className="text-muted-foreground text-[12px] font-normal">days</span></p>
+          <p className="mt-0.5 font-display text-[18px] font-semibold leading-tight">
+            {streak ?? 0} <span className="text-muted-foreground text-[12px] font-normal">days</span>
+          </p>
         </div>
       </div>
 
