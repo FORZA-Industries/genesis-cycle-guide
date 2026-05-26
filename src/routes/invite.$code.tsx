@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { toast, Toaster } from "sonner";
 import { BrandLogo } from "@/components/genesyx/BrandLogo";
 import { Heart, Loader2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { acceptPartnerInvite } from "@/lib/partner.functions";
 
 export const Route = createFileRoute("/invite/$code")({
   head: () => ({ meta: [{ title: "Partner invite — Genesyx" }] }),
