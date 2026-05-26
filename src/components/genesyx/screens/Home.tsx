@@ -3,15 +3,20 @@ import { BrandOrb } from "../BrandLogo";
 import { ArrowRight, Droplets, Plus, Leaf } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useCycleSettings } from "@/hooks/use-cycle";
+import { useDailyLog, useStreak } from "@/hooks/use-daily-log";
 import { getCyclePhase, phaseHeroCopy, phaseLabel } from "@/lib/cycle";
 import { useState } from "react";
 import { CycleSettingsDialog } from "../CycleSettingsDialog";
+
+const WATER_TARGET_ML = 2400;
 
 export function HomeScreen({
   onLog, onPregnancy, onProfile,
 }: { onLog: () => void; onPregnancy: () => void; onProfile?: () => void }) {
   const { user } = useAuth();
   const { settings, loading } = useCycleSettings();
+  const { log } = useDailyLog();
+  const { streak } = useStreak();
   const [cycleOpen, setCycleOpen] = useState(false);
 
   const displayName =
