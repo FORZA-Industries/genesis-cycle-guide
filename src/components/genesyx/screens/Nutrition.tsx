@@ -1,14 +1,27 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ScreenHeader } from "../ScreenHeader";
 import { Progress } from "@/components/ui/progress";
-import { nutritionFocus, articles } from "../mockData";
-import { Droplets, ChevronRight, Pill, Plus, Minus } from "lucide-react";
+import { articles } from "../mockData";
+import { Droplets, ChevronRight, Pill, Minus, Plus } from "lucide-react";
+import { useCycleSettings } from "@/hooks/use-cycle";
+import { getCyclePhase, phaseFoods, phaseLabel } from "@/lib/cycle";
+import { cn } from "@/lib/utils";
 
 export function NutritionScreen() {
+  const { settings, loading } = useCycleSettings();
+  const info = settings
+    ? getCyclePhase(settings.lastPeriodDate, settings.cycleLength, settings.periodLength)
+    : null;
+  const phase = info?.phase ?? "follicular";
+  const foods = info ? phaseFoods[phase] : [];
+  const [expanded, setExpanded] = useState<number | null>(null);
+
   return (
     <div className="gx-screen pb-6">
       <div className="px-6 pt-3 pb-6">
-        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-primary">Today · Ovulatory phase</p>
+        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-primary">
+          Today · {info ? phaseLabel[phase] : loading ? "Loading…" : "Set your cycle"}
+        </p>
         <h1 className="mt-2 font-display text-[32px] font-semibold leading-[1.05] tracking-tight">
           Your nutrition focus
         </h1>
