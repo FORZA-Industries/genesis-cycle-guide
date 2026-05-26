@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AppShell } from "@/components/genesyx/AppShell";
@@ -31,6 +31,7 @@ type Flow = "splash" | "intro" | "quiz" | "results" | "waitlist" | "app" | "log"
 function Index() {
   const [flow, setFlow] = useState<Flow>("splash");
   const [tab, setTab] = useState<TabKey>("home");
+  const navigate = useNavigate();
 
   const isApp = flow === "app";
 
@@ -40,7 +41,7 @@ function Index() {
         tabBar={isApp ? <BottomTabBar active={tab} onChange={setTab} /> : undefined}
       >
         {flow === "splash" && (
-          <SplashScreen onStart={() => setFlow("intro")} onSignIn={() => setFlow("app")} />
+          <SplashScreen onStart={() => setFlow("intro")} onSignIn={() => navigate({ to: "/auth" })} />
         )}
         {flow === "intro" && (
           <OnboardingIntro onContinue={() => setFlow("quiz")} onBack={() => setFlow("splash")} />
