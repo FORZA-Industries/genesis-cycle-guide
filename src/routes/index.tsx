@@ -66,7 +66,11 @@ function Index() {
         {isApp && (
           <>
             {tab === "home" && (
-              <HomeScreen onLog={() => setFlow("log")} onPregnancy={() => setFlow("pregnancy")} />
+              <HomeScreen
+                onLog={() => setFlow("log")}
+                onPregnancy={() => setFlow("pregnancy")}
+                onProfile={() => setTab("profile")}
+              />
             )}
             {tab === "track" && <TrackScreen onLog={() => setFlow("log")} />}
             {tab === "nutrition" && <NutritionScreen />}
