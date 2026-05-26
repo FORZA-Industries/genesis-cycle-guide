@@ -164,3 +164,7 @@
 /* Hide scrollbar inside phone frame */
 .gx-scroll::-webkit-scrollbar { display: none; }
 .gx-scroll { scrollbar-width: none; }
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}

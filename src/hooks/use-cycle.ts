@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getCycleSettings, upsertCycleSettings, type CycleSettingsDTO } from "@/lib/cycle.functions";
+import { getCyclePhase, type CyclePhaseInfo } from "@/lib/cycle";
 import { useAuth } from "@/hooks/use-auth";
 
 export function useCycleSettings() {
@@ -39,5 +40,10 @@ export function useCycleSettings() {
     [upsertFn, refresh],
   );
 
-  return { settings: data, loading, error, refresh, save };
+  const cycleInfo = useMemo<CyclePhaseInfo | null>(() => {
+    if (!data) return null;
+    return getCyclePhase(data.lastPeriodDate, data.cycleLength, data.periodLength);
+  }, [data]);
+
+  return { settings: data, cycleInfo, loading, error, refresh, save };
 }
