@@ -92,31 +92,36 @@ export function PartnerSection() {
       return toast.error("You can't invite yourself");
     }
     setBusy(true);
-    const code = crypto.randomUUID().replace(/-/g, "").slice(0, 16);
-    const { error } = await supabase.from("partner_invites").insert({
-      inviter_id: user.id,
-      invitee_email: parsed.data,
-      code,
-    });
-    setBusy(false);
-    if (error) return toast.error(error.message);
-    setEmail("");
-    toast.success("Invite created — copy the link to share");
-    load();
+    try {
+      await sendInviteFn({ data: { email: parsed.data } });
+      setEmail("");
+      toast.success("Invite created — copy the link to share");
+      load();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not create invite");
+    } finally {
+      setBusy(false);
+    }
   };
 
   const revoke = async (id: string) => {
-    const { error } = await supabase.from("partner_invites").update({ status: "revoked" }).eq("id", id);
-    if (error) return toast.error(error.message);
-    load();
+    try {
+      await revokeInviteFn({ data: { id } });
+      load();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not revoke invite");
+    }
   };
 
   const unlink = async () => {
     if (!confirm("Remove partner link?")) return;
-    const { error } = await supabase.from("profiles").update({ partner_id: null }).eq("id", user.id);
-    if (error) return toast.error(error.message);
-    toast.success("Partner unlinked");
-    load();
+    try {
+      await unlinkPartnerFn({});
+      toast.success("Partner unlinked");
+      load();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not unlink");
+    }
   };
 
   const copyLink = (code: string) => {
