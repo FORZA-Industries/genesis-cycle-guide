@@ -44,6 +44,51 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_logs: {
+        Row: {
+          created_at: string
+          date: string
+          energy: string | null
+          id: string
+          mood: string | null
+          notes: string | null
+          sleep_minutes: number | null
+          supplements: string[]
+          symptoms: string[]
+          updated_at: string
+          user_id: string
+          water_ml: number
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          energy?: string | null
+          id?: string
+          mood?: string | null
+          notes?: string | null
+          sleep_minutes?: number | null
+          supplements?: string[]
+          symptoms?: string[]
+          updated_at?: string
+          user_id: string
+          water_ml?: number
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          energy?: string | null
+          id?: string
+          mood?: string | null
+          notes?: string | null
+          sleep_minutes?: number | null
+          supplements?: string[]
+          symptoms?: string[]
+          updated_at?: string
+          user_id?: string
+          water_ml?: number
+        }
+        Relationships: []
+      }
       partner_invites: {
         Row: {
           accepted_at: string | null
