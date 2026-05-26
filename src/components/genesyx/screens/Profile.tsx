@@ -184,7 +184,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
                 e.preventDefault();
                 setDeleting(true);
                 try {
-                  await deleteAccountFn();
+                  await deleteAccountFn({});
                   await supabase.auth.signOut();
                   toast.success("Account deleted");
                   navigate({ to: "/auth" });
@@ -204,11 +204,6 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
       </AlertDialog>
     </div>
   );
-
-  // Local reference so handler above can call it (hooks must stay at top level)
-  function deleteAccountFn() {
-    return deleteAccountServer();
-  }
 }
 
 function EditNameDialog({
