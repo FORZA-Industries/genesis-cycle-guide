@@ -30,11 +30,13 @@ function InvitePage() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const acceptInviteFn = useServerFn(acceptPartnerInvite);
 
   useEffect(() => {
     if (authLoading) return;
     (async () => {
       if (!user) { setLoading(false); return; }
+      // Preview-only read (server fn re-validates atomically on accept)
       const { data, error } = await supabase
         .from("partner_invites")
         .select("id,inviter_id,invitee_email,status,expires_at")
@@ -56,18 +58,15 @@ function InvitePage() {
   const accept = async () => {
     if (!invite || !user) return;
     setBusy(true);
-    const { error: updErr } = await supabase
-      .from("partner_invites")
-      .update({ status: "accepted", accepted_by: user.id, accepted_at: new Date().toISOString() })
-      .eq("id", invite.id);
-    if (updErr) { setBusy(false); return toast.error(updErr.message); }
-    // Link both profiles
-    const { error: p1 } = await supabase.from("profiles").update({ partner_id: invite.inviter_id }).eq("id", user.id);
-    const { error: p2 } = await supabase.from("profiles").update({ partner_id: user.id }).eq("id", invite.inviter_id);
-    setBusy(false);
-    if (p1 || p2) return toast.error((p1 ?? p2)!.message);
-    toast.success("You're linked!");
-    navigate({ to: "/", replace: true });
+    try {
+      await acceptInviteFn({ data: { code } });
+      toast.success("You're linked!");
+      navigate({ to: "/", replace: true });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not accept invite");
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (authLoading || loading) {
