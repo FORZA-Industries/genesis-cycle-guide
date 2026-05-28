@@ -168,3 +168,9 @@
 @keyframes shimmer {
   100% { transform: translateX(100%); }
 }
+
+@keyframes gx-float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  33% { transform: translateY(-12px) translateX(6px); }
+  66% { transform: translateY(8px) translateX(-6px); }
+}
