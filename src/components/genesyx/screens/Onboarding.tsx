@@ -127,11 +127,7 @@ export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSig
       <div className="relative z-10 flex justify-center pt-2"><BrandLogo size={56} /></div>
 
       <div className="relative z-10 mt-6 flex flex-1 flex-col items-center justify-center text-center">
-        <div className="relative" style={{ animation: "gx-float 6s ease-in-out infinite" }}>
-          <GenesyxEgg className="h-60 w-60" />
-          <div className="pointer-events-none absolute -inset-8 rounded-full border border-primary/10" />
-          <div className="pointer-events-none absolute -inset-16 rounded-full border border-primary/5" />
-        </div>
+
 
         <h1 className="mt-10 max-w-[18ch] font-display text-[30px] font-semibold leading-[1.1] tracking-tight text-foreground">
           Feel informed, supported, and ready for your conception journey.
