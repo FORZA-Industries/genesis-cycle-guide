@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
-import eggMale from "@/assets/egg-male.jpg";
-import eggFemale from "@/assets/egg-female.jpg";
+import eggMale from "@/assets/egg-male.png";
+import eggFemale from "@/assets/egg-female.png";
+
 
 /**
  * Floating brand Egg — uses the official Genesyx 'Egg' artworks
@@ -32,7 +33,8 @@ function FloatingEgg({
       src={variant === "male" ? eggMale : eggFemale}
       alt=""
       aria-hidden
-      className={`pointer-events-none absolute select-none mix-blend-multiply ${className}`}
+      className={`pointer-events-none absolute select-none ${className}`}
+
       style={{
         width: size,
         height: size,
