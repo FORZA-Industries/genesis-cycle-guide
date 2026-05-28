@@ -50,53 +50,79 @@ function GenesyxEgg({ className = "" }: { className?: string }) {
 }
 
 /**
- * Small floating egg used as ambient decoration.
+ * Soft blurred crescent "egg" — matches the brand reference: a hazy
+ * gradient halo with a paler off-center hollow, heavily blurred for that
+ * dreamy, floating feel.
  */
 function FloatingEgg({
   size,
   className = "",
   delay = 0,
-  duration = 8,
+  duration = 9,
   hue = "lavender",
+  rotate = 0,
 }: {
   size: number;
   className?: string;
   delay?: number;
   duration?: number;
-  hue?: "lavender" | "pink" | "blue";
+  hue?: "lavender" | "pink" | "blue" | "mix";
+  rotate?: number;
 }) {
   const palettes = {
-    lavender: "radial-gradient(circle at 30% 28%, #f3e0fa 0%, #d6b8f0 45%, #a892d8 100%)",
-    pink: "radial-gradient(circle at 30% 28%, #ffe1ee 0%, #f5b8d8 45%, #d890b8 100%)",
-    blue: "radial-gradient(circle at 30% 28%, #e0ecfa 0%, #b8d0f0 45%, #8aa8d8 100%)",
+    lavender: { ring: "#c9a8e8", glow: "#e8c8f5" },
+    pink: { ring: "#e8a8c8", glow: "#f5cde0" },
+    blue: { ring: "#a8c0e8", glow: "#cfe0f5" },
+    mix: { ring: "#c9a8e8", glow: "#a8c0e8" },
   } as const;
+  const { ring, glow } = palettes[hue];
   return (
     <div
-      className={`pointer-events-none absolute rounded-full ${className}`}
+      className={`pointer-events-none absolute ${className}`}
       style={{
         width: size,
         height: size,
-        background: palettes[hue],
-        boxShadow:
-          "inset -3px -4px 10px rgba(120, 110, 180, 0.25), inset 2px 3px 8px rgba(255,255,255,0.6)",
+        transform: `rotate(${rotate}deg)`,
         animation: `gx-float ${duration}s ease-in-out ${delay}s infinite`,
-        opacity: 0.85,
       }}
-    />
+    >
+      {/* Outer gradient ring */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background: `conic-gradient(from 140deg, ${ring} 0deg, ${glow} 120deg, ${ring} 240deg, ${glow} 360deg)`,
+          filter: "blur(8px)",
+          opacity: 0.85,
+        }}
+      />
+      {/* Inner hollow — the crescent shape */}
+      <div
+        className="absolute rounded-full bg-background"
+        style={{
+          inset: "22%",
+          transform: "translate(12%, -10%)",
+          filter: "blur(10px)",
+          opacity: 0.95,
+        }}
+      />
+    </div>
   );
 }
 
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
     <div className="gx-screen relative flex h-full min-h-[760px] flex-col overflow-hidden px-6 pt-4 pb-10">
-      {/* Ambient floating eggs */}
-      <FloatingEgg size={42} hue="pink" delay={0} duration={9} className="left-6 top-24" />
-      <FloatingEgg size={28} hue="blue" delay={1.5} duration={11} className="right-10 top-32" />
-      <FloatingEgg size={20} hue="lavender" delay={0.8} duration={7} className="left-16 top-[42%]" />
-      <FloatingEgg size={36} hue="lavender" delay={2} duration={10} className="right-6 top-[48%]" />
-      <FloatingEgg size={24} hue="pink" delay={3} duration={8} className="left-8 bottom-56" />
-      <FloatingEgg size={32} hue="blue" delay={1} duration={9} className="right-14 bottom-48" />
-      <FloatingEgg size={18} hue="lavender" delay={2.5} duration={12} className="left-1/2 top-20" />
+      {/* Ambient floating crescent eggs */}
+      <FloatingEgg size={140} hue="blue"     delay={0}   duration={11} rotate={20}   className="-left-10 top-10" />
+      <FloatingEgg size={120} hue="lavender" delay={1.2} duration={13} rotate={-30}  className="-right-6 top-6" />
+      <FloatingEgg size={90}  hue="pink"     delay={2}   duration={10} rotate={45}   className="-left-6 top-[38%]" />
+      <FloatingEgg size={110} hue="lavender" delay={0.6} duration={12} rotate={-15}  className="-right-10 top-[44%]" />
+      <FloatingEgg size={80}  hue="blue"     delay={2.4} duration={9}  rotate={70}   className="left-1/3 top-[22%]" />
+      <FloatingEgg size={100} hue="pink"     delay={1.8} duration={14} rotate={-50}  className="-left-8 bottom-40" />
+      <FloatingEgg size={130} hue="blue"     delay={0.4} duration={12} rotate={30}   className="-right-12 bottom-32" />
+      <FloatingEgg size={60}  hue="lavender" delay={3}   duration={10} rotate={0}    className="right-1/4 bottom-20" />
+
+
 
       <div className="relative z-10 flex justify-center pt-2"><BrandLogo size={56} /></div>
 
