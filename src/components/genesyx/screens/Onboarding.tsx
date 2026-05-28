@@ -139,7 +139,7 @@ export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSig
   );
 }
 
-}
+
 
 export function OnboardingIntro({ onContinue, onBack }: { onContinue: () => void; onBack: () => void }) {
   const benefits = [
