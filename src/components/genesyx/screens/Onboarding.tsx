@@ -70,10 +70,10 @@ function FloatingEgg({
   rotate?: number;
 }) {
   const palettes = {
-    lavender: { ring: "#c9a8e8", glow: "#e8c8f5" },
-    pink: { ring: "#e8a8c8", glow: "#f5cde0" },
-    blue: { ring: "#a8c0e8", glow: "#cfe0f5" },
-    mix: { ring: "#c9a8e8", glow: "#a8c0e8" },
+    lavender: { ring: "#a974e6", glow: "#d9a8ff" },
+    pink: { ring: "#e074b8", glow: "#ffa8d6" },
+    blue: { ring: "#6a92e6", glow: "#a8c8ff" },
+    mix: { ring: "#a974e6", glow: "#6a92e6" },
   } as const;
   const { ring, glow } = palettes[hue];
   return (
@@ -86,23 +86,23 @@ function FloatingEgg({
         animation: `gx-float ${duration}s ease-in-out ${delay}s infinite`,
       }}
     >
-      {/* Outer gradient ring */}
+      {/* Outer vivid gradient ring */}
       <div
         className="absolute inset-0 rounded-full"
         style={{
           background: `conic-gradient(from 140deg, ${ring} 0deg, ${glow} 120deg, ${ring} 240deg, ${glow} 360deg)`,
-          filter: "blur(8px)",
-          opacity: 0.85,
+          filter: "blur(6px)",
+          opacity: 1,
         }}
       />
       {/* Inner hollow — the crescent shape */}
       <div
         className="absolute rounded-full bg-background"
         style={{
-          inset: "22%",
-          transform: "translate(12%, -10%)",
-          filter: "blur(10px)",
-          opacity: 0.95,
+          inset: "20%",
+          transform: "translate(14%, -12%)",
+          filter: "blur(8px)",
+          opacity: 1,
         }}
       />
     </div>
@@ -127,11 +127,7 @@ export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSig
       <div className="relative z-10 flex justify-center pt-2"><BrandLogo size={56} /></div>
 
       <div className="relative z-10 mt-6 flex flex-1 flex-col items-center justify-center text-center">
-        <div className="relative" style={{ animation: "gx-float 6s ease-in-out infinite" }}>
-          <GenesyxEgg className="h-60 w-60" />
-          <div className="pointer-events-none absolute -inset-8 rounded-full border border-primary/10" />
-          <div className="pointer-events-none absolute -inset-16 rounded-full border border-primary/5" />
-        </div>
+
 
         <h1 className="mt-10 max-w-[18ch] font-display text-[30px] font-semibold leading-[1.1] tracking-tight text-foreground">
           Feel informed, supported, and ready for your conception journey.
