@@ -2,6 +2,52 @@ import { Button } from "@/components/ui/button";
 import { BrandLogo, BrandOrb } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
 
+function GenesyxEgg({ className = "" }: { className?: string }) {
+  return (
+    <div className={`relative ${className}`}>
+      {/* Soft outer aura */}
+      <div
+        className="absolute inset-0 rounded-full blur-3xl opacity-60"
+        style={{
+          background:
+            "radial-gradient(circle at 30% 30%, #f5c8e6 0%, #c9b8f0 35%, #a8c7f0 65%, transparent 80%)",
+        }}
+      />
+      {/* Crescent egg — created with two overlapping gradient circles */}
+      <div className="relative h-full w-full">
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background:
+              "conic-gradient(from 200deg at 50% 50%, #e8a8d8 0deg, #c9a8e8 90deg, #a8b8e8 180deg, #b8d4f0 260deg, #e8a8d8 360deg)",
+            filter: "blur(2px)",
+          }}
+        />
+        {/* Inner highlight forming the crescent hollow */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            inset: "14%",
+            background:
+              "radial-gradient(circle at 65% 60%, #f4f1ec 0%, #f4f1ec 55%, transparent 75%)",
+            filter: "blur(6px)",
+          }}
+        />
+        {/* Glossy top-left highlight */}
+        <div
+          className="absolute rounded-full opacity-70"
+          style={{
+            inset: "8%",
+            background:
+              "radial-gradient(ellipse 40% 30% at 30% 25%, rgba(255,255,255,0.9) 0%, transparent 60%)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
     <div className="gx-screen flex h-full min-h-[760px] flex-col px-6 pt-6 pb-10">
