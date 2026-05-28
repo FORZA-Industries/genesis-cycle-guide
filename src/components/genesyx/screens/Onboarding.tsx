@@ -1,139 +1,76 @@
 import { Button } from "@/components/ui/button";
-import { BrandLogo, BrandOrb } from "../BrandLogo";
+import { BrandLogo } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
+import eggMale from "@/assets/egg-male.jpg";
+import eggFemale from "@/assets/egg-female.jpg";
 
 /**
- * Genesyx Egg — a smooth, fully-round orb with a soft pink → lavender → blue
- * gradient and a glossy highlight. Used as the brand's central conception symbol.
- */
-function GenesyxEgg({ className = "" }: { className?: string }) {
-  return (
-    <div className={`relative ${className}`}>
-      {/* Soft outer aura */}
-      <div
-        className="absolute inset-0 rounded-full blur-2xl opacity-70"
-        style={{
-          background:
-            "radial-gradient(circle at 30% 30%, #f5c8e6 0%, #c9b8f0 35%, #a8c7f0 65%, transparent 80%)",
-        }}
-      />
-      {/* Main round egg body */}
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle at 32% 28%, #fde6f2 0%, #f0bcdf 22%, #c9a8e8 55%, #a8c0ee 85%, #94b4e6 100%)",
-          boxShadow:
-            "inset -10px -14px 40px rgba(120, 110, 180, 0.25), inset 8px 10px 30px rgba(255,255,255,0.55)",
-        }}
-      />
-      {/* Glossy top-left highlight */}
-      <div
-        className="absolute rounded-full opacity-80 mix-blend-screen"
-        style={{
-          inset: "8%",
-          background:
-            "radial-gradient(ellipse 45% 32% at 30% 22%, rgba(255,255,255,0.95) 0%, transparent 65%)",
-        }}
-      />
-      {/* Soft bottom shadow blush */}
-      <div
-        className="absolute rounded-full opacity-50"
-        style={{
-          inset: "10%",
-          background:
-            "radial-gradient(ellipse 60% 35% at 65% 80%, rgba(180,140,210,0.35) 0%, transparent 70%)",
-        }}
-      />
-    </div>
-  );
-}
-
-/**
- * Soft blurred crescent "egg" — matches the brand reference: a hazy
- * gradient halo with a paler off-center hollow, heavily blurred for that
- * dreamy, floating feel.
+ * Floating brand Egg — uses the official Genesyx 'Egg' artworks
+ * (Male = blue, Female = pink) from the brand guidelines. The JPGs ship
+ * on a white background, so we use mix-blend-multiply to drop the white
+ * cleanly against the Zenith Grey canvas.
  */
 function FloatingEgg({
+  variant,
   size,
   className = "",
   delay = 0,
-  duration = 9,
-  hue = "lavender",
+  duration = 10,
   rotate = 0,
+  opacity = 1,
 }: {
+  variant: "male" | "female";
   size: number;
   className?: string;
   delay?: number;
   duration?: number;
-  hue?: "lavender" | "pink" | "blue" | "mix";
   rotate?: number;
+  opacity?: number;
 }) {
-  const palettes = {
-    lavender: { ring: "#a974e6", glow: "#d9a8ff" },
-    pink: { ring: "#e074b8", glow: "#ffa8d6" },
-    blue: { ring: "#6a92e6", glow: "#a8c8ff" },
-    mix: { ring: "#a974e6", glow: "#6a92e6" },
-  } as const;
-  const { ring, glow } = palettes[hue];
   return (
-    <div
-      className={`pointer-events-none absolute ${className}`}
+    <img
+      src={variant === "male" ? eggMale : eggFemale}
+      alt=""
+      aria-hidden
+      className={`pointer-events-none absolute select-none mix-blend-multiply ${className}`}
       style={{
         width: size,
         height: size,
         transform: `rotate(${rotate}deg)`,
         animation: `gx-float ${duration}s ease-in-out ${delay}s infinite`,
+        opacity,
       }}
-    >
-      {/* Outer vivid gradient ring */}
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background: `conic-gradient(from 140deg, ${ring} 0deg, ${glow} 120deg, ${ring} 240deg, ${glow} 360deg)`,
-          filter: "blur(6px)",
-          opacity: 1,
-        }}
-      />
-      {/* Inner hollow — the crescent shape */}
-      <div
-        className="absolute rounded-full bg-background"
-        style={{
-          inset: "20%",
-          transform: "translate(14%, -12%)",
-          filter: "blur(8px)",
-          opacity: 1,
-        }}
-      />
-    </div>
+      draggable={false}
+    />
   );
 }
 
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
     <div className="gx-screen relative flex h-full min-h-[760px] flex-col overflow-hidden px-6 pt-4 pb-10">
-      {/* Ambient floating crescent eggs */}
-      <FloatingEgg size={140} hue="blue"     delay={0}   duration={11} rotate={20}   className="-left-10 top-10" />
-      <FloatingEgg size={120} hue="lavender" delay={1.2} duration={13} rotate={-30}  className="-right-6 top-6" />
-      <FloatingEgg size={90}  hue="pink"     delay={2}   duration={10} rotate={45}   className="-left-6 top-[38%]" />
-      <FloatingEgg size={110} hue="lavender" delay={0.6} duration={12} rotate={-15}  className="-right-10 top-[44%]" />
-      <FloatingEgg size={80}  hue="blue"     delay={2.4} duration={9}  rotate={70}   className="left-1/3 top-[22%]" />
-      <FloatingEgg size={100} hue="pink"     delay={1.8} duration={14} rotate={-50}  className="-left-8 bottom-40" />
-      <FloatingEgg size={130} hue="blue"     delay={0.4} duration={12} rotate={30}   className="-right-12 bottom-32" />
-      <FloatingEgg size={60}  hue="lavender" delay={3}   duration={10} rotate={0}    className="right-1/4 bottom-20" />
+      {/* Ambient brand eggs — symbol of the embryo, gently floating */}
+      <FloatingEgg variant="male"   size={170} delay={0}   duration={12} rotate={20}   className="-left-12 -top-6" />
+      <FloatingEgg variant="female" size={150} delay={1.2} duration={13} rotate={-25}  className="-right-10 -top-4" />
+      <FloatingEgg variant="female" size={110} delay={2}   duration={11} rotate={55}   className="-left-8 top-[36%]" />
+      <FloatingEgg variant="male"   size={130} delay={0.6} duration={14} rotate={-15}  className="-right-12 top-[42%]" />
+      <FloatingEgg variant="male"   size={90}  delay={2.4} duration={10} rotate={70}   className="left-1/3 top-[18%]" opacity={0.85} />
+      <FloatingEgg variant="female" size={120} delay={1.8} duration={13} rotate={-50}  className="-left-10 bottom-44" />
+      <FloatingEgg variant="male"   size={150} delay={0.4} duration={12} rotate={30}   className="-right-14 bottom-36" />
+      <FloatingEgg variant="female" size={70}  delay={3}   duration={11} rotate={0}    className="right-1/4 bottom-24" opacity={0.85} />
 
+      <div className="relative z-10 flex justify-center pt-2">
+        <BrandLogo size={64} />
+      </div>
 
-
-      <div className="relative z-10 flex justify-center pt-2"><BrandLogo size={56} /></div>
-
-      <div className="relative z-10 mt-6 flex flex-1 flex-col items-center justify-center text-center">
-
-
-        <h1 className="mt-10 max-w-[18ch] font-display text-[30px] font-semibold leading-[1.1] tracking-tight text-foreground">
-          Feel informed, supported, and ready for your conception journey.
+      <div className="relative z-10 mt-8 flex flex-1 flex-col items-center justify-center text-center">
+        <p className="font-display text-[13px] font-medium uppercase tracking-[0.22em] text-[var(--color-electric-lavender)]">
+          Step into the future of fertility
+        </p>
+        <h1 className="mt-4 max-w-[16ch] font-display text-[32px] font-semibold leading-[1.05] tracking-tight text-foreground">
+          Feel informed, supported and ready for your conception journey.
         </h1>
-        <p className="mt-4 max-w-[28ch] text-[15px] leading-relaxed text-muted-foreground">
-          A gentle, personalised companion for your fertility-prep journey.
+        <p className="mt-5 max-w-[28ch] text-[15px] leading-relaxed text-muted-foreground">
+          A premium, gently-guided companion blending cycle awareness, nutrition and supplement support.
         </p>
       </div>
 
@@ -141,7 +78,7 @@ export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSig
         <Button
           size="lg"
           onClick={onStart}
-          className="h-14 w-full rounded-2xl bg-primary text-base font-semibold text-primary-foreground hover:bg-primary/90"
+          className="h-14 w-full rounded-2xl bg-[var(--color-electric-lavender)] text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(77,77,170,0.55)] hover:bg-[var(--color-electric-lavender)]/90"
         >
           Start Your Personalised Quiz
           <ChevronRight className="ml-1 h-5 w-5" />
@@ -160,6 +97,7 @@ export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSig
     </div>
   );
 }
+
 
 
 
