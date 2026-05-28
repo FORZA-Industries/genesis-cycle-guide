@@ -2,25 +2,72 @@ import { Button } from "@/components/ui/button";
 import { BrandLogo, BrandOrb } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
 
+function GenesyxEgg({ className = "" }: { className?: string }) {
+  return (
+    <div className={`relative ${className}`}>
+      {/* Soft outer aura */}
+      <div
+        className="absolute inset-0 rounded-full blur-3xl opacity-60"
+        style={{
+          background:
+            "radial-gradient(circle at 30% 30%, #f5c8e6 0%, #c9b8f0 35%, #a8c7f0 65%, transparent 80%)",
+        }}
+      />
+      {/* Crescent egg — created with two overlapping gradient circles */}
+      <div className="relative h-full w-full">
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background:
+              "conic-gradient(from 200deg at 50% 50%, #e8a8d8 0deg, #c9a8e8 90deg, #a8b8e8 180deg, #b8d4f0 260deg, #e8a8d8 360deg)",
+            filter: "blur(2px)",
+          }}
+        />
+        {/* Inner highlight forming the crescent hollow */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            inset: "14%",
+            background:
+              "radial-gradient(circle at 65% 60%, #f4f1ec 0%, #f4f1ec 55%, transparent 75%)",
+            filter: "blur(6px)",
+          }}
+        />
+        {/* Glossy top-left highlight */}
+        <div
+          className="absolute rounded-full opacity-70"
+          style={{
+            inset: "8%",
+            background:
+              "radial-gradient(ellipse 40% 30% at 30% 25%, rgba(255,255,255,0.9) 0%, transparent 60%)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
-    <div className="gx-screen flex h-full min-h-[760px] flex-col px-6 pt-6 pb-10">
-      <div className="flex justify-center"><BrandLogo size={32} /></div>
+    <div className="gx-screen flex h-full min-h-[760px] flex-col px-6 pt-4 pb-10">
+      <div className="flex justify-center pt-2"><BrandLogo size={56} /></div>
 
-      <div className="mt-10 flex flex-1 flex-col items-center justify-center text-center">
+      <div className="mt-6 flex flex-1 flex-col items-center justify-center text-center">
         <div className="relative">
-          <BrandOrb className="h-44 w-44" />
-          <div className="absolute -inset-6 rounded-full border border-primary/10" />
-          <div className="absolute -inset-12 rounded-full border border-primary/5" />
+          <GenesyxEgg className="h-64 w-64" />
+          <div className="pointer-events-none absolute -inset-8 rounded-full border border-primary/10" />
+          <div className="pointer-events-none absolute -inset-16 rounded-full border border-primary/5" />
         </div>
 
-        <h1 className="mt-12 max-w-[18ch] font-display text-[34px] font-semibold leading-[1.1] tracking-tight text-foreground">
+        <h1 className="mt-10 max-w-[18ch] font-display text-[30px] font-semibold leading-[1.1] tracking-tight text-foreground">
           Feel informed, supported, and ready for your conception journey.
         </h1>
         <p className="mt-4 max-w-[28ch] text-[15px] leading-relaxed text-muted-foreground">
           A gentle, personalised companion for your fertility-prep journey.
         </p>
       </div>
+
 
       <div className="space-y-3">
         <Button
