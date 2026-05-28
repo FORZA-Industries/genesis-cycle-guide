@@ -2,60 +2,107 @@ import { Button } from "@/components/ui/button";
 import { BrandLogo, BrandOrb } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
 
+/**
+ * Genesyx Egg — a smooth, fully-round orb with a soft pink → lavender → blue
+ * gradient and a glossy highlight. Used as the brand's central conception symbol.
+ */
 function GenesyxEgg({ className = "" }: { className?: string }) {
   return (
     <div className={`relative ${className}`}>
       {/* Soft outer aura */}
       <div
-        className="absolute inset-0 rounded-full blur-3xl opacity-60"
+        className="absolute inset-0 rounded-full blur-2xl opacity-70"
         style={{
           background:
             "radial-gradient(circle at 30% 30%, #f5c8e6 0%, #c9b8f0 35%, #a8c7f0 65%, transparent 80%)",
         }}
       />
-      {/* Crescent egg — created with two overlapping gradient circles */}
-      <div className="relative h-full w-full">
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background:
-              "conic-gradient(from 200deg at 50% 50%, #e8a8d8 0deg, #c9a8e8 90deg, #a8b8e8 180deg, #b8d4f0 260deg, #e8a8d8 360deg)",
-            filter: "blur(2px)",
-          }}
-        />
-        {/* Inner highlight forming the crescent hollow */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            inset: "14%",
-            background:
-              "radial-gradient(circle at 65% 60%, #f4f1ec 0%, #f4f1ec 55%, transparent 75%)",
-            filter: "blur(6px)",
-          }}
-        />
-        {/* Glossy top-left highlight */}
-        <div
-          className="absolute rounded-full opacity-70"
-          style={{
-            inset: "8%",
-            background:
-              "radial-gradient(ellipse 40% 30% at 30% 25%, rgba(255,255,255,0.9) 0%, transparent 60%)",
-          }}
-        />
-      </div>
+      {/* Main round egg body */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle at 32% 28%, #fde6f2 0%, #f0bcdf 22%, #c9a8e8 55%, #a8c0ee 85%, #94b4e6 100%)",
+          boxShadow:
+            "inset -10px -14px 40px rgba(120, 110, 180, 0.25), inset 8px 10px 30px rgba(255,255,255,0.55)",
+        }}
+      />
+      {/* Glossy top-left highlight */}
+      <div
+        className="absolute rounded-full opacity-80 mix-blend-screen"
+        style={{
+          inset: "8%",
+          background:
+            "radial-gradient(ellipse 45% 32% at 30% 22%, rgba(255,255,255,0.95) 0%, transparent 65%)",
+        }}
+      />
+      {/* Soft bottom shadow blush */}
+      <div
+        className="absolute rounded-full opacity-50"
+        style={{
+          inset: "10%",
+          background:
+            "radial-gradient(ellipse 60% 35% at 65% 80%, rgba(180,140,210,0.35) 0%, transparent 70%)",
+        }}
+      />
     </div>
   );
 }
 
+/**
+ * Small floating egg used as ambient decoration.
+ */
+function FloatingEgg({
+  size,
+  className = "",
+  delay = 0,
+  duration = 8,
+  hue = "lavender",
+}: {
+  size: number;
+  className?: string;
+  delay?: number;
+  duration?: number;
+  hue?: "lavender" | "pink" | "blue";
+}) {
+  const palettes = {
+    lavender: "radial-gradient(circle at 30% 28%, #f3e0fa 0%, #d6b8f0 45%, #a892d8 100%)",
+    pink: "radial-gradient(circle at 30% 28%, #ffe1ee 0%, #f5b8d8 45%, #d890b8 100%)",
+    blue: "radial-gradient(circle at 30% 28%, #e0ecfa 0%, #b8d0f0 45%, #8aa8d8 100%)",
+  } as const;
+  return (
+    <div
+      className={`pointer-events-none absolute rounded-full ${className}`}
+      style={{
+        width: size,
+        height: size,
+        background: palettes[hue],
+        boxShadow:
+          "inset -3px -4px 10px rgba(120, 110, 180, 0.25), inset 2px 3px 8px rgba(255,255,255,0.6)",
+        animation: `gx-float ${duration}s ease-in-out ${delay}s infinite`,
+        opacity: 0.85,
+      }}
+    />
+  );
+}
 
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
-    <div className="gx-screen flex h-full min-h-[760px] flex-col px-6 pt-4 pb-10">
-      <div className="flex justify-center pt-2"><BrandLogo size={56} /></div>
+    <div className="gx-screen relative flex h-full min-h-[760px] flex-col overflow-hidden px-6 pt-4 pb-10">
+      {/* Ambient floating eggs */}
+      <FloatingEgg size={42} hue="pink" delay={0} duration={9} className="left-6 top-24" />
+      <FloatingEgg size={28} hue="blue" delay={1.5} duration={11} className="right-10 top-32" />
+      <FloatingEgg size={20} hue="lavender" delay={0.8} duration={7} className="left-16 top-[42%]" />
+      <FloatingEgg size={36} hue="lavender" delay={2} duration={10} className="right-6 top-[48%]" />
+      <FloatingEgg size={24} hue="pink" delay={3} duration={8} className="left-8 bottom-56" />
+      <FloatingEgg size={32} hue="blue" delay={1} duration={9} className="right-14 bottom-48" />
+      <FloatingEgg size={18} hue="lavender" delay={2.5} duration={12} className="left-1/2 top-20" />
 
-      <div className="mt-6 flex flex-1 flex-col items-center justify-center text-center">
-        <div className="relative">
-          <GenesyxEgg className="h-64 w-64" />
+      <div className="relative z-10 flex justify-center pt-2"><BrandLogo size={56} /></div>
+
+      <div className="relative z-10 mt-6 flex flex-1 flex-col items-center justify-center text-center">
+        <div className="relative" style={{ animation: "gx-float 6s ease-in-out infinite" }}>
+          <GenesyxEgg className="h-60 w-60" />
           <div className="pointer-events-none absolute -inset-8 rounded-full border border-primary/10" />
           <div className="pointer-events-none absolute -inset-16 rounded-full border border-primary/5" />
         </div>
@@ -68,8 +115,7 @@ export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSig
         </p>
       </div>
 
-
-      <div className="space-y-3">
+      <div className="relative z-10 space-y-3">
         <Button
           size="lg"
           onClick={onStart}
@@ -92,6 +138,8 @@ export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSig
     </div>
   );
 }
+
+
 
 export function OnboardingIntro({ onContinue, onBack }: { onContinue: () => void; onBack: () => void }) {
   const benefits = [
