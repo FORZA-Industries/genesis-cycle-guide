@@ -129,14 +129,17 @@ export const unlinkPartner = createServerFn({ method: "POST" })
     if (meErr) safeThrow("unlink:fetch", meErr, "Could not unlink.");
     const partnerId = me?.partner_id;
 
-    const { error: e1 } = await supabase
+    // partner_id writes are locked at the RLS layer; perform link/unlink via
+    // the service role only after verifying caller identity above.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { error: e1 } = await supabaseAdmin
       .from("profiles")
       .update({ partner_id: null })
       .eq("id", userId);
     if (e1) safeThrow("unlink:self", e1, "Could not unlink.");
 
     if (partnerId) {
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       await supabaseAdmin
         .from("profiles")
         .update({ partner_id: null })
