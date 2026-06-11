@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import wordmark from "@/assets/genesyx-wordmark.png";
+import wordmark from "@/assets/genesyx-logo.svg";
 
 interface BrandLogoProps {
   className?: string;
