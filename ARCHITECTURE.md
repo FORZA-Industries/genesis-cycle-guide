@@ -315,6 +315,33 @@ Use Material3, MVVM with a companion ViewModel, and our shared GenesyxTheme + Ge
 
 ---
 
+## Native Port Notes (from source deep-dive)
+
+**Architecture facts to honor:**
+- **State machine → NavGraph + saved ViewModel.** Web keeps `flow` (`splash·intro·quiz·results·waitlist·app·log·pregnancy`) + `tab` in plain `useState` with **no persistence** (refresh → splash). On native, model onboarding as a nested NavGraph backed by a `SavedStateHandle`/DataStore `OnboardingViewModel` so it **survives process death** and remembers completion (a real improvement over web).
+- **Bottom nav** shows only in `app` flow (hidden during onboarding/log/pregnancy) — match.
+- **Auth bridge.** Web attaches `Authorization: Bearer <access_token>` to every server-fn call via a global middleware (`auth-attacher.ts`); `AuthProvider` registers `onAuthStateChange` **before** `getSession()` to avoid a race. Native equivalent: a single Supabase client holding the session; repositories call Postgrest directly (RLS enforces scope). Mirror the listener-first bootstrap.
+- **Hooks use a pub/sub `Set<Listener>`** (`emitLogChange()`, pH `emit()`) for cross-screen refresh after a mutation. Native equivalent: a shared repository exposing `Flow`/`StateFlow`; collectors update automatically — no manual emit.
+- **Server functions are thin wrappers over Supabase** (`requireSupabaseAuth`, Zod-validated). Native calls Supabase directly; **port the Zod validation** into the repository/use-case layer. Privileged fns (`acceptPartnerInvite`, `unlinkPartner`, `deleteAccount`) use the service role → must become **Supabase Edge Functions** the app calls.
+- **CSP/connect:** web allows `connect-src 'self' https://*.supabase.co wss://*.supabase.co` — confirms Supabase is the only network dependency.
+- **404 & errors exist:** `__root.tsx` has a `NotFoundComponent` (404 "Page not found" + Go home); router has `DefaultErrorComponent` ("Something went wrong", Try again / Go home). Provide native equivalents (nav fallback + error surface).
+
+**Web → native mapping cheatsheet:**
+- Recharts pH chart → Compose chart (Vico/MPAndroidChart): recreate colored reference bands (acidic/optimal/alkaline), tooltip, range pills (7d/30d/90d/All).
+- oklch + `color-mix(in oklab,…)` → **pre-compute to ARGB** `Color(0xFF…)`; never compute at runtime.
+- BrandOrb (`gx-orb` radial gradient + inset shadows) → `Brush.radialGradient` + layered `drawBehind`, or ship a pre-rendered asset. Floating splash eggs → looping `gx-float` offset animation on the PNG assets in `src/assets/`.
+- Outfit variable font from gstatic → **bundle the .ttf**; Inter likewise (web relied on system fallback).
+- Sonner toasts → Material 3 `Snackbar` (anchor bottom-center above nav, not bottom-right).
+- shadcn `Sheet` (Log, PhLog, CycleSettings) → `ModalBottomSheet` (keep `rounded-t-[28px]`). Dialogs → `AlertDialog`/`Dialog`.
+- `<input type=date/datetime-local>` → Material `DatePicker`/`TimePicker`. `100dvh` + `env(safe-area-inset-*)` → `WindowInsets.systemBars` + `enableEdgeToEdge`.
+- Google OAuth → Credential Manager → `supabase.auth.signInWithIdToken(Google)` (drop Lovable web wrapper).
+- Partner deep link `/invite/$code` → App Link intent filter on `genesis-cycle-guide.lovable.app/invite/:code` → `acceptPartnerInvite`.
+- Theme toggle → DataStore + respect system dark mode by default.
+- Capacitor config → use only for app id/name/icons; drop the WebView. Desktop phone-frame → drop (native is device-bound).
+- **Offline:** web is online-only (no realtime, no SW). Native adds Room cache + sync-on-reconnect (net-new; scope per Open Decisions).
+
+**Not implemented in web (decide for native):** password reset / forgot-password (no `resetPasswordForEmail`), email-confirmation landing page, persistent onboarding-complete flag, realtime subscriptions, offline, full pregnancy mode (only the transition/sell screen), push notifications (Capacitor present, no plugin wired).
+
 ## Conventions
 
 - Complete files only — no partial snippets; all imports at the top. Kotlin only, no Java.
