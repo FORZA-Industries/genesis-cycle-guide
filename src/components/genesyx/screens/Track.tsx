@@ -16,6 +16,7 @@ import { CycleSettingsDialog } from "../CycleSettingsDialog";
 import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
+import { PhTrackerCard } from "../PhTrackerCard";
 
 const dayClass: Record<DayType, string> = {
   period: "bg-[color-mix(in_oklab,var(--powder-pink)_55%,white)] text-foreground",
