@@ -179,6 +179,10 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
         >
           <Plus className="mr-1 h-5 w-5" /> Add to today's log
         </Button>
+
+        <div className="mt-5">
+          <PhTrackerCard />
+        </div>
       </div>
 
       <CycleSettingsDialog open={cycleOpen} onOpenChange={setCycleOpen} />
