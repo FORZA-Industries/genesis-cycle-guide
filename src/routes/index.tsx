@@ -74,7 +74,7 @@ function Index() {
             )}
             {tab === "track" && <TrackScreen onLog={() => setFlow("log")} />}
             {tab === "nutrition" && <NutritionScreen />}
-            {tab === "insights" && <InsightsScreen />}
+            {tab === "insights" && <InsightsScreen onOpenTracker={() => setTab("track")} />}
             {tab === "profile" && <ProfileScreen onPregnancy={() => setFlow("pregnancy")} />}
           </>
         )}

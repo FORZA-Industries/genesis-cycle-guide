@@ -16,6 +16,7 @@ import { CycleSettingsDialog } from "../CycleSettingsDialog";
 import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
+import { PhTrackerCard } from "../PhTrackerCard";
 
 const dayClass: Record<DayType, string> = {
   period: "bg-[color-mix(in_oklab,var(--powder-pink)_55%,white)] text-foreground",
@@ -178,6 +179,10 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
         >
           <Plus className="mr-1 h-5 w-5" /> Add to today's log
         </Button>
+
+        <div className="mt-5">
+          <PhTrackerCard />
+        </div>
       </div>
 
       <CycleSettingsDialog open={cycleOpen} onOpenChange={setCycleOpen} />

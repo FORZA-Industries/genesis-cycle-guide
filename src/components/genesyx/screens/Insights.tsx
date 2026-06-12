@@ -3,8 +3,9 @@ import { ScreenHeader } from "../ScreenHeader";
 import { insightBars, nutritionBars } from "../mockData";
 import { cn } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
+import { PhInsightsSection } from "../PhInsightsSection";
 
-export function InsightsScreen() {
+export function InsightsScreen({ onOpenTracker }: { onOpenTracker?: () => void }) {
   const [empty] = useState(false);
 
   if (empty) {
@@ -29,6 +30,8 @@ export function InsightsScreen() {
       />
 
       <div className="px-5 space-y-4">
+        <PhInsightsSection onOpenTracker={onOpenTracker} />
+
         {/* Cycle regularity */}
         <div className="rounded-3xl bg-card gx-soft-shadow p-5 gx-card-shadow">
           <div className="flex items-baseline justify-between">
