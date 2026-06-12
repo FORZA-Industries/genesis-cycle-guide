@@ -3,8 +3,9 @@ import { ScreenHeader } from "../ScreenHeader";
 import { insightBars, nutritionBars } from "../mockData";
 import { cn } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
+import { PhInsightsSection } from "../PhInsightsSection";
 
-export function InsightsScreen() {
+export function InsightsScreen({ onOpenTracker }: { onOpenTracker?: () => void }) {
   const [empty] = useState(false);
 
   if (empty) {
