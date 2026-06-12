@@ -46,3 +46,42 @@ Shared: `emailSchema = string.trim().toLowerCase().email().max(255)`.
 - Auth bridge `attachSupabaseAuth` (src/start.ts) attaches `Authorization: Bearer <token>`; native uses the supabase-kt session directly.
 
 > **Native mapping:** non-privileged fns → direct Postgrest calls in repositories (RLS scopes to `auth.uid()`); the three **service-role** fns (`acceptPartnerInvite`, `unlinkPartner`, `deleteAccount`) → Supabase **Edge Functions** invoked via supabase-kt `functions.invoke(...)`.
+
+---
+
+## Schema & RLS
+Full verbatim DDL + policies live in [`schema.sql`](schema.sql). Key facts:
+- **No FK or CHECK constraints** — uniqueness via indexes, ownership via RLS. `auth.users(id)` referenced logically only.
+- `profiles.theme` defaults to **`'dark'`**. A signup trigger (`handle_new_user`) auto-creates the profile row (display_name from `display_name`/`full_name`/email-prefix).
+- **`profiles.partner_id` is read-locked for clients** — the UPDATE policy forbids changing it via the data API. Link/unlink/delete happen **only via service role** → must be **Edge Functions** on native (the app must never try to write `partner_id` directly).
+- `partner_invites` SELECT is visible to the inviter, or to the invitee **only if their JWT email matches and `email_verified=true`**. UPDATE is restricted to `status='revoked'` (accept is service-role).
+- Indexes that matter: `daily_logs (user_id, date DESC)` (streak), `ph_readings (user_id, recorded_at DESC)`, `partner_invites` unique `code` + `lower(invitee_email)`.
+
+## Privileged Edge Functions — exact logic to replicate
+
+**acceptPartnerInvite({ code })** — `{ code: string 8–64 }`
+1. Require verified email (`claims.email`) else `"Email not verified on your account"`.
+2. User-scoped read `partner_invites WHERE code` (passes invitee RLS) → `"Invite not found"` if null.
+3. `status !== 'pending'` → `"Invite is <status>"`; `expires_at < now` → `"Invite expired"`.
+4. `lower(invitee_email) !== lower(myEmail)` → `"This invite is for a different email address"`.
+5. `inviter_id === userId` → `"You can't accept your own invite"`.
+6. **service role:** read both profiles; if either `partner_id` set to a different person → `"One of the accounts is already linked to a different partner"`.
+7. Conditional `UPDATE partner_invites SET status='accepted', accepted_by, accepted_at WHERE id AND status='pending' RETURNING id`; 0 rows → `"Invite was already accepted or revoked"`.
+8. Two writes: set `profiles.partner_id` on both sides → `"Could not link accounts."`.
+> ⚠️ Step 8 is **non-transactional** in web — wrap as a single `SECURITY DEFINER` plpgsql RPC in native for atomicity.
+
+**unlinkPartner()** — service role: read own `partner_id`; `UPDATE profiles SET partner_id=NULL WHERE id=userId`; if partner set, also `... WHERE id=partnerId AND partner_id=userId` (best-effort).
+
+**deleteAccount()** — service role: null partner's side; delete from `daily_logs`, `cycle_settings`, `partner_links`(missing table—skipped), `partner_invites` (by inviter_id), `profiles` (tolerate missing-table errors); then `auth.admin.deleteUser(userId)` (only fatal step).
+
+## Bugs to fix in the native rebuild
+- **`deleteAccount` does not delete `ph_readings`** → orphaned rows. Native Edge Function must delete them.
+- `deleteAccount` doesn't clean up invites where the user was the **invitee** (`accepted_by=userId` / matched email).
+- Neither `acceptPartnerInvite` (step 8) nor `deleteAccount` is transactional → use plpgsql RPCs for atomicity.
+- `getDailyLog.energy` is `String?` but constrained to `low|normal|high` — narrow in Kotlin.
+
+## Content & assets (captured)
+- Phase copy + foods → ported to `android/.../domain/content/CycleContent.kt` (verbatim).
+- Quiz questions + facts → `android/.../domain/content/QuizContent.kt`.
+- `articles` have **no body content** in web (title + read-time only) — content gap; author 3 article bodies or add an `articles` table for native.
+- Brand assets copied into the app: `egg_male.png` / `egg_female.png` (`res/drawable-nodpi/`) and `genesyx-logo.svg` (`assets/`, still to convert to a vector drawable for the wordmark).
