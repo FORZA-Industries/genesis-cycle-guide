@@ -4,6 +4,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/hooks/use-auth";
+import { useIsNativeApp } from "@/hooks/use-native";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,6 +28,7 @@ const pwSchema = z.string().min(8, "Password must be at least 8 characters").max
 function AuthPage() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const isNativeApp = useIsNativeApp();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -116,14 +118,20 @@ function AuthPage() {
           </Button>
         </form>
 
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
-          <div className="relative flex justify-center"><span className="bg-background px-2 text-xs uppercase tracking-wider text-muted-foreground">or</span></div>
-        </div>
+        {/* Google OAuth is blocked inside embedded WebViews (the native app),
+            so only offer it on the web. Email/password works everywhere. */}
+        {!isNativeApp && (
+          <>
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
+              <div className="relative flex justify-center"><span className="bg-background px-2 text-xs uppercase tracking-wider text-muted-foreground">or</span></div>
+            </div>
 
-        <Button variant="outline" onClick={handleGoogle} disabled={busy} className="h-12 w-full rounded-xl text-base font-medium">
-          Continue with Google
-        </Button>
+            <Button variant="outline" onClick={handleGoogle} disabled={busy} className="h-12 w-full rounded-xl text-base font-medium">
+              Continue with Google
+            </Button>
+          </>
+        )}
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
           {mode === "signin" ? "New here? " : "Already have an account? "}
@@ -133,6 +141,10 @@ function AuthPage() {
         </p>
         <p className="mt-4 text-center text-xs text-muted-foreground">
           <Link to="/" className="hover:underline">Back to app</Link>
+          <span className="mx-2">·</span>
+          <Link to="/privacy" className="hover:underline">Privacy</Link>
+          <span className="mx-2">·</span>
+          <Link to="/terms" className="hover:underline">Terms</Link>
         </p>
       </div>
       <Toaster position="top-center" />
