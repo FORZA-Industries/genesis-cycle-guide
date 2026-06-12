@@ -30,6 +30,8 @@ export function InsightsScreen({ onOpenTracker }: { onOpenTracker?: () => void }
       />
 
       <div className="px-5 space-y-4">
+        <PhInsightsSection onOpenTracker={onOpenTracker} />
+
         {/* Cycle regularity */}
         <div className="rounded-3xl bg-card gx-soft-shadow p-5 gx-card-shadow">
           <div className="flex items-baseline justify-between">
