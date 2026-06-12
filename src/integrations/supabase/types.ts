@@ -125,6 +125,36 @@ export type Database = {
         }
         Relationships: []
       }
+      ph_readings: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          ph_value: number
+          recorded_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          ph_value: number
+          recorded_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          ph_value?: number
+          recorded_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
