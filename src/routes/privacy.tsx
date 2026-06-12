@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 
 // ── EDIT THESE before publishing ──────────────────────────────────────────
-const CONTACT_EMAIL = "support@genesyx.app"; // must be a real, monitored inbox
+const CONTACT_EMAIL = "lucas@mysupplementfactory.com";
 const LAST_UPDATED = "12 June 2026";
 const COMPANY = "FORZA Industries";
 // ──────────────────────────────────────────────────────────────────────────
