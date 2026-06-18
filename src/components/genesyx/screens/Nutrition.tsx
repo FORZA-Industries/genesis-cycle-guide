@@ -60,6 +60,7 @@ export function NutritionScreen() {
   const phase: Phase | null = info?.phase ?? null;
   const foods = phase ? PHASE_FOODS[phase] : [];
   const [expandedFood, setExpandedFood] = useState<string | null>(null);
+  const [planOpen, setPlanOpen] = useState(false);
 
   const [waterMl, setWaterMl] = useState<number>(0);
   useEffect(() => { if (log) setWaterMl(log.waterMl); }, [log]);
