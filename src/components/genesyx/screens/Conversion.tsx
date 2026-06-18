@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { BrandOrb } from "../BrandLogo";
 import { CalendarDays, Leaf, Sparkles, BookOpen, Check, Mail, ChevronLeft, Lock } from "lucide-react";
 import { toast } from "sonner";
 import eggMale from "@/assets/egg-male.png";
@@ -30,11 +29,6 @@ export function QuizResults({
       </button>
 
       <div className="mt-2 flex flex-col items-center text-center">
-        <div className="relative h-28 w-28" aria-hidden>
-          <BrandOrb className="absolute inset-4" />
-          <img src={eggMale} alt="" className="absolute left-0 top-2 h-20 w-20 rotate-[-16deg] object-contain" loading="lazy" />
-          <img src={eggFemale} alt="" className="absolute bottom-0 right-0 h-20 w-20 rotate-[22deg] object-contain" loading="lazy" />
-        </div>
         <Badge className="mt-5 rounded-full border-none bg-[color-mix(in_oklab,var(--electric-lavender)_10%,white)] px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-primary">
           Your readiness summary
         </Badge>
