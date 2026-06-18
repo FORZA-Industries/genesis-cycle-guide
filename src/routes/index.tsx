@@ -33,6 +33,17 @@ function Index() {
   const [flow, setFlow] = useState<Flow>("splash");
   const [tab, setTab] = useState<TabKey>("home");
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleSwitchToPregnancy = () => {
+    if (!user) {
+      toast.error("Please sign in to switch to pregnancy mode.");
+      navigate({ to: "/auth" });
+      return;
+    }
+    toast.success("Pregnancy mode is coming soon — we'll let you know.");
+    setFlow("app");
+  };
 
   const isApp = flow === "app";
 
