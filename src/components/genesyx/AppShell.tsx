@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
+import appBg from "@/assets/app-bg.jpg.asset.json";
 
 interface AppShellProps {
   children: React.ReactNode;
