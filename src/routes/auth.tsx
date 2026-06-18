@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { toast, Toaster } from "sonner";
 import { BrandLogo } from "@/components/genesyx/BrandLogo";
 import { Loader2 } from "lucide-react";
+import authBg from "@/assets/auth-bg.jpg.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -86,8 +87,16 @@ function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-10">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-10 relative overflow-hidden">
+      {/* Brand background — soft floating eggs on zenith grey */}
+      <img
+        src={authBg.url}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
+        draggable={false}
+      />
+      <div className="relative z-10 w-full max-w-sm">
         <div className="flex justify-center mb-8"><BrandLogo size={32} /></div>
         <h1 className="font-display text-3xl font-semibold tracking-tight text-center">
           {mode === "signin" ? "Welcome back" : "Create your account"}

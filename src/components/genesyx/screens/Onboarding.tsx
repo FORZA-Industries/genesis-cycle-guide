@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
+import splashBg from "@/assets/splash-bg.jpg.asset.json";
+import introIllustration from "@/assets/intro-illustration.png.asset.json";
 import eggMale from "@/assets/egg-male.png";
 import eggFemale from "@/assets/egg-female.png";
 
@@ -50,7 +52,16 @@ function FloatingEgg({
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
     <div className="gx-screen relative flex h-full min-h-[760px] flex-col overflow-hidden px-6 pt-4 pb-10">
-      {/* Ambient brand eggs — symbol of the embryo, gently floating */}
+      {/* Full-bleed brand background — floating soft eggs on zenith grey */}
+      <img
+        src={splashBg.url}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        draggable={false}
+      />
+
+      {/* Ambient brand eggs — symbol of the embryo, gently floating over the bg */}
       <FloatingEgg variant="male"   size={170} delay={0}   duration={12} rotate={20}   className="-left-12 -top-6" />
       <FloatingEgg variant="female" size={150} delay={1.2} duration={13} rotate={-25}  className="-right-10 -top-4" />
       <FloatingEgg variant="female" size={110} delay={2}   duration={11} rotate={55}   className="-left-8 top-[36%]" />
@@ -122,8 +133,17 @@ export function OnboardingIntro({ onContinue, onBack }: { onContinue: () => void
         <ChevronRight className="h-5 w-5 rotate-180" />
       </button>
 
-      <div className="mt-2">
-        <h1 className="max-w-[16ch] font-display text-[30px] font-semibold leading-[1.1] tracking-tight">
+      <div className="mt-2 flex flex-col items-center text-center">
+        <img
+          src={introIllustration.url}
+          alt=""
+          aria-hidden
+          className="h-44 w-44 object-contain"
+          loading="lazy"
+          width={1024}
+          height={1024}
+        />
+        <h1 className="mt-4 max-w-[16ch] font-display text-[30px] font-semibold leading-[1.1] tracking-tight">
           Your fertility preparation, gently guided
         </h1>
         <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">

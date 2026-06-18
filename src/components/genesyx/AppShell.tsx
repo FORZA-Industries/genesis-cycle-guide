@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
+import appBg from "@/assets/app-bg.jpg.asset.json";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -29,7 +30,16 @@ export function AppShell({ children, tabBar, bgClassName, showThemeToggle }: App
           className="gx-scroll relative h-full w-full overflow-y-auto"
           style={{ paddingTop: "max(env(safe-area-inset-top), 12px)" }}
         >
-          <div className={cn("min-h-full", tabBar && "pb-28")}>{children}</div>
+          {/* Subtle branded background for all screens */}
+          <img
+            src={appBg.url}
+            alt=""
+            aria-hidden
+            className="pointer-events-none fixed inset-0 h-full w-full object-cover opacity-40"
+            draggable={false}
+            style={{ maxWidth: "420px", left: "50%", transform: "translateX(-50%)" }}
+          />
+          <div className={cn("relative z-10 min-h-full", tabBar && "pb-28")}>{children}</div>
         </div>
 
         {showThemeToggle && (

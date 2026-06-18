@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { BrandOrb } from "../BrandLogo";
 import { Baby, Apple, ChevronLeft } from "lucide-react";
+import pregnancyIllustration from "@/assets/pregnancy-illustration.png.asset.json";
 
 export function PregnancyTransition({ onSwitch, onLater }: { onSwitch: () => void; onLater: () => void }) {
   return (
@@ -10,7 +10,15 @@ export function PregnancyTransition({ onSwitch, onLater }: { onSwitch: () => voi
       </button>
 
       <div className="mt-2 flex flex-col items-center text-center">
-        <BrandOrb className="h-24 w-24" />
+        <img
+          src={pregnancyIllustration.url}
+          alt=""
+          aria-hidden
+          className="h-32 w-32 object-contain"
+          loading="lazy"
+          width={1024}
+          height={1024}
+        />
         <h1 className="mt-6 max-w-[18ch] font-display text-[26px] font-semibold leading-tight tracking-tight">
           Support for the next chapter
         </h1>
