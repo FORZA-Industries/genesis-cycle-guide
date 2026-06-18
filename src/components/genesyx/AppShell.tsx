@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
-import appBg from "@/assets/app-bg.jpg.asset.json";
+import eggMale from "@/assets/egg-male.png";
+import eggFemale from "@/assets/egg-female.png";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -30,15 +31,12 @@ export function AppShell({ children, tabBar, bgClassName, showThemeToggle }: App
           className="gx-scroll relative h-full w-full overflow-y-auto"
           style={{ paddingTop: "max(env(safe-area-inset-top), 12px)" }}
         >
-          {/* Subtle branded background for all screens */}
-          <img
-            src={appBg.url}
-            alt=""
-            aria-hidden
-            className="pointer-events-none fixed inset-0 h-full w-full object-cover opacity-40"
-            draggable={false}
-            style={{ maxWidth: "420px", left: "50%", transform: "translateX(-50%)" }}
-          />
+          {/* Subtle branded floating eggs for all screens */}
+          <div className="pointer-events-none fixed inset-y-0 left-1/2 w-full max-w-[420px] -translate-x-1/2 overflow-hidden opacity-35" aria-hidden>
+            <img src={eggFemale} alt="" className="absolute -right-16 top-16 h-36 w-36 rotate-[-24deg] select-none object-contain" draggable={false} />
+            <img src={eggMale} alt="" className="absolute -left-14 top-[42%] h-32 w-32 rotate-[18deg] select-none object-contain" draggable={false} />
+            <img src={eggFemale} alt="" className="absolute bottom-20 right-8 h-24 w-24 rotate-[32deg] select-none object-contain" draggable={false} />
+          </div>
           <div className={cn("relative z-10 min-h-full", tabBar && "pb-28")}>{children}</div>
         </div>
 

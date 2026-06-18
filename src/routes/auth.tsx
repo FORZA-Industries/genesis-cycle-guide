@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import { toast, Toaster } from "sonner";
 import { BrandLogo } from "@/components/genesyx/BrandLogo";
 import { Loader2 } from "lucide-react";
-import authBg from "@/assets/auth-bg.jpg.asset.json";
+import eggMale from "@/assets/egg-male.png";
+import eggFemale from "@/assets/egg-female.png";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -89,13 +90,10 @@ function AuthPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-10 relative overflow-hidden">
       {/* Brand background — soft floating eggs on zenith grey */}
-      <img
-        src={authBg.url}
-        alt=""
-        aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
-        draggable={false}
-      />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,color-mix(in_oklab,var(--powder-blue)_28%,transparent),transparent_30%),radial-gradient(circle_at_80%_74%,color-mix(in_oklab,var(--powder-pink)_26%,transparent),transparent_34%)]" aria-hidden>
+        <img src={eggFemale} alt="" className="absolute -right-10 top-16 h-40 w-40 rotate-[-24deg] object-contain opacity-70" draggable={false} />
+        <img src={eggMale} alt="" className="absolute -left-10 bottom-20 h-36 w-36 rotate-[20deg] object-contain opacity-70" draggable={false} />
+      </div>
       <div className="relative z-10 w-full max-w-sm">
         <div className="flex justify-center mb-8"><BrandLogo size={32} /></div>
         <h1 className="font-display text-3xl font-semibold tracking-tight text-center">

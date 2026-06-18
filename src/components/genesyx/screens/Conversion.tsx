@@ -5,8 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { BrandOrb } from "../BrandLogo";
 import { CalendarDays, Leaf, Sparkles, BookOpen, Check, Mail, ChevronLeft, Lock } from "lucide-react";
 import { toast } from "sonner";
-import resultsIllustration from "@/assets/results-illustration.png.asset.json";
-import waitlistIllustration from "@/assets/waitlist-illustration.png.asset.json";
+import eggMale from "@/assets/egg-male.png";
+import eggFemale from "@/assets/egg-female.png";
 
 export function QuizResults({
   onUnlock,
@@ -30,15 +30,11 @@ export function QuizResults({
       </button>
 
       <div className="mt-2 flex flex-col items-center text-center">
-        <img
-          src={resultsIllustration.url}
-          alt=""
-          aria-hidden
-          className="h-28 w-28 object-contain"
-          loading="lazy"
-          width={1024}
-          height={1024}
-        />
+        <div className="relative h-28 w-28" aria-hidden>
+          <BrandOrb className="absolute inset-4" />
+          <img src={eggMale} alt="" className="absolute left-0 top-2 h-20 w-20 rotate-[-16deg] object-contain" loading="lazy" />
+          <img src={eggFemale} alt="" className="absolute bottom-0 right-0 h-20 w-20 rotate-[22deg] object-contain" loading="lazy" />
+        </div>
         <Badge className="mt-5 rounded-full border-none bg-[color-mix(in_oklab,var(--electric-lavender)_10%,white)] px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-primary">
           Your readiness summary
         </Badge>
@@ -147,15 +143,12 @@ export function WaitlistScreen({ onContinue, onBack }: { onContinue: () => void;
 
       {/* Hero illustration */}
       <div className="mt-4 flex flex-col items-center">
-        <img
-          src={waitlistIllustration.url}
-          alt=""
-          aria-hidden
-          className="h-44 w-44 object-contain"
-          loading="lazy"
-          width={1024}
-          height={1024}
-        />
+        <div className="relative flex h-44 w-44 items-center justify-center" aria-hidden>
+          <BrandOrb className="absolute h-32 w-32" />
+          <Mail className="relative h-16 w-16 text-primary" />
+          <img src={eggFemale} alt="" className="absolute right-2 top-3 h-16 w-16 rotate-[28deg] object-contain" loading="lazy" />
+          <img src={eggMale} alt="" className="absolute bottom-3 left-3 h-16 w-16 rotate-[-18deg] object-contain" loading="lazy" />
+        </div>
 
         <p className="mt-7 text-[11px] font-medium uppercase tracking-[0.16em] text-primary">Free with early access</p>
         <h1 className="mt-2 max-w-[18ch] text-center font-display text-[26px] font-semibold leading-[1.1] tracking-tight">
