@@ -49,7 +49,10 @@ export function HomeScreen({
   const focus = cycleInfo ? getTodaysFocus(cycleInfo.phase) : null;
 
   return (
-    <div className="gx-screen px-5 pt-3 pb-4">
+    <div
+      className="gx-screen bg-cover bg-center bg-no-repeat px-5 pt-3 pb-4"
+      style={{ backgroundImage: `url(${homeBg.url})` }}
+    >
       <div className="flex items-center justify-between px-1">
         <div>
           <p className="text-[13px] text-muted-foreground">{greeting}</p>
