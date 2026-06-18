@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { BrandOrb } from "../BrandLogo";
 import { ArrowRight, Droplets, Plus, Leaf } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
@@ -13,7 +12,7 @@ import {
   getTodaysFocus,
 } from "@/lib/cycleEngine";
 import { CycleSettingsDialog } from "../CycleSettingsDialog";
-import homeBg from "@/assets/genesyx-home-bg.jpg.asset.json";
+
 
 const WATER_TARGET_ML = 2400;
 
@@ -49,10 +48,7 @@ export function HomeScreen({
   const focus = cycleInfo ? getTodaysFocus(cycleInfo.phase) : null;
 
   return (
-    <div
-      className="gx-screen bg-cover bg-center bg-no-repeat px-5 pt-3 pb-4"
-      style={{ backgroundImage: `url(${homeBg.url})` }}
-    >
+    <div className="gx-screen px-5 pt-3 pb-4">
       <div className="flex items-center justify-between px-1">
         <div>
           <p className="text-[13px] text-muted-foreground">{greeting}</p>
@@ -77,9 +73,6 @@ export function HomeScreen({
           onClick={() => setCycleOpen(true)}
           className="relative mt-6 block w-full overflow-hidden rounded-[28px] bg-card p-6 text-left gx-card-shadow"
         >
-          <div className="pointer-events-none absolute -right-10 -top-12 opacity-70">
-            <BrandOrb className="h-44 w-44" />
-          </div>
           <div className="relative">
             <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-primary">{topLabel}</p>
             <p className="mt-3 max-w-[14ch] font-display text-[26px] font-semibold leading-[1.1] tracking-tight">
