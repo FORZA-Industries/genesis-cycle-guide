@@ -1,6 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Toaster } from "@/components/ui/sonner";
 import { AppShell } from "@/components/genesyx/AppShell";
 import { BottomTabBar, type TabKey } from "@/components/genesyx/BottomTabBar";
 import { SplashScreen, OnboardingIntro } from "@/components/genesyx/screens/Onboarding";
