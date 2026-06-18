@@ -7,12 +7,14 @@ import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useCycleSettings } from "@/hooks/use-cycle";
+import { useAuth } from "@/hooks/use-auth";
 import { formatDateOnly } from "@/lib/cycle";
 
 export function CycleSettingsDialog({
   open, onOpenChange,
 }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const { settings, save } = useCycleSettings();
+  const { user } = useAuth();
   const todayStr = formatDateOnly(new Date());
   const [lastPeriod, setLastPeriod] = useState<string>(todayStr);
   const [cycleLen, setCycleLen] = useState<number>(28);
@@ -37,13 +39,21 @@ export function CycleSettingsDialog({
     if (periodLen < 1 || periodLen > 10) {
       toast.error("Period length must be 1–10 days"); return;
     }
+    if (!user) {
+      toast.error("Please sign in to save your cycle setup.");
+      return;
+    }
     setSaving(true);
     try {
       await save({ lastPeriodDate: lastPeriod, cycleLength: cycleLen, periodLength: periodLen });
       toast.success("Cycle updated");
       onOpenChange(false);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not save");
+      const msg = err instanceof Error ? err.message : "Could not save";
+      const friendly = /unauthorized|no authorization/i.test(msg)
+        ? "Please sign in to save your cycle setup."
+        : msg;
+      toast.error(friendly);
     } finally {
       setSaving(false);
     }

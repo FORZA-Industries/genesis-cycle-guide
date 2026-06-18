@@ -1,6 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Toaster } from "@/components/ui/sonner";
 import { AppShell } from "@/components/genesyx/AppShell";
 import { BottomTabBar, type TabKey } from "@/components/genesyx/BottomTabBar";
 import { SplashScreen, OnboardingIntro } from "@/components/genesyx/screens/Onboarding";
@@ -13,6 +12,8 @@ import { InsightsScreen } from "@/components/genesyx/screens/Insights";
 import { ProfileScreen } from "@/components/genesyx/screens/Profile";
 import { LogScreen } from "@/components/genesyx/screens/Log";
 import { PregnancyTransition } from "@/components/genesyx/screens/Pregnancy";
+import { useAuth } from "@/hooks/use-auth";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,6 +33,17 @@ function Index() {
   const [flow, setFlow] = useState<Flow>("splash");
   const [tab, setTab] = useState<TabKey>("home");
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleSwitchToPregnancy = () => {
+    if (!user) {
+      toast.error("Please sign in to switch to pregnancy mode.");
+      navigate({ to: "/auth" });
+      return;
+    }
+    toast.success("Pregnancy mode is coming soon — we'll let you know.");
+    setFlow("app");
+  };
 
   const isApp = flow === "app";
 
@@ -61,7 +73,7 @@ function Index() {
         )}
         {flow === "log" && <LogScreen onClose={() => setFlow("app")} />}
         {flow === "pregnancy" && (
-          <PregnancyTransition onSwitch={() => setFlow("app")} onLater={() => setFlow("app")} />
+          <PregnancyTransition onSwitch={handleSwitchToPregnancy} onLater={() => setFlow("app")} />
         )}
         {isApp && (
           <>
@@ -79,7 +91,6 @@ function Index() {
           </>
         )}
       </AppShell>
-      <Toaster position="top-center" />
     </>
   );
 }

@@ -79,7 +79,7 @@ function RootComponent() {
   return (
     <AuthProvider>
       <Outlet />
-      <Toaster />
+      <Toaster position="top-center" duration={3500} />
     </AuthProvider>
   );
 }
