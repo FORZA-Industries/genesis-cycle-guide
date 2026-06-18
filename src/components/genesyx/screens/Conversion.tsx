@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { BrandOrb } from "../BrandLogo";
 import { CalendarDays, Leaf, Sparkles, BookOpen, Check, Mail, ChevronLeft, Lock } from "lucide-react";
 import { toast } from "sonner";
+import resultsIllustration from "@/assets/results-illustration.png.asset.json";
+import waitlistIllustration from "@/assets/waitlist-illustration.png.asset.json";
 
 export function QuizResults({
   onUnlock,
@@ -28,7 +30,15 @@ export function QuizResults({
       </button>
 
       <div className="mt-2 flex flex-col items-center text-center">
-        <BrandOrb className="h-20 w-20" />
+        <img
+          src={resultsIllustration.url}
+          alt=""
+          aria-hidden
+          className="h-28 w-28 object-contain"
+          loading="lazy"
+          width={1024}
+          height={1024}
+        />
         <Badge className="mt-5 rounded-full border-none bg-[color-mix(in_oklab,var(--electric-lavender)_10%,white)] px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-primary">
           Your readiness summary
         </Badge>
