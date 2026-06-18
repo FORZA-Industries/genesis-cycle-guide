@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Droplets, Plus, Leaf } from "lucide-react";
+import { ArrowRight, Droplets, Plus, Leaf, LogIn } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useCycleSettings } from "@/hooks/use-cycle";
@@ -17,11 +17,12 @@ import homeBg from "@/assets/genesyx-home-bg.jpg.asset.json";
 const WATER_TARGET_ML = 2400;
 
 export function HomeScreen({
-  onLog, onPregnancy, onProfile, quizAnswers,
+  onLog, onPregnancy, onProfile, onRequireAuth, quizAnswers,
 }: {
   onLog: () => void;
   onPregnancy: () => void;
   onProfile?: () => void;
+  onRequireAuth?: () => void;
   quizAnswers?: Record<string, string>;
 }) {
   const { user } = useAuth();
@@ -74,6 +75,20 @@ export function HomeScreen({
           {initial}
         </button>
       </div>
+
+      {!user && (
+        <button
+          type="button"
+          onClick={onRequireAuth}
+          className="mt-4 flex w-full items-center justify-between rounded-2xl bg-primary px-5 py-3 text-left text-primary-foreground gx-card-shadow"
+        >
+          <span>
+            <span className="block text-[14px] font-semibold">Sign in to save your journey</span>
+            <span className="block text-[12px] opacity-85">Cycle setup, logs, pH readings, and profile sync.</span>
+          </span>
+          <LogIn className="h-5 w-5 shrink-0" />
+        </button>
+      )}
 
       {loading ? (
         <div className="relative mt-6 h-[220px] w-full overflow-hidden rounded-[28px] bg-muted gx-card-shadow">
