@@ -74,9 +74,6 @@ export function HomeScreen({
           onClick={() => setCycleOpen(true)}
           className="relative mt-6 block w-full overflow-hidden rounded-[28px] bg-card p-6 text-left gx-card-shadow"
         >
-          <div className="pointer-events-none absolute -right-10 -top-12 opacity-70">
-            <BrandOrb className="h-44 w-44" />
-          </div>
           <div className="relative">
             <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-primary">{topLabel}</p>
             <p className="mt-3 max-w-[14ch] font-display text-[26px] font-semibold leading-[1.1] tracking-tight">
