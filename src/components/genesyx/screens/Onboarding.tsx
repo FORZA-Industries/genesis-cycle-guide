@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
-import eggMale from "@/assets/egg-male.png";
-import eggFemale from "@/assets/egg-female.png";
 
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
@@ -71,10 +69,6 @@ export function OnboardingIntro({ onContinue, onBack }: { onContinue: () => void
       </button>
 
       <div className="mt-2 flex flex-col items-center text-center">
-        <div className="relative h-44 w-44" aria-hidden>
-          <img src={eggMale} alt="" className="absolute left-2 top-4 h-32 w-32 rotate-[-18deg] object-contain" loading="lazy" />
-          <img src={eggFemale} alt="" className="absolute bottom-2 right-1 h-28 w-28 rotate-[24deg] object-contain" loading="lazy" />
-        </div>
         <h1 className="mt-4 max-w-[16ch] font-display text-[30px] font-semibold leading-[1.1] tracking-tight">
           Your fertility preparation, gently guided
         </h1>
