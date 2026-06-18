@@ -73,7 +73,7 @@ function Index() {
         )}
         {flow === "log" && <LogScreen onClose={() => setFlow("app")} />}
         {flow === "pregnancy" && (
-          <PregnancyTransition onSwitch={() => setFlow("app")} onLater={() => setFlow("app")} />
+          <PregnancyTransition onSwitch={handleSwitchToPregnancy} onLater={() => setFlow("app")} />
         )}
         {isApp && (
           <>
