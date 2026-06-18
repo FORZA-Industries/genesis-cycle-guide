@@ -7,6 +7,7 @@ import { useCycleSettings } from "@/hooks/use-cycle";
 import { useDailyLog } from "@/hooks/use-daily-log";
 import { getCyclePhase, phaseLabel, type Phase } from "@/lib/cycle";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 
 const WATER_TARGET = 2400;
 const WATER_STEP = 200;
