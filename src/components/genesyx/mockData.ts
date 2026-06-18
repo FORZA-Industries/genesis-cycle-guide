@@ -38,8 +38,8 @@ export const quizQuestions = [
   },
   {
     id: "gender",
-    question: "Do you have a gender preference for your baby?",
-    helper: "Some traditions and nutrition patterns are linked to gender outcomes — your answer is completely private.",
+    question: "Do you have a preference about your baby's sex?",
+    helper: "Just a personal preference — your answer is completely private and doesn't change your plan.",
     options: [
       { id: "girl", label: "Hoping for a girl" },
       { id: "boy", label: "Hoping for a boy" },
@@ -47,8 +47,8 @@ export const quizQuestions = [
       { id: "surprise", label: "I'd love a surprise" },
     ],
     fact: {
-      title: "Did you know?",
-      body: "Research suggests that timing, diet, and even pH balance can subtly influence the likelihood of conceiving a boy or girl. Nothing is guaranteed — but small, gentle shifts can support your hopes.",
+      title: "A gentle note",
+      body: "There's no reliable evidence that diet, timing, or pH can determine your baby's sex — claims you may have seen online aren't supported by current research. Genesyx focuses on what does help: nourishing your body, understanding your cycle, and supporting your wellbeing.",
     },
   },
   {
