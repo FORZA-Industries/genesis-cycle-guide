@@ -12,7 +12,7 @@ import {
   getTodaysFocus,
 } from "@/lib/cycleEngine";
 import { CycleSettingsDialog } from "../CycleSettingsDialog";
-
+import homeBg from "@/assets/genesyx-home-bg.jpg.asset.json";
 
 const WATER_TARGET_ML = 2400;
 
