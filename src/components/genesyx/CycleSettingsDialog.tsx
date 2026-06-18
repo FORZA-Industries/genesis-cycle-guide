@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useCycleSettings } from "@/hooks/use-cycle";
+import { useAuth } from "@/hooks/use-auth";
 import { formatDateOnly } from "@/lib/cycle";
 
 export function CycleSettingsDialog({
