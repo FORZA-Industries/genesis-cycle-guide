@@ -78,7 +78,6 @@ function Index() {
           </>
         )}
       </AppShell>
-      <Toaster position="top-center" />
     </>
   );
 }
