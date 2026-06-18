@@ -39,13 +39,21 @@ export function CycleSettingsDialog({
     if (periodLen < 1 || periodLen > 10) {
       toast.error("Period length must be 1–10 days"); return;
     }
+    if (!user) {
+      toast.error("Please sign in to save your cycle setup.");
+      return;
+    }
     setSaving(true);
     try {
       await save({ lastPeriodDate: lastPeriod, cycleLength: cycleLen, periodLength: periodLen });
       toast.success("Cycle updated");
       onOpenChange(false);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not save");
+      const msg = err instanceof Error ? err.message : "Could not save";
+      const friendly = /unauthorized|no authorization/i.test(msg)
+        ? "Please sign in to save your cycle setup."
+        : msg;
+      toast.error(friendly);
     } finally {
       setSaving(false);
     }
