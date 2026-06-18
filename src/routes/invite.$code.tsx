@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { BrandLogo } from "@/components/genesyx/BrandLogo";
 import { Heart, Loader2 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
@@ -86,7 +86,6 @@ function InvitePage() {
         <Button asChild className="mt-6 h-12 rounded-xl px-8">
           <Link to="/auth">Sign in to continue</Link>
         </Button>
-        <Toaster position="top-center" />
       </div>
     );
   }
@@ -112,7 +111,6 @@ function InvitePage() {
           <Button asChild variant="ghost" className="mt-2"><Link to="/">Not now</Link></Button>
         </>
       )}
-      <Toaster position="top-center" />
     </div>
   );
 }
