@@ -14,6 +14,7 @@ export function CycleSettingsDialog({
   open, onOpenChange,
 }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const { settings, save } = useCycleSettings();
+  const { user } = useAuth();
   const todayStr = formatDateOnly(new Date());
   const [lastPeriod, setLastPeriod] = useState<string>(todayStr);
   const [cycleLen, setCycleLen] = useState<number>(28);
