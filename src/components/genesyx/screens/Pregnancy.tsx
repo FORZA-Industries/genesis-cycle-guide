@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Baby, Apple, ChevronLeft } from "lucide-react";
-import { BrandOrb } from "../BrandLogo";
-import eggFemale from "@/assets/egg-female.png";
+import { Baby, Apple, ChevronLeft, Heart, Sparkles } from "lucide-react";
 
 export function PregnancyTransition({ onSwitch, onLater }: { onSwitch: () => void; onLater: () => void }) {
   return (
@@ -11,9 +9,8 @@ export function PregnancyTransition({ onSwitch, onLater }: { onSwitch: () => voi
       </button>
 
       <div className="mt-2 flex flex-col items-center text-center">
-        <div className="relative h-32 w-32" aria-hidden>
-          <BrandOrb className="absolute inset-3" />
-          <img src={eggFemale} alt="" className="absolute inset-0 h-32 w-32 rotate-[14deg] object-contain" loading="lazy" />
+        <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-[color-mix(in_oklab,var(--powder-pink)_30%,white)] text-[var(--color-electric-pink)]" aria-hidden>
+          <Heart className="h-9 w-9" />
         </div>
         <h1 className="mt-6 max-w-[18ch] font-display text-[26px] font-semibold leading-tight tracking-tight">
           Support for the next chapter
@@ -54,6 +51,71 @@ function FeatureCard({ Icon, title, desc }: { Icon: typeof Baby; title: string; 
         <p className="font-display text-[15.5px] font-semibold tracking-tight">{title}</p>
         <p className="mt-0.5 text-[13px] leading-relaxed text-muted-foreground">{desc}</p>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Lightweight pregnancy-mode dashboard. Replaces the "coming soon" toast
+ * with a real in-app screen so the toggle actually leads somewhere.
+ */
+export function PregnancyHome({
+  displayName,
+  onBackToPrep,
+}: {
+  displayName: string;
+  onBackToPrep: () => void;
+}) {
+  return (
+    <div className="gx-screen px-5 pt-3 pb-4">
+      <div className="flex items-center justify-between px-1">
+        <div>
+          <p className="text-[13px] text-muted-foreground">Pregnancy mode</p>
+          <h1 className="mt-0.5 font-display text-[26px] font-semibold leading-tight tracking-tight">{displayName}</h1>
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-[28px] bg-card p-6 gx-card-shadow">
+        <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-electric-pink)]">Week-by-week</p>
+        <p className="mt-3 font-display text-[24px] font-semibold leading-[1.1] tracking-tight">
+          Gentle prenatal guidance
+        </p>
+        <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
+          Once you confirm your due date, Genesyx will guide you through each week with calm prenatal nutrition,
+          symptom tracking, and supplement reminders.
+        </p>
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <div className="rounded-[20px] bg-card p-4 gx-soft-shadow">
+          <Baby className="h-4 w-4 text-[var(--color-electric-pink)]" />
+          <p className="mt-3 text-[10.5px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Trimester</p>
+          <p className="mt-0.5 font-display text-[18px] font-semibold leading-tight">—</p>
+        </div>
+        <div className="rounded-[20px] bg-card p-4 gx-soft-shadow">
+          <Sparkles className="h-4 w-4 text-primary" />
+          <p className="mt-3 text-[10.5px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Focus</p>
+          <p className="mt-0.5 font-display text-[18px] font-semibold leading-tight">Folate</p>
+        </div>
+      </div>
+
+      <div className="mt-5 rounded-[24px] bg-card p-5 gx-soft-shadow">
+        <p className="font-display text-[15.5px] font-semibold tracking-tight">Prenatal essentials</p>
+        <ul className="mt-2 space-y-1.5 text-[13.5px] text-foreground/85">
+          <li>• Folate 400–800 mcg daily</li>
+          <li>• Vitamin D 600 IU daily</li>
+          <li>• Omega-3 (DHA) 200 mg daily</li>
+          <li>• Stay hydrated and rest when needed</li>
+        </ul>
+      </div>
+
+      <Button
+        onClick={onBackToPrep}
+        variant="outline"
+        className="mt-6 h-12 w-full rounded-2xl"
+      >
+        Switch back to fertility prep
+      </Button>
     </div>
   );
 }

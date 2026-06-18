@@ -4,14 +4,14 @@ import { AppShell } from "@/components/genesyx/AppShell";
 import { BottomTabBar, type TabKey } from "@/components/genesyx/BottomTabBar";
 import { SplashScreen, OnboardingIntro } from "@/components/genesyx/screens/Onboarding";
 import { QuizFlow } from "@/components/genesyx/screens/Quiz";
-import { QuizResults, WaitlistScreen } from "@/components/genesyx/screens/Conversion";
+import { QuizResults, WaitlistScreen, type QuizAnswers } from "@/components/genesyx/screens/Conversion";
 import { HomeScreen } from "@/components/genesyx/screens/Home";
 import { TrackScreen } from "@/components/genesyx/screens/Track";
 import { NutritionScreen } from "@/components/genesyx/screens/Nutrition";
 import { InsightsScreen } from "@/components/genesyx/screens/Insights";
 import { ProfileScreen } from "@/components/genesyx/screens/Profile";
 import { LogScreen } from "@/components/genesyx/screens/Log";
-import { PregnancyTransition } from "@/components/genesyx/screens/Pregnancy";
+import { PregnancyTransition, PregnancyHome } from "@/components/genesyx/screens/Pregnancy";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 
@@ -28,10 +28,13 @@ export const Route = createFileRoute("/")({
 });
 
 type Flow = "splash" | "intro" | "quiz" | "results" | "waitlist" | "app" | "log" | "pregnancy";
+type Mode = "prep" | "pregnancy";
 
 function Index() {
   const [flow, setFlow] = useState<Flow>("splash");
   const [tab, setTab] = useState<TabKey>("home");
+  const [mode, setMode] = useState<Mode>("prep");
+  const [quizAnswers, setQuizAnswers] = useState<QuizAnswers>({});
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -41,56 +44,70 @@ function Index() {
       navigate({ to: "/auth" });
       return;
     }
-    toast.success("Pregnancy mode is coming soon — we'll let you know.");
+    setMode("pregnancy");
     setFlow("app");
+    setTab("home");
+    toast.success("Switched to pregnancy mode");
   };
+
+  const displayName =
+    (user?.user_metadata?.full_name as string | undefined) ??
+    (user?.user_metadata?.display_name as string | undefined) ??
+    user?.email?.split("@")[0] ??
+    "Guest";
 
   const isApp = flow === "app";
 
   return (
-    <>
-      <AppShell
-        tabBar={isApp ? <BottomTabBar active={tab} onChange={setTab} /> : undefined}
-      >
-        {flow === "splash" && (
-          <SplashScreen onStart={() => setFlow("intro")} onSignIn={() => navigate({ to: "/auth" })} />
-        )}
-        {flow === "intro" && (
-          <OnboardingIntro onContinue={() => setFlow("quiz")} onBack={() => setFlow("splash")} />
-        )}
-        {flow === "quiz" && (
-          <QuizFlow onComplete={() => setFlow("results")} onBack={() => setFlow("intro")} />
-        )}
-        {flow === "results" && (
-          <QuizResults
-            onUnlock={() => setFlow("waitlist")}
-            onContinue={() => setFlow("app")}
-            onBack={() => setFlow("intro")}
-          />
-        )}
-        {flow === "waitlist" && (
-          <WaitlistScreen onContinue={() => setFlow("app")} onBack={() => setFlow("results")} />
-        )}
-        {flow === "log" && <LogScreen onClose={() => setFlow("app")} />}
-        {flow === "pregnancy" && (
-          <PregnancyTransition onSwitch={handleSwitchToPregnancy} onLater={() => setFlow("app")} />
-        )}
-        {isApp && (
-          <>
-            {tab === "home" && (
-              <HomeScreen
-                onLog={() => setFlow("log")}
-                onPregnancy={() => setFlow("pregnancy")}
-                onProfile={() => setTab("profile")}
-              />
-            )}
-            {tab === "track" && <TrackScreen onLog={() => setFlow("log")} />}
-            {tab === "nutrition" && <NutritionScreen />}
-            {tab === "insights" && <InsightsScreen onOpenTracker={() => setTab("track")} />}
-            {tab === "profile" && <ProfileScreen onPregnancy={() => setFlow("pregnancy")} />}
-          </>
-        )}
-      </AppShell>
-    </>
+    <AppShell
+      tabBar={isApp ? <BottomTabBar active={tab} onChange={setTab} /> : undefined}
+    >
+      {flow === "splash" && (
+        <SplashScreen onStart={() => setFlow("intro")} onSignIn={() => navigate({ to: "/auth" })} />
+      )}
+      {flow === "intro" && (
+        <OnboardingIntro onContinue={() => setFlow("quiz")} onBack={() => setFlow("splash")} />
+      )}
+      {flow === "quiz" && (
+        <QuizFlow
+          onComplete={(a) => { setQuizAnswers(a); setFlow("results"); }}
+          onBack={() => setFlow("intro")}
+        />
+      )}
+      {flow === "results" && (
+        <QuizResults
+          answers={quizAnswers}
+          onUnlock={() => setFlow("waitlist")}
+          onContinue={() => setFlow("app")}
+          onBack={() => setFlow("intro")}
+        />
+      )}
+      {flow === "waitlist" && (
+        <WaitlistScreen onContinue={() => setFlow("app")} onBack={() => setFlow("results")} />
+      )}
+      {flow === "log" && <LogScreen onClose={() => setFlow("app")} />}
+      {flow === "pregnancy" && (
+        <PregnancyTransition onSwitch={handleSwitchToPregnancy} onLater={() => setFlow("app")} />
+      )}
+      {isApp && (
+        <>
+          {tab === "home" && mode === "prep" && (
+            <HomeScreen
+              quizAnswers={quizAnswers}
+              onLog={() => setFlow("log")}
+              onPregnancy={() => setFlow("pregnancy")}
+              onProfile={() => setTab("profile")}
+            />
+          )}
+          {tab === "home" && mode === "pregnancy" && (
+            <PregnancyHome displayName={displayName} onBackToPrep={() => setMode("prep")} />
+          )}
+          {tab === "track" && <TrackScreen onLog={() => setFlow("log")} />}
+          {tab === "nutrition" && <NutritionScreen />}
+          {tab === "insights" && <InsightsScreen onOpenTracker={() => setTab("track")} />}
+          {tab === "profile" && <ProfileScreen onPregnancy={() => setFlow("pregnancy")} />}
+        </>
+      )}
+    </AppShell>
   );
 }
