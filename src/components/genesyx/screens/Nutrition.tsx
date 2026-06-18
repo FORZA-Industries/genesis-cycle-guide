@@ -65,6 +65,7 @@ export function NutritionScreen({ onRequireAuth }: { onRequireAuth?: () => void 
   const foods = phase ? PHASE_FOODS[phase] : [];
   const [expandedFood, setExpandedFood] = useState<string | null>(null);
   const [planOpen, setPlanOpen] = useState(false);
+  const [articleOpen, setArticleOpen] = useState<(typeof articles)[number] | null>(null);
 
   const [waterMl, setWaterMl] = useState<number>(0);
   useEffect(() => { if (log) setWaterMl(log.waterMl); }, [log]);
@@ -231,7 +232,7 @@ export function NutritionScreen({ onRequireAuth }: { onRequireAuth?: () => void 
           <p className="mb-3 px-1 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Learn more</p>
           <div className="space-y-2">
             {articles.map((a) => (
-              <button key={a.title} className="flex w-full items-center justify-between rounded-2xl bg-card p-4 text-left gx-soft-shadow">
+              <button key={a.title} onClick={() => setArticleOpen(a)} className="flex w-full items-center justify-between rounded-2xl bg-card p-4 text-left gx-soft-shadow">
                 <div className="min-w-0 pr-3">
                   <p className="text-[14.5px] font-medium leading-snug text-foreground">{a.title}</p>
                   <p className="mt-1 text-[11.5px] text-muted-foreground">{a.read}</p>
@@ -257,6 +258,21 @@ export function NutritionScreen({ onRequireAuth }: { onRequireAuth?: () => void 
           </ul>
           <DialogFooter>
             <Button onClick={() => setPlanOpen(false)} className="rounded-xl">Got it</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!articleOpen} onOpenChange={(open) => { if (!open) setArticleOpen(null); }}>
+        <DialogContent className="sm:max-w-[380px]">
+          <DialogHeader>
+            <DialogTitle>{articleOpen?.title}</DialogTitle>
+            <DialogDescription>{articleOpen?.read}</DialogDescription>
+          </DialogHeader>
+          <p className="text-[13.5px] leading-relaxed text-muted-foreground">
+            Keep the focus simple: regular meals, steady hydration, and phase-aware foods. Use your logs and pH tracker to notice patterns over time rather than chasing perfection.
+          </p>
+          <DialogFooter>
+            <Button onClick={() => setArticleOpen(null)} className="rounded-xl">Done</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
