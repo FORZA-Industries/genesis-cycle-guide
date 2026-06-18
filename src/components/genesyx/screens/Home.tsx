@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { BrandOrb } from "../BrandLogo";
 import { ArrowRight, Droplets, Plus, Leaf } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
