@@ -87,61 +87,57 @@ function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-10 relative overflow-hidden">
-      {/* Brand background — soft floating eggs on zenith grey */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,color-mix(in_oklab,var(--powder-blue)_28%,transparent),transparent_30%),radial-gradient(circle_at_80%_74%,color-mix(in_oklab,var(--powder-pink)_26%,transparent),transparent_34%)]" aria-hidden>
-        <img src={eggFemale} alt="" className="absolute -right-10 top-16 h-40 w-40 rotate-[-24deg] object-contain opacity-70" draggable={false} />
-        <img src={eggMale} alt="" className="absolute -left-10 bottom-20 h-36 w-36 rotate-[20deg] object-contain opacity-70" draggable={false} />
-      </div>
-      <div className="relative z-10 w-full max-w-sm">
-        <div className="flex justify-center mb-8"><BrandLogo size={32} /></div>
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-center">
-          {mode === "signin" ? "Welcome back" : "Create your account"}
-        </h1>
-        <p className="mt-2 text-center text-sm text-muted-foreground">
-          {mode === "signin" ? "Sign in to sync your journey across devices." : "Save your cycle, nutrition, and partner info securely."}
-        </p>
+    <AppShell>
+      <div className="flex min-h-full flex-col items-center justify-center px-6 py-10 relative">
+        <div className="relative z-10 w-full max-w-sm">
+          <div className="flex justify-center mb-8"><BrandLogo size={32} /></div>
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-center">
+            {mode === "signin" ? "Welcome back" : "Create your account"}
+          </h1>
+          <p className="mt-2 text-center text-sm text-muted-foreground">
+            {mode === "signin" ? "Sign in to sync your journey across devices." : "Save your cycle, nutrition, and partner info securely."}
+          </p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-          {mode === "signup" && (
+          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            {mode === "signup" && (
+              <div>
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" maxLength={80} className="mt-1.5 h-12 rounded-xl" />
+              </div>
+            )}
             <div>
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" maxLength={80} className="mt-1.5 h-12 rounded-xl" />
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" className="mt-1.5 h-12 rounded-xl" />
             </div>
-          )}
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" className="mt-1.5 h-12 rounded-xl" />
+            <div>
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete={mode === "signin" ? "current-password" : "new-password"} className="mt-1.5 h-12 rounded-xl" />
+            </div>
+            <Button type="submit" disabled={busy} className="h-12 w-full rounded-xl text-base font-semibold">
+              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "signin" ? "Sign in" : "Create account"}
+            </Button>
+          </form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
+            <div className="relative flex justify-center"><span className="bg-background px-2 text-xs uppercase tracking-wider text-muted-foreground">or</span></div>
           </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete={mode === "signin" ? "current-password" : "new-password"} className="mt-1.5 h-12 rounded-xl" />
-          </div>
-          <Button type="submit" disabled={busy} className="h-12 w-full rounded-xl text-base font-semibold">
-            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "signin" ? "Sign in" : "Create account"}
+
+          <Button variant="outline" onClick={handleGoogle} disabled={busy} className="h-12 w-full rounded-xl text-base font-medium">
+            Continue with Google
           </Button>
-        </form>
 
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
-          <div className="relative flex justify-center"><span className="bg-background px-2 text-xs uppercase tracking-wider text-muted-foreground">or</span></div>
+          <p className="mt-8 text-center text-sm text-muted-foreground">
+            {mode === "signin" ? "New here? " : "Already have an account? "}
+            <button type="button" onClick={() => setMode(mode === "signin" ? "signup" : "signin")} className="font-semibold text-primary hover:underline">
+              {mode === "signin" ? "Create account" : "Sign in"}
+            </button>
+          </p>
+          <p className="mt-4 text-center text-xs text-muted-foreground">
+            <Link to="/" className="hover:underline">Back to app</Link>
+          </p>
         </div>
-
-        <Button variant="outline" onClick={handleGoogle} disabled={busy} className="h-12 w-full rounded-xl text-base font-medium">
-          Continue with Google
-        </Button>
-
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          {mode === "signin" ? "New here? " : "Already have an account? "}
-          <button type="button" onClick={() => setMode(mode === "signin" ? "signup" : "signin")} className="font-semibold text-primary hover:underline">
-            {mode === "signin" ? "Create account" : "Sign in"}
-          </button>
-        </p>
-        <p className="mt-4 text-center text-xs text-muted-foreground">
-          <Link to="/" className="hover:underline">Back to app</Link>
-        </p>
       </div>
-      <Toaster position="top-center" />
-    </div>
+    </AppShell>
   );
 }
