@@ -7,7 +7,7 @@ interface AppShellProps {
   tabBar?: React.ReactNode;
   bgClassName?: string;
   showThemeToggle?: boolean;
-  hideFloatingEggs?: boolean;
+  
 }
 
 /**
