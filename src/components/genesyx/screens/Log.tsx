@@ -9,12 +9,13 @@ import { Smile, Meh, Frown, Heart, Plus, Droplets, Moon, Pill, Apple, Check } fr
 import { toast } from "sonner";
 import { useDailyLog } from "@/hooks/use-daily-log";
 import { supabase } from "@/integrations/supabase/client";
+import { showSignInRequired } from "@/lib/authPrompt";
 
 
 const SUPPLEMENTS = ["Folic acid", "Vitamin D", "Iron", "Omega-3"];
 const WATER_TARGET = 2400;
 
-export function LogScreen({ onClose }: { onClose: () => void }) {
+export function LogScreen({ onClose, onRequireAuth }: { onClose: () => void; onRequireAuth?: () => void }) {
   const { log, loading, save } = useDailyLog();
   const [mood, setMood] = useState<string | null>(null);
   const [energy, setEnergy] = useState<"low" | "normal" | "high" | null>(null);
@@ -73,7 +74,7 @@ export function LogScreen({ onClose }: { onClose: () => void }) {
   const onSave = async () => {
     const { data: sessionData } = await supabase.auth.getSession();
     if (!sessionData.session) {
-      toast.error("Please sign in to save your log.");
+      showSignInRequired("Sign in to save your log.", onRequireAuth);
       return;
     }
     setSaving(true);

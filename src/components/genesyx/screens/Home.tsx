@@ -177,7 +177,7 @@ export function HomeScreen({
         <ArrowRight className="h-4 w-4 text-muted-foreground" />
       </button>
 
-      <CycleSettingsDialog open={cycleOpen} onOpenChange={setCycleOpen} />
+      <CycleSettingsDialog open={cycleOpen} onOpenChange={setCycleOpen} onRequireAuth={onRequireAuth} />
     </div>
   );
 }
