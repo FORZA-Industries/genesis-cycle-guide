@@ -48,7 +48,7 @@ export function HomeScreen({
   const focus = cycleInfo ? getTodaysFocus(cycleInfo.phase) : null;
 
   return (
-    <div className="gx-screen px-5 pt-3 pb-4">
+    <div className="gx-screen bg-black px-5 pt-3 pb-4">
       <div className="flex items-center justify-between px-1">
         <div>
           <p className="text-[13px] text-muted-foreground">{greeting}</p>
