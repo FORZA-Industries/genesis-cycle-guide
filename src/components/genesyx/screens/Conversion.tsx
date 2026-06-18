@@ -21,8 +21,6 @@ function personalizedInsights(a: QuizAnswers) {
 
   const nutritionVal =
     a.support === "nutrition" ? "Folate, omega-3, zinc, and iron-forward meals"
-    : a.gender === "girl" ? "Calcium and magnesium-rich, balanced meals"
-    : a.gender === "boy" ? "Potassium and sodium-aware, protein-forward meals"
     : "Folate, omega-3, and zinc-rich foods";
 
   const supportVal =

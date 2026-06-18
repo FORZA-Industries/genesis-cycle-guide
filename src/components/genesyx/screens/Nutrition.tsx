@@ -5,10 +5,12 @@ import { articles } from "../mockData";
 import { Droplets, ChevronRight, Pill, Minus, Plus } from "lucide-react";
 import { useCycleSettings } from "@/hooks/use-cycle";
 import { useDailyLog } from "@/hooks/use-daily-log";
+import { useAuth } from "@/hooks/use-auth";
 import { getCyclePhase, phaseLabel, type Phase } from "@/lib/cycle";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { PhTrackerCard } from "../PhTrackerCard";
+import { showSignInRequired } from "@/lib/authPrompt";
 
 const WATER_TARGET = 2400;
 const WATER_STEP = 200;
@@ -53,6 +55,7 @@ const PHASE_DESCRIPTION: Record<Phase, string> = {
 };
 
 export function NutritionScreen({ onRequireAuth }: { onRequireAuth?: () => void }) {
+  const { user } = useAuth();
   const { settings, loading } = useCycleSettings();
   const { log, save } = useDailyLog();
   const info = settings
@@ -74,6 +77,10 @@ export function NutritionScreen({ onRequireAuth }: { onRequireAuth?: () => void 
     }, 500);
   };
   const bump = (delta: number) => {
+    if (!user) {
+      showSignInRequired("Sign in to save hydration and nutrition logs.", onRequireAuth);
+      return;
+    }
     const next = Math.max(0, Math.min(10000, waterMl + delta));
     setWaterMl(next);
     queueSave(next);

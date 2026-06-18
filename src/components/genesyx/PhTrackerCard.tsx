@@ -9,6 +9,7 @@ import { usePhReadings, phStatus, PH_STATUS_LABEL, PH_STATUS_COLOR } from "@/hoo
 import type { PhReadingDTO } from "@/lib/ph.functions";
 import { PhLogDialog } from "./PhLogDialog";
 import { useAuth } from "@/hooks/use-auth";
+import { showSignInRequired } from "@/lib/authPrompt";
 
 type Range = "7" | "30" | "90" | "all";
 const RANGE_DAYS: Record<Range, number | null> = { "7": 7, "30": 30, "90": 90, all: null };
@@ -33,7 +34,14 @@ export function PhTrackerCard({ onRequireAuth }: { onRequireAuth?: () => void })
     label: fmtDate(r.recordedAt),
   }));
 
-  const openNew = () => { setEditing(null); setLogOpen(true); };
+  const openNew = () => {
+    if (!user) {
+      showSignInRequired("Sign in to save pH readings.", onRequireAuth);
+      return;
+    }
+    setEditing(null);
+    setLogOpen(true);
+  };
   const openEdit = (r: PhReadingDTO) => { setEditing(r); setLogOpen(true); };
 
   return (
