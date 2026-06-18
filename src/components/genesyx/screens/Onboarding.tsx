@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
-import splashBg from "@/assets/splash-bg.jpg.asset.json";
-import introIllustration from "@/assets/intro-illustration.png.asset.json";
 import eggMale from "@/assets/egg-male.png";
 import eggFemale from "@/assets/egg-female.png";
 
@@ -52,14 +50,7 @@ function FloatingEgg({
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
     <div className="gx-screen relative flex h-full min-h-[760px] flex-col overflow-hidden px-6 pt-4 pb-10">
-      {/* Full-bleed brand background — floating soft eggs on zenith grey */}
-      <img
-        src={splashBg.url}
-        alt=""
-        aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-        draggable={false}
-      />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,color-mix(in_oklab,var(--powder-blue)_28%,transparent),transparent_34%),radial-gradient(circle_at_80%_82%,color-mix(in_oklab,var(--powder-pink)_24%,transparent),transparent_32%)]" aria-hidden />
 
       {/* Ambient brand eggs — symbol of the embryo, gently floating over the bg */}
       <FloatingEgg variant="male"   size={170} delay={0}   duration={12} rotate={20}   className="-left-12 -top-6" />
@@ -134,15 +125,10 @@ export function OnboardingIntro({ onContinue, onBack }: { onContinue: () => void
       </button>
 
       <div className="mt-2 flex flex-col items-center text-center">
-        <img
-          src={introIllustration.url}
-          alt=""
-          aria-hidden
-          className="h-44 w-44 object-contain"
-          loading="lazy"
-          width={1024}
-          height={1024}
-        />
+        <div className="relative h-44 w-44" aria-hidden>
+          <img src={eggMale} alt="" className="absolute left-2 top-4 h-32 w-32 rotate-[-18deg] object-contain" loading="lazy" />
+          <img src={eggFemale} alt="" className="absolute bottom-2 right-1 h-28 w-28 rotate-[24deg] object-contain" loading="lazy" />
+        </div>
         <h1 className="mt-4 max-w-[16ch] font-display text-[30px] font-semibold leading-[1.1] tracking-tight">
           Your fertility preparation, gently guided
         </h1>
