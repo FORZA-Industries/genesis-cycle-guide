@@ -8,6 +8,7 @@ import { useDailyLog } from "@/hooks/use-daily-log";
 import { getCyclePhase, phaseLabel, type Phase } from "@/lib/cycle";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { PhTrackerCard } from "../PhTrackerCard";
 
 const WATER_TARGET = 2400;
 const WATER_STEP = 200;
@@ -51,7 +52,7 @@ const PHASE_DESCRIPTION: Record<Phase, string> = {
   luteal: "Foods to ease PMS and support your winding-down phase.",
 };
 
-export function NutritionScreen() {
+export function NutritionScreen({ onRequireAuth }: { onRequireAuth?: () => void }) {
   const { settings, loading } = useCycleSettings();
   const { log, save } = useDailyLog();
   const info = settings
@@ -128,6 +129,8 @@ export function NutritionScreen() {
             <span>{remaining > 0 ? `${remaining}ml to go` : "Target reached — nice work"}</span>
           </div>
         </div>
+
+        <PhTrackerCard onRequireAuth={onRequireAuth} />
 
         {/* Focus foods — phase-driven, expandable */}
         <div className="rounded-[28px] bg-card overflow-hidden gx-card-shadow">

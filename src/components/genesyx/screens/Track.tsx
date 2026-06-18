@@ -29,7 +29,7 @@ const dayClass: Record<DayType, string> = {
 const monthLabel = (d: Date) =>
   d.toLocaleString(undefined, { month: "long", year: "numeric" });
 
-export function TrackScreen({ onLog }: { onLog: () => void }) {
+export function TrackScreen({ onLog, onRequireAuth }: { onLog: () => void; onRequireAuth?: () => void }) {
   const { settings, loading } = useCycleSettings();
   const [cycleOpen, setCycleOpen] = useState(false);
   const [monthAnchor, setMonthAnchor] = useState<Date>(() => {
@@ -181,11 +181,11 @@ export function TrackScreen({ onLog }: { onLog: () => void }) {
         </Button>
 
         <div className="mt-5">
-          <PhTrackerCard />
+          <PhTrackerCard onRequireAuth={onRequireAuth} />
         </div>
       </div>
 
-      <CycleSettingsDialog open={cycleOpen} onOpenChange={setCycleOpen} />
+      <CycleSettingsDialog open={cycleOpen} onOpenChange={setCycleOpen} onRequireAuth={onRequireAuth} />
 
       <Dialog open={!!selectedDate} onOpenChange={(v) => { if (!v) setSelectedDate(null); }}>
         <DialogContent className="sm:max-w-[380px]">

@@ -16,7 +16,7 @@ const RANGE_DAYS: Record<Range, number | null> = { "7": 7, "30": 30, "90": 90, a
 const fmtDate = (iso: string) => new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 const fmtTime = (iso: string) => new Date(iso).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
 
-export function PhTrackerCard() {
+export function PhTrackerCard({ onRequireAuth }: { onRequireAuth?: () => void }) {
   const { user } = useAuth();
   const [range, setRange] = useState<Range>("30");
   const { readings, loading } = usePhReadings(RANGE_DAYS[range]);
@@ -98,7 +98,7 @@ export function PhTrackerCard() {
         {loading ? (
           <div className="h-full w-full animate-pulse rounded-2xl bg-muted/50" />
         ) : !user ? (
-          <EmptyState label="Sign in to track your pH" />
+          <EmptyState label="Sign in to track your pH" cta="Sign in" onCta={onRequireAuth} />
         ) : chartData.length === 0 ? (
           <EmptyState label="No readings yet" cta="Log your first pH" onCta={openNew} />
         ) : (
