@@ -4,67 +4,13 @@ import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
 import eggMale from "@/assets/egg-male.png";
 import eggFemale from "@/assets/egg-female.png";
 
-
-/**
- * Floating brand Egg — uses the official Genesyx 'Egg' artworks
- * (Male = blue, Female = pink) from the brand guidelines. The JPGs ship
- * on a white background, so we use mix-blend-multiply to drop the white
- * cleanly against the Zenith Grey canvas.
- */
-function FloatingEgg({
-  variant,
-  size,
-  className = "",
-  delay = 0,
-  duration = 10,
-  rotate = 0,
-  opacity = 1,
-}: {
-  variant: "male" | "female";
-  size: number;
-  className?: string;
-  delay?: number;
-  duration?: number;
-  rotate?: number;
-  opacity?: number;
-}) {
-  return (
-    <img
-      src={variant === "male" ? eggMale : eggFemale}
-      alt=""
-      aria-hidden
-      className={`pointer-events-none absolute select-none ${className}`}
-
-      style={{
-        width: size,
-        height: size,
-        transform: `rotate(${rotate}deg)`,
-        animation: `gx-float ${duration}s ease-in-out ${delay}s infinite`,
-        opacity,
-      }}
-      draggable={false}
-    />
-  );
-}
-
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
     <div className="gx-screen relative flex h-full min-h-[760px] flex-col overflow-hidden px-6 pt-4 pb-10">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,color-mix(in_oklab,var(--powder-blue)_28%,transparent),transparent_34%),radial-gradient(circle_at_80%_82%,color-mix(in_oklab,var(--powder-pink)_24%,transparent),transparent_32%)]" aria-hidden />
-
-      {/* Ambient brand eggs — symbol of the embryo, gently floating over the bg */}
-      <FloatingEgg variant="male"   size={170} delay={0}   duration={12} rotate={20}   className="-left-12 -top-6" />
-      <FloatingEgg variant="female" size={150} delay={1.2} duration={13} rotate={-25}  className="-right-10 -top-4" />
-      <FloatingEgg variant="female" size={110} delay={2}   duration={11} rotate={55}   className="-left-8 top-[36%]" />
-      <FloatingEgg variant="male"   size={130} delay={0.6} duration={14} rotate={-15}  className="-right-12 top-[42%]" />
-      <FloatingEgg variant="male"   size={90}  delay={2.4} duration={10} rotate={70}   className="left-1/3 top-[18%]" opacity={0.85} />
-      <FloatingEgg variant="female" size={120} delay={1.8} duration={13} rotate={-50}  className="-left-10 bottom-44" />
-      <FloatingEgg variant="male"   size={150} delay={0.4} duration={12} rotate={30}   className="-right-14 bottom-36" />
-      <FloatingEgg variant="female" size={70}  delay={3}   duration={11} rotate={0}    className="right-1/4 bottom-24" opacity={0.85} />
-
       <div className="relative z-10 flex justify-center pt-2">
         <BrandLogo size={64} />
       </div>
+
 
       <div className="relative z-10 mt-8 flex flex-1 flex-col items-center justify-center text-center">
         <p className="font-display text-[13px] font-medium uppercase tracking-[0.22em] text-[var(--color-electric-lavender)]">
