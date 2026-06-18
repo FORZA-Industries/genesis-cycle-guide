@@ -2,11 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { BrandOrb } from "../BrandLogo";
 import { CalendarDays, Leaf, Sparkles, BookOpen, Check, Mail, ChevronLeft, Lock } from "lucide-react";
 import { toast } from "sonner";
-import eggMale from "@/assets/egg-male.png";
-import eggFemale from "@/assets/egg-female.png";
 
 export function QuizResults({
   onUnlock,
@@ -138,11 +135,8 @@ export function WaitlistScreen({ onContinue, onBack }: { onContinue: () => void;
 
       {/* Hero illustration */}
       <div className="mt-4 flex flex-col items-center">
-        <div className="relative flex h-44 w-44 items-center justify-center" aria-hidden>
-          <BrandOrb className="absolute h-32 w-32" />
-          <Mail className="relative h-16 w-16 text-primary" />
-          <img src={eggFemale} alt="" className="absolute right-2 top-3 h-16 w-16 rotate-[28deg] object-contain" loading="lazy" />
-          <img src={eggMale} alt="" className="absolute bottom-3 left-3 h-16 w-16 rotate-[-18deg] object-contain" loading="lazy" />
+        <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-[color-mix(in_oklab,var(--electric-lavender)_10%,white)] text-primary" aria-hidden>
+          <Mail className="h-8 w-8" />
         </div>
 
         <p className="mt-7 text-[11px] font-medium uppercase tracking-[0.16em] text-primary">Free with early access</p>
