@@ -9,10 +9,11 @@ import { toast } from "sonner";
 import { useCycleSettings } from "@/hooks/use-cycle";
 import { useAuth } from "@/hooks/use-auth";
 import { formatDateOnly } from "@/lib/cycle";
+import { showSignInRequired } from "@/lib/authPrompt";
 
 export function CycleSettingsDialog({
-  open, onOpenChange,
-}: { open: boolean; onOpenChange: (v: boolean) => void }) {
+  open, onOpenChange, onRequireAuth,
+}: { open: boolean; onOpenChange: (v: boolean) => void; onRequireAuth?: () => void }) {
   const { settings, save } = useCycleSettings();
   const { user } = useAuth();
   const todayStr = formatDateOnly(new Date());
@@ -40,7 +41,7 @@ export function CycleSettingsDialog({
       toast.error("Period length must be 1–10 days"); return;
     }
     if (!user) {
-      toast.error("Please sign in to save your cycle setup.");
+      showSignInRequired("Sign in to save your cycle setup.", onRequireAuth);
       return;
     }
     setSaving(true);
