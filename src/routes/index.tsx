@@ -12,6 +12,8 @@ import { InsightsScreen } from "@/components/genesyx/screens/Insights";
 import { ProfileScreen } from "@/components/genesyx/screens/Profile";
 import { LogScreen } from "@/components/genesyx/screens/Log";
 import { PregnancyTransition } from "@/components/genesyx/screens/Pregnancy";
+import { useAuth } from "@/hooks/use-auth";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
