@@ -7,11 +7,10 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { BrandLogo } from "@/components/genesyx/BrandLogo";
+import { AppShell } from "@/components/genesyx/AppShell";
 import { Loader2 } from "lucide-react";
-import eggMale from "@/assets/egg-male.png";
-import eggFemale from "@/assets/egg-female.png";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
