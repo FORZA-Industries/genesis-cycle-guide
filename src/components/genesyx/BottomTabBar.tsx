@@ -20,7 +20,7 @@ export function BottomTabBar({ active, onChange }: BottomTabBarProps) {
   return (
     <nav
       aria-label="Primary"
-      className="absolute bottom-0 left-0 right-0 border-t border-border/60 bg-card/95 backdrop-blur-xl"
+      className="absolute bottom-0 left-0 right-0 z-40 border-t border-border/60 bg-card/95 backdrop-blur-xl"
       style={{ paddingBottom: "max(env(safe-area-inset-bottom), 12px)" }}
     >
       <ul className="flex items-stretch justify-around px-2 pt-2">

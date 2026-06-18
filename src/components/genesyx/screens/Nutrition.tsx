@@ -5,9 +5,12 @@ import { articles } from "../mockData";
 import { Droplets, ChevronRight, Pill, Minus, Plus } from "lucide-react";
 import { useCycleSettings } from "@/hooks/use-cycle";
 import { useDailyLog } from "@/hooks/use-daily-log";
+import { useAuth } from "@/hooks/use-auth";
 import { getCyclePhase, phaseLabel, type Phase } from "@/lib/cycle";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { PhTrackerCard } from "../PhTrackerCard";
+import { showSignInRequired } from "@/lib/authPrompt";
 
 const WATER_TARGET = 2400;
 const WATER_STEP = 200;
@@ -51,7 +54,8 @@ const PHASE_DESCRIPTION: Record<Phase, string> = {
   luteal: "Foods to ease PMS and support your winding-down phase.",
 };
 
-export function NutritionScreen() {
+export function NutritionScreen({ onRequireAuth }: { onRequireAuth?: () => void }) {
+  const { user } = useAuth();
   const { settings, loading } = useCycleSettings();
   const { log, save } = useDailyLog();
   const info = settings
@@ -61,6 +65,7 @@ export function NutritionScreen() {
   const foods = phase ? PHASE_FOODS[phase] : [];
   const [expandedFood, setExpandedFood] = useState<string | null>(null);
   const [planOpen, setPlanOpen] = useState(false);
+  const [articleOpen, setArticleOpen] = useState<(typeof articles)[number] | null>(null);
 
   const [waterMl, setWaterMl] = useState<number>(0);
   useEffect(() => { if (log) setWaterMl(log.waterMl); }, [log]);
@@ -73,6 +78,10 @@ export function NutritionScreen() {
     }, 500);
   };
   const bump = (delta: number) => {
+    if (!user) {
+      showSignInRequired("Sign in to save hydration and nutrition logs.", onRequireAuth);
+      return;
+    }
     const next = Math.max(0, Math.min(10000, waterMl + delta));
     setWaterMl(next);
     queueSave(next);
@@ -128,6 +137,8 @@ export function NutritionScreen() {
             <span>{remaining > 0 ? `${remaining}ml to go` : "Target reached — nice work"}</span>
           </div>
         </div>
+
+        <PhTrackerCard onRequireAuth={onRequireAuth} />
 
         {/* Focus foods — phase-driven, expandable */}
         <div className="rounded-[28px] bg-card overflow-hidden gx-card-shadow">
@@ -221,7 +232,7 @@ export function NutritionScreen() {
           <p className="mb-3 px-1 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Learn more</p>
           <div className="space-y-2">
             {articles.map((a) => (
-              <button key={a.title} className="flex w-full items-center justify-between rounded-2xl bg-card p-4 text-left gx-soft-shadow">
+              <button key={a.title} onClick={() => setArticleOpen(a)} className="flex w-full items-center justify-between rounded-2xl bg-card p-4 text-left gx-soft-shadow">
                 <div className="min-w-0 pr-3">
                   <p className="text-[14.5px] font-medium leading-snug text-foreground">{a.title}</p>
                   <p className="mt-1 text-[11.5px] text-muted-foreground">{a.read}</p>
@@ -247,6 +258,21 @@ export function NutritionScreen() {
           </ul>
           <DialogFooter>
             <Button onClick={() => setPlanOpen(false)} className="rounded-xl">Got it</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!articleOpen} onOpenChange={(open) => { if (!open) setArticleOpen(null); }}>
+        <DialogContent className="sm:max-w-[380px]">
+          <DialogHeader>
+            <DialogTitle>{articleOpen?.title}</DialogTitle>
+            <DialogDescription>{articleOpen?.read}</DialogDescription>
+          </DialogHeader>
+          <p className="text-[13.5px] leading-relaxed text-muted-foreground">
+            Keep the focus simple: regular meals, steady hydration, and phase-aware foods. Use your logs and pH tracker to notice patterns over time rather than chasing perfection.
+          </p>
+          <DialogFooter>
+            <Button onClick={() => setArticleOpen(null)} className="rounded-xl">Done</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

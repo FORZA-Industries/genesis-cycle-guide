@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppShell } from "@/components/genesyx/AppShell";
 import { BottomTabBar, type TabKey } from "@/components/genesyx/BottomTabBar";
 import { SplashScreen, OnboardingIntro } from "@/components/genesyx/screens/Onboarding";
@@ -14,6 +14,7 @@ import { LogScreen } from "@/components/genesyx/screens/Log";
 import { PregnancyTransition, PregnancyHome } from "@/components/genesyx/screens/Pregnancy";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
+import { rememberAppEntry, showSignInRequired } from "@/lib/authPrompt";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,10 +39,26 @@ function Index() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (user || window.localStorage.getItem("genesyx:openApp") === "true") {
+      setFlow((current) => (current === "splash" ? "app" : current));
+    }
+  }, [user]);
+
+  const openApp = () => {
+    rememberAppEntry();
+    setFlow("app");
+  };
+
+  const openAuth = () => {
+    rememberAppEntry();
+    navigate({ to: "/auth" });
+  };
+
   const handleSwitchToPregnancy = () => {
     if (!user) {
-      toast.error("Please sign in to switch to pregnancy mode.");
-      navigate({ to: "/auth" });
+      showSignInRequired("Sign in to switch to pregnancy mode.", openAuth);
       return;
     }
     setMode("pregnancy");
@@ -63,7 +80,7 @@ function Index() {
       tabBar={isApp ? <BottomTabBar active={tab} onChange={setTab} /> : undefined}
     >
       {flow === "splash" && (
-        <SplashScreen onStart={() => setFlow("intro")} onSignIn={() => navigate({ to: "/auth" })} />
+        <SplashScreen onStart={() => setFlow("intro")} onSignIn={openAuth} />
       )}
       {flow === "intro" && (
         <OnboardingIntro onContinue={() => setFlow("quiz")} onBack={() => setFlow("splash")} />
@@ -78,14 +95,14 @@ function Index() {
         <QuizResults
           answers={quizAnswers}
           onUnlock={() => setFlow("waitlist")}
-          onContinue={() => setFlow("app")}
+          onContinue={openApp}
           onBack={() => setFlow("intro")}
         />
       )}
       {flow === "waitlist" && (
-        <WaitlistScreen onContinue={() => setFlow("app")} onBack={() => setFlow("results")} />
+        <WaitlistScreen onContinue={openApp} onBack={() => setFlow("results")} />
       )}
-      {flow === "log" && <LogScreen onClose={() => setFlow("app")} />}
+      {flow === "log" && <LogScreen onClose={() => setFlow("app")} onRequireAuth={openAuth} />}
       {flow === "pregnancy" && (
         <PregnancyTransition onSwitch={handleSwitchToPregnancy} onLater={() => setFlow("app")} />
       )}
@@ -97,15 +114,16 @@ function Index() {
               onLog={() => setFlow("log")}
               onPregnancy={() => setFlow("pregnancy")}
               onProfile={() => setTab("profile")}
+              onRequireAuth={openAuth}
             />
           )}
           {tab === "home" && mode === "pregnancy" && (
             <PregnancyHome displayName={displayName} onBackToPrep={() => setMode("prep")} />
           )}
-          {tab === "track" && <TrackScreen onLog={() => setFlow("log")} />}
-          {tab === "nutrition" && <NutritionScreen />}
+          {tab === "track" && <TrackScreen onLog={() => setFlow("log")} onRequireAuth={openAuth} />}
+          {tab === "nutrition" && <NutritionScreen onRequireAuth={openAuth} />}
           {tab === "insights" && <InsightsScreen onOpenTracker={() => setTab("track")} />}
-          {tab === "profile" && <ProfileScreen onPregnancy={() => setFlow("pregnancy")} />}
+          {tab === "profile" && <ProfileScreen onPregnancy={() => setFlow("pregnancy")} onSignIn={openAuth} />}
         </>
       )}
     </AppShell>

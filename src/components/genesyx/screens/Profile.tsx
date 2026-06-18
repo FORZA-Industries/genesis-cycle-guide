@@ -34,7 +34,7 @@ import { updateDisplayName, deleteAccount } from "@/lib/account.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
+export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => void; onSignIn?: () => void }) {
   const [focus, setFocus] = useState<"prep" | "preg">("prep");
   const [notif, setNotif] = useState(true);
   const { theme, toggle } = useTheme();
@@ -55,7 +55,10 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
   const [nameOpen, setNameOpen] = useState(false);
   const [pwOpen, setPwOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
+  const [detail, setDetail] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  const goSignIn = () => (onSignIn ? onSignIn() : navigate({ to: "/auth" }));
 
   return (
     <div className="gx-screen pb-4">
@@ -104,7 +107,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
           <div className="overflow-hidden rounded-2xl bg-card gx-soft-shadow">
             <button
               type="button"
-              onClick={() => user ? setNameOpen(true) : navigate({ to: "/auth" })}
+              onClick={() => user ? setNameOpen(true) : goSignIn()}
               className="flex min-h-[52px] w-full items-center justify-between border-b border-border/50 px-4 py-3 text-left transition-colors hover:bg-muted/40"
             >
               <span className="text-[14.5px] text-foreground">Edit name</span>
@@ -112,7 +115,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
             </button>
             <button
               type="button"
-              onClick={() => user ? setPwOpen(true) : navigate({ to: "/auth" })}
+              onClick={() => user ? setPwOpen(true) : goSignIn()}
               className="flex min-h-[52px] w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-muted/40"
             >
               <span className="text-[14.5px] text-foreground">Change password</span>
@@ -121,7 +124,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
           </div>
         </div>
 
-        <MenuGroup title="Tracking" items={profileMenu.account} />
+        <MenuGroup title="Tracking" items={profileMenu.account} onSelect={(label: string) => user ? setDetail(label) : goSignIn()} />
 
         <div>
           <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">Preferences</p>
@@ -135,12 +138,12 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
           </div>
         </div>
 
-        <MenuGroup title="About" items={profileMenu.about} />
+        <MenuGroup title="About" items={profileMenu.about} onSelect={setDetail} />
 
         <button
           onClick={async () => {
             if (user) { await signOut(); }
-            navigate({ to: "/auth" });
+            goSignIn();
           }}
           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-card gx-soft-shadow py-4 text-[14px] font-semibold text-destructive"
         >
@@ -168,6 +171,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
         onOpenChange={setPwOpen}
         email={user?.email ?? ""}
       />
+      <ProfileDetailDialog open={!!detail} title={detail ?? ""} onOpenChange={(open: boolean) => { if (!open) setDetail(null); }} />
       <AlertDialog open={delOpen} onOpenChange={setDelOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -383,15 +387,46 @@ function ChangePasswordDialog({
   );
 }
 
-function MenuGroup({ title, items }: { title: string; items: { label: string }[] }) {
+function ProfileDetailDialog({ open, title, onOpenChange }: { open: boolean; title: string; onOpenChange: (open: boolean) => void }) {
+  const copy: Record<string, string> = {
+    "Personal Details": "Manage your display name, email sign-in, and account details from this screen.",
+    "Health Profile": "Your cycle settings, daily logs, pH readings, and partner connection shape your personalised guidance.",
+    "Tracking Preferences": "Keep notifications on and update your cycle settings any time your rhythm changes.",
+    "Privacy & Data": "Your saved data is private to your account. You can log out or delete your account from Profile.",
+    "Help & Support": "For best results, complete cycle setup, log today, and use the Track or Nutrition tabs to add pH readings.",
+  };
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[400px]">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{copy[title] ?? "This section is ready for your saved app settings."}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <button onClick={() => onOpenChange(false)} className="min-h-[44px] rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground">
+            Done
+          </button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function MenuGroup({ title, items, onSelect }: { title: string; items: { label: string }[]; onSelect?: (label: string) => void }) {
   return (
     <div>
       <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">{title}</p>
       <div className="overflow-hidden rounded-2xl bg-card gx-soft-shadow">
         {items.map((it, i) => (
-          <Row key={it.label} label={it.label} last={i === items.length - 1}>
+          <button
+            key={it.label}
+            type="button"
+            onClick={() => onSelect?.(it.label)}
+            className={cn("flex min-h-[52px] w-full items-center justify-between px-4 py-3 text-left", i !== items.length - 1 && "border-b border-border/50")}
+          >
+            <span className="text-[14.5px] text-foreground">{it.label}</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </Row>
+          </button>
         ))}
       </div>
     </div>
