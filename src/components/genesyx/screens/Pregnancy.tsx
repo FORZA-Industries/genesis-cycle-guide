@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { BrandOrb } from "../BrandLogo";
 import { Baby, Apple, ChevronLeft } from "lucide-react";
+import pregnancyIllustration from "@/assets/pregnancy-illustration.png.asset.json";
 
 export function PregnancyTransition({ onSwitch, onLater }: { onSwitch: () => void; onLater: () => void }) {
   return (
