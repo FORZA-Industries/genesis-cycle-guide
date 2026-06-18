@@ -39,6 +39,7 @@ function Index() {
     <>
       <AppShell
         tabBar={isApp ? <BottomTabBar active={tab} onChange={setTab} /> : undefined}
+        hideFloatingEggs={isApp && tab === "home"}
       >
         {flow === "splash" && (
           <SplashScreen onStart={() => setFlow("intro")} onSignIn={() => navigate({ to: "/auth" })} />
