@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { BrandOrb } from "../BrandLogo";
 import { CalendarDays, Leaf, Sparkles, BookOpen, Check, Mail, ChevronLeft, Lock } from "lucide-react";
 import { toast } from "sonner";
 import eggMale from "@/assets/egg-male.png";
