@@ -34,7 +34,7 @@ import { updateDisplayName, deleteAccount } from "@/lib/account.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
+export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => void; onSignIn?: () => void }) {
   const [focus, setFocus] = useState<"prep" | "preg">("prep");
   const [notif, setNotif] = useState(true);
   const { theme, toggle } = useTheme();
@@ -55,7 +55,10 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
   const [nameOpen, setNameOpen] = useState(false);
   const [pwOpen, setPwOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
+  const [detail, setDetail] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  const goSignIn = () => (onSignIn ? onSignIn() : navigate({ to: "/auth" }));
 
   return (
     <div className="gx-screen pb-4">
@@ -104,7 +107,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
           <div className="overflow-hidden rounded-2xl bg-card gx-soft-shadow">
             <button
               type="button"
-              onClick={() => user ? setNameOpen(true) : navigate({ to: "/auth" })}
+              onClick={() => user ? setNameOpen(true) : goSignIn()}
               className="flex min-h-[52px] w-full items-center justify-between border-b border-border/50 px-4 py-3 text-left transition-colors hover:bg-muted/40"
             >
               <span className="text-[14.5px] text-foreground">Edit name</span>
@@ -112,7 +115,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
             </button>
             <button
               type="button"
-              onClick={() => user ? setPwOpen(true) : navigate({ to: "/auth" })}
+              onClick={() => user ? setPwOpen(true) : goSignIn()}
               className="flex min-h-[52px] w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-muted/40"
             >
               <span className="text-[14.5px] text-foreground">Change password</span>
@@ -121,7 +124,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
           </div>
         </div>
 
-        <MenuGroup title="Tracking" items={profileMenu.account} />
+        <MenuGroup title="Tracking" items={profileMenu.account} onSelect={(label) => user ? setDetail(label) : goSignIn()} />
 
         <div>
           <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">Preferences</p>
@@ -135,12 +138,12 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
           </div>
         </div>
 
-        <MenuGroup title="About" items={profileMenu.about} />
+        <MenuGroup title="About" items={profileMenu.about} onSelect={setDetail} />
 
         <button
           onClick={async () => {
             if (user) { await signOut(); }
-            navigate({ to: "/auth" });
+            goSignIn();
           }}
           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-card gx-soft-shadow py-4 text-[14px] font-semibold text-destructive"
         >
@@ -168,6 +171,7 @@ export function ProfileScreen({ onPregnancy }: { onPregnancy: () => void }) {
         onOpenChange={setPwOpen}
         email={user?.email ?? ""}
       />
+      <ProfileDetailDialog open={!!detail} title={detail ?? ""} onOpenChange={(open) => { if (!open) setDetail(null); }} />
       <AlertDialog open={delOpen} onOpenChange={setDelOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
