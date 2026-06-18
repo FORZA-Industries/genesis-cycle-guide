@@ -7,6 +7,7 @@ import { useCycleSettings } from "@/hooks/use-cycle";
 import { useDailyLog } from "@/hooks/use-daily-log";
 import { getCyclePhase, phaseLabel, type Phase } from "@/lib/cycle";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 
 const WATER_TARGET = 2400;
 const WATER_STEP = 200;
@@ -59,6 +60,7 @@ export function NutritionScreen() {
   const phase: Phase | null = info?.phase ?? null;
   const foods = phase ? PHASE_FOODS[phase] : [];
   const [expandedFood, setExpandedFood] = useState<string | null>(null);
+  const [planOpen, setPlanOpen] = useState(false);
 
   const [waterMl, setWaterMl] = useState<number>(0);
   useEffect(() => { if (log) setWaterMl(log.waterMl); }, [log]);
@@ -209,7 +211,7 @@ export function NutritionScreen() {
               </div>
             </div>
           </div>
-          <Button className="mt-5 h-12 w-full rounded-2xl bg-primary text-[14.5px] font-semibold hover:bg-primary/90">
+          <Button onClick={() => setPlanOpen(true)} className="mt-5 h-12 w-full rounded-2xl bg-primary text-[14.5px] font-semibold hover:bg-primary/90">
             Review Plan
           </Button>
         </div>
@@ -230,6 +232,24 @@ export function NutritionScreen() {
           </div>
         </div>
       </div>
+
+      <Dialog open={planOpen} onOpenChange={setPlanOpen}>
+        <DialogContent className="sm:max-w-[380px]">
+          <DialogHeader>
+            <DialogTitle>Your supplement plan</DialogTitle>
+            <DialogDescription>Gentle, evidence-informed essentials for fertility prep.</DialogDescription>
+          </DialogHeader>
+          <ul className="space-y-3 text-[13.5px]">
+            <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--electric-lavender)_10%,white)] text-[11px] font-semibold text-primary">F</span><div><p className="font-medium">Folate (400–800 mcg)</p><p className="text-muted-foreground">Supports egg quality and early cell development.</p></div></li>
+            <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--powder-blue)_30%,white)] text-[11px] font-semibold text-[var(--color-electric-blue)]">O</span><div><p className="font-medium">Omega-3 (DHA/EPA)</p><p className="text-muted-foreground">Hormone balance and reduced inflammation.</p></div></li>
+            <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--electric-lavender)_10%,white)] text-[11px] font-semibold text-primary">D</span><div><p className="font-medium">Vitamin D (600–1000 IU)</p><p className="text-muted-foreground">Supports ovulation and overall wellbeing.</p></div></li>
+            <li className="flex items-start gap-3"><span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--powder-pink)_30%,white)] text-[11px] font-semibold text-[var(--color-electric-pink)]">Z</span><div><p className="font-medium">Zinc (8–11 mg)</p><p className="text-muted-foreground">Supports the LH surge that triggers ovulation.</p></div></li>
+          </ul>
+          <DialogFooter>
+            <Button onClick={() => setPlanOpen(false)} className="rounded-xl">Got it</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -29,7 +29,7 @@ export function AppShell({ children, tabBar, bgClassName, showThemeToggle }: App
           className="gx-scroll relative h-full w-full overflow-y-auto"
           style={{ paddingTop: "max(env(safe-area-inset-top), 12px)" }}
         >
-          <div className={cn("relative z-10 min-h-full", tabBar && "pb-28")}>{children}</div>
+          <div className={cn("relative z-10 min-h-full", tabBar && "pb-20")}>{children}</div>
         </div>
 
         {showThemeToggle && (

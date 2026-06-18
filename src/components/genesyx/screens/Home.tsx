@@ -17,8 +17,13 @@ import homeBg from "@/assets/genesyx-home-bg.jpg.asset.json";
 const WATER_TARGET_ML = 2400;
 
 export function HomeScreen({
-  onLog, onPregnancy, onProfile,
-}: { onLog: () => void; onPregnancy: () => void; onProfile?: () => void }) {
+  onLog, onPregnancy, onProfile, quizAnswers,
+}: {
+  onLog: () => void;
+  onPregnancy: () => void;
+  onProfile?: () => void;
+  quizAnswers?: Record<string, string>;
+}) {
   const { user } = useAuth();
   const { settings, cycleInfo, loading } = useCycleSettings();
   const { log } = useDailyLog();
@@ -45,7 +50,11 @@ export function HomeScreen({
     ? "Add your last period date to get personalised insights."
     : getPhaseHeroSubtext(cycleInfo.phase, cycleInfo.fertileWindow);
   const tags = !settings || !cycleInfo ? [] : getPhaseTags(cycleInfo.phase, cycleInfo.fertileWindow);
-  const focus = cycleInfo ? getTodaysFocus(cycleInfo.phase) : null;
+  const baseFocus = cycleInfo ? getTodaysFocus(cycleInfo.phase) : null;
+  // Light personalization: nudge focus title when the user said nutrition is their top priority.
+  const focus = baseFocus && quizAnswers?.support === "nutrition"
+    ? { ...baseFocus, title: `${baseFocus.title} (your priority)` }
+    : baseFocus;
 
   return (
     <div
