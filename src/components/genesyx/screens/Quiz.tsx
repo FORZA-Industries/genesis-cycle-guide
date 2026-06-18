@@ -61,7 +61,7 @@ export function QuizFlow({
     return (
       <div className="gx-screen flex h-full flex-col items-center justify-center px-8 text-center">
         <div className="relative">
-          <BrandOrb className="h-32 w-32 animate-pulse" />
+          <BrandOrb className="h-32 w-32" />
         </div>
         <p className="mt-10 font-display text-xl font-semibold">Preparing your personalised summary…</p>
         <p className="mt-2 text-sm text-muted-foreground">Reviewing your answers with care.</p>
