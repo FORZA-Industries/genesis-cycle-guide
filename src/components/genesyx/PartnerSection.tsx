@@ -14,8 +14,9 @@ import {
   revokePartnerInvite,
   unlinkPartner,
 } from "@/lib/partner.functions";
+import { getAvatarSignedUrl } from "@/lib/avatar";
 
-type Profile = { id: string; display_name: string | null; partner_id: string | null };
+type Profile = { id: string; display_name: string | null; partner_id: string | null; avatar_url: string | null };
 type Invite = { id: string; invitee_email: string; code: string; status: string; created_at: string; expires_at: string };
 
 const emailSchema = z.string().trim().email("Enter a valid email").max(255);
@@ -24,6 +25,7 @@ export function PartnerSection() {
   const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [partner, setPartner] = useState<Profile | null>(null);
+  const [partnerAvatar, setPartnerAvatar] = useState<string | null>(null);
   const [invites, setInvites] = useState<Invite[]>([]);
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
@@ -36,19 +38,22 @@ export function PartnerSection() {
     if (!user) { setLoading(false); return; }
     const { data: prof } = await supabase
       .from("profiles")
-      .select("id,display_name,partner_id")
+      .select("id,display_name,partner_id,avatar_url")
       .eq("id", user.id)
       .maybeSingle();
     setProfile(prof as Profile | null);
     if (prof?.partner_id) {
       const { data: p } = await supabase
         .from("profiles")
-        .select("id,display_name,partner_id")
+        .select("id,display_name,partner_id,avatar_url")
         .eq("id", prof.partner_id)
         .maybeSingle();
-      setPartner(p as Profile | null);
+      const pp = p as Profile | null;
+      setPartner(pp);
+      setPartnerAvatar(await getAvatarSignedUrl(pp?.avatar_url ?? null));
     } else {
       setPartner(null);
+      setPartnerAvatar(null);
     }
     const { data: inv } = await supabase
       .from("partner_invites")
@@ -136,8 +141,12 @@ export function PartnerSection() {
       <div className="rounded-2xl bg-card gx-soft-shadow p-5 space-y-4">
         {partner ? (
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-[var(--color-baby-lavender)] to-[var(--color-electric-pink)] text-sm font-semibold text-white">
-              {(partner.display_name ?? "P").slice(0, 1).toUpperCase()}
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-[var(--color-baby-lavender)] to-[var(--color-electric-pink)] text-sm font-semibold text-white">
+              {partnerAvatar ? (
+                <img src={partnerAvatar} alt="" className="h-full w-full object-cover" />
+              ) : (
+                (partner.display_name ?? "P").slice(0, 1).toUpperCase()
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[14px] font-semibold truncate">{partner.display_name ?? "Your partner"}</p>
