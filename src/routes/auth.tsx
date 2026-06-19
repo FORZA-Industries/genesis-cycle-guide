@@ -33,6 +33,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [helperBusy, setHelperBusy] = useState<null | "resend" | "reset">(null);
 
   useEffect(() => {
     if (!loading && user) navigate({ to: "/", replace: true });
@@ -82,8 +83,44 @@ function AuthPage() {
       setBusy(false);
       return;
     }
-    if (result.redirected) return; // browser navigating
+    if (result.redirected) return;
     navigate({ to: "/", replace: true });
+  };
+
+  const handleResendConfirmation = async () => {
+    const emailP = emailSchema.safeParse(email);
+    if (!emailP.success) return toast.error("Enter your email first");
+    setHelperBusy("resend");
+    try {
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email: emailP.data,
+        options: { emailRedirectTo: `${window.location.origin}/` },
+      });
+      if (error) throw error;
+      toast.success("Confirmation email sent. Check your inbox.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not resend email");
+    } finally {
+      setHelperBusy(null);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    const emailP = emailSchema.safeParse(email);
+    if (!emailP.success) return toast.error("Enter your email first");
+    setHelperBusy("reset");
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(emailP.data, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      toast.success("Password reset email sent. Check your inbox.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not send reset email");
+    } finally {
+      setHelperBusy(null);
+    }
   };
 
   return (
@@ -110,13 +147,36 @@ function AuthPage() {
               <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" className="mt-1.5 h-12 rounded-xl" />
             </div>
             <div>
-              <Label htmlFor="password">Password</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                {mode === "signin" && (
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    disabled={helperBusy !== null}
+                    className="text-xs font-medium text-primary hover:underline disabled:opacity-60"
+                  >
+                    {helperBusy === "reset" ? "Sending…" : "Forgot password?"}
+                  </button>
+                )}
+              </div>
               <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete={mode === "signin" ? "current-password" : "new-password"} className="mt-1.5 h-12 rounded-xl" />
             </div>
             <Button type="submit" disabled={busy} className="h-12 w-full rounded-xl text-base font-semibold">
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "signin" ? "Sign in" : "Create account"}
             </Button>
           </form>
+
+          <div className="mt-3 text-center">
+            <button
+              type="button"
+              onClick={handleResendConfirmation}
+              disabled={helperBusy !== null}
+              className="text-xs font-medium text-muted-foreground hover:text-primary hover:underline disabled:opacity-60"
+            >
+              {helperBusy === "resend" ? "Sending…" : "Didn't get a confirmation email? Resend"}
+            </button>
+          </div>
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
