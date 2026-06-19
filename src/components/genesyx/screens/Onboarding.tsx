@@ -1,10 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "../BrandLogo";
 import { Sparkles, Heart, Leaf, BarChart3, ChevronRight } from "lucide-react";
+import splashBg from "@/assets/genesyx-splash-bg.jpg.asset.json";
 
 export function SplashScreen({ onStart, onSignIn }: { onStart: () => void; onSignIn: () => void }) {
   return (
-    <div className="gx-screen relative flex h-full min-h-[760px] flex-col overflow-hidden px-6 pt-4 pb-10">
+    <div
+      className="gx-screen relative flex h-full min-h-[760px] flex-col overflow-hidden bg-cover bg-center bg-no-repeat px-6 pt-4 pb-10"
+      style={{ backgroundImage: `url(${splashBg.url})` }}
+    >
       <div className="relative z-10 flex justify-center pt-2">
         <BrandLogo size={64} />
       </div>
