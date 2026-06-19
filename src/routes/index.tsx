@@ -41,7 +41,9 @@ function Index() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (user || window.localStorage.getItem("genesyx:openApp") === "true") {
+    const savedEntry = window.localStorage.getItem("genesyx:openApp");
+    const shouldOpenApp = user || savedEntry === "true" || savedEntry === "1";
+    if (shouldOpenApp) {
       setFlow((current) => (current === "splash" ? "app" : current));
     }
   }, [user]);
