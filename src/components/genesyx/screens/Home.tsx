@@ -66,10 +66,47 @@ export function HomeScreen({
     : baseFocus;
 
   return (
-    <div
-      className="gx-screen bg-cover bg-center bg-no-repeat px-5 pt-3 pb-4"
-      style={{ backgroundImage: `url(${homeBg.url})` }}
-    >
+    <>
+      <style>{`
+        @keyframes gx-float {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-14px) scale(1.03); }
+        }
+        @keyframes gx-float-slow {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          33% { transform: translateY(-10px) translateX(6px); }
+          66% { transform: translateY(6px) translateX(-4px); }
+        }
+        @keyframes gx-float-delay {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-18px) scale(0.97); }
+        }
+      `}</style>
+      <div
+        className="gx-screen relative overflow-hidden bg-cover bg-center bg-no-repeat px-5 pt-3 pb-4"
+        style={{ backgroundImage: `url(${homeBg.url})` }}
+      >
+        {/* Floating egg/bubble overlays */}
+        <div
+          className="pointer-events-none absolute -right-6 top-24 h-28 w-28 rounded-full opacity-60 blur-sm"
+          style={{ background: 'radial-gradient(circle at 30% 30%, #c4b5fd, #a78bfa)', animation: 'gx-float 5s ease-in-out infinite' }}
+        />
+        <div
+          className="pointer-events-none absolute -left-8 top-56 h-20 w-20 rounded-full opacity-50 blur-sm"
+          style={{ background: 'radial-gradient(circle at 30% 30%, #bae6fd, #7dd3fc)', animation: 'gx-float-slow 7s ease-in-out infinite' }}
+        />
+        <div
+          className="pointer-events-none absolute right-8 bottom-40 h-24 w-24 rounded-full opacity-55 blur-sm"
+          style={{ background: 'radial-gradient(circle at 30% 30%, #e9d5ff, #c084fc)', animation: 'gx-float-delay 6s ease-in-out infinite 1s' }}
+        />
+        <div
+          className="pointer-events-none absolute left-4 top-[420px] h-16 w-16 rounded-full opacity-45 blur-sm"
+          style={{ background: 'radial-gradient(circle at 30% 30%, #fbcfe8, #f472b6)', animation: 'gx-float 4.5s ease-in-out infinite 0.5s' }}
+        />
+        <div
+          className="pointer-events-none absolute -right-4 bottom-20 h-14 w-14 rounded-full opacity-40 blur-sm"
+          style={{ background: 'radial-gradient(circle at 30% 30%, #bfdbfe, #60a5fa)', animation: 'gx-float-slow 8s ease-in-out infinite 2s' }}
+        />
       <div className="flex items-center justify-between px-1">
         <div>
           <p className="text-[13px] text-muted-foreground">{greeting}</p>
