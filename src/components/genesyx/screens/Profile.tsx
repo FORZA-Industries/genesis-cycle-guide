@@ -59,6 +59,42 @@ export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => vo
   const [delOpen, setDelOpen] = useState(false);
   const [detail, setDetail] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!user) { setAvatarUrl(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (cancelled) return;
+      const signed = await getAvatarSignedUrl(data?.avatar_url ?? null);
+      if (!cancelled) setAvatarUrl(signed);
+    })();
+    return () => { cancelled = true; };
+  }, [user?.id]);
+
+  const onPickAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file || !user) return;
+    setUploadingAvatar(true);
+    try {
+      const path = await uploadAvatar(user.id, file);
+      const signed = await getAvatarSignedUrl(path);
+      setAvatarUrl(signed);
+      toast.success("Profile photo updated");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not upload photo");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
 
   const goSignIn = () => (onSignIn ? onSignIn() : navigate({ to: "/auth" }));
 
