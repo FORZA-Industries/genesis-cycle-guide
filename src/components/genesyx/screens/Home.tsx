@@ -1,9 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Droplets, Plus, Leaf, LogIn } from "lucide-react";
+import { ArrowRight, Droplets, Plus, Leaf, LogIn, User, Settings } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useCycleSettings } from "@/hooks/use-cycle";
 import { useDailyLog, useStreak } from "@/hooks/use-daily-log";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   getPhaseSubLabel,
   getPhaseHeroText,
@@ -67,13 +75,40 @@ export function HomeScreen({
           <p className="text-[13px] text-muted-foreground">{greeting}</p>
           <h1 className="mt-0.5 font-display text-[26px] font-semibold leading-tight tracking-tight">{displayName}</h1>
         </div>
-        <button
-          aria-label="Profile"
-          onClick={onProfile}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-card text-[13px] font-semibold text-foreground gx-hairline"
-        >
-          {initial}
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              aria-label="Account menu"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-card text-[13px] font-semibold text-foreground gx-hairline"
+            >
+              {initial}
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={8} className="w-56 rounded-2xl p-2">
+            <DropdownMenuLabel className="px-2 py-2">
+              <span className="block text-[13px] font-semibold">{displayName}</span>
+              <span className="block truncate text-[12px] font-normal text-muted-foreground">
+                {user?.email ?? "Guest session"}
+              </span>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {!user && (
+              <DropdownMenuItem onSelect={onRequireAuth} className="rounded-xl py-2.5">
+                <LogIn className="h-4 w-4" />
+                Sign in or create account
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem onSelect={onProfile} className="rounded-xl py-2.5">
+              <User className="h-4 w-4" />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => setCycleOpen(true)} className="rounded-xl py-2.5">
+              <Settings className="h-4 w-4" />
+              Cycle setup
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {!user && (
