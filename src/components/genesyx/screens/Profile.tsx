@@ -104,9 +104,28 @@ export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => vo
 
       <div className="px-5 space-y-4">
         <div className="flex items-center gap-4 rounded-3xl bg-card p-5 gx-card-shadow">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-[var(--color-baby-lavender)] to-[var(--color-electric-pink)] text-lg font-semibold text-white">
-            {initial}
-          </div>
+          <button
+            type="button"
+            onClick={() => user ? fileInputRef.current?.click() : goSignIn()}
+            className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-[var(--color-baby-lavender)] to-[var(--color-electric-pink)] text-lg font-semibold text-white"
+            aria-label="Change profile photo"
+          >
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
+            ) : (
+              initial
+            )}
+            <span className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-card text-foreground shadow ring-1 ring-border">
+              {uploadingAvatar ? <Loader2 className="h-3 w-3 animate-spin" /> : <Camera className="h-3 w-3" />}
+            </span>
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={onPickAvatar}
+          />
           <div className="flex-1 min-w-0">
             <p className="font-display text-[17px] font-semibold tracking-tight truncate">{displayName}</p>
             <p className="text-[13px] text-muted-foreground truncate">{emailLine}</p>
