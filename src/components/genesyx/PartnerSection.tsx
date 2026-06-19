@@ -14,8 +14,9 @@ import {
   revokePartnerInvite,
   unlinkPartner,
 } from "@/lib/partner.functions";
+import { getAvatarSignedUrl } from "@/lib/avatar";
 
-type Profile = { id: string; display_name: string | null; partner_id: string | null };
+type Profile = { id: string; display_name: string | null; partner_id: string | null; avatar_url: string | null };
 type Invite = { id: string; invitee_email: string; code: string; status: string; created_at: string; expires_at: string };
 
 const emailSchema = z.string().trim().email("Enter a valid email").max(255);
