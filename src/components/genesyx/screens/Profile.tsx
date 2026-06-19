@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { profileMenu } from "../mockData";
-import { ChevronRight, LogOut, Loader2, Trash2 } from "lucide-react";
+import { ChevronRight, LogOut, Loader2, Trash2, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "../ThemeToggle";
 import { useAuth } from "@/hooks/use-auth";
@@ -32,7 +32,9 @@ import { PartnerSection } from "../PartnerSection";
 import { useServerFn } from "@tanstack/react-start";
 import { updateDisplayName, deleteAccount } from "@/lib/account.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { getAvatarSignedUrl, uploadAvatar } from "@/lib/avatar";
 import { toast } from "sonner";
+import { useRef } from "react";
 
 export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => void; onSignIn?: () => void }) {
   const [focus, setFocus] = useState<"prep" | "preg">("prep");
