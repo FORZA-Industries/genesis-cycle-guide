@@ -141,8 +141,12 @@ export function PartnerSection() {
       <div className="rounded-2xl bg-card gx-soft-shadow p-5 space-y-4">
         {partner ? (
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-[var(--color-baby-lavender)] to-[var(--color-electric-pink)] text-sm font-semibold text-white">
-              {(partner.display_name ?? "P").slice(0, 1).toUpperCase()}
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-[var(--color-baby-lavender)] to-[var(--color-electric-pink)] text-sm font-semibold text-white">
+              {partnerAvatar ? (
+                <img src={partnerAvatar} alt="" className="h-full w-full object-cover" />
+              ) : (
+                (partner.display_name ?? "P").slice(0, 1).toUpperCase()
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[14px] font-semibold truncate">{partner.display_name ?? "Your partner"}</p>
