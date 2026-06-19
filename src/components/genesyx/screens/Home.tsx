@@ -251,5 +251,6 @@ export function HomeScreen({
 
       <CycleSettingsDialog open={cycleOpen} onOpenChange={setCycleOpen} onRequireAuth={onRequireAuth} />
     </div>
+    </>
   );
 }
