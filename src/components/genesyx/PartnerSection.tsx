@@ -25,6 +25,7 @@ export function PartnerSection() {
   const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [partner, setPartner] = useState<Profile | null>(null);
+  const [partnerAvatar, setPartnerAvatar] = useState<string | null>(null);
   const [invites, setInvites] = useState<Invite[]>([]);
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
@@ -37,19 +38,22 @@ export function PartnerSection() {
     if (!user) { setLoading(false); return; }
     const { data: prof } = await supabase
       .from("profiles")
-      .select("id,display_name,partner_id")
+      .select("id,display_name,partner_id,avatar_url")
       .eq("id", user.id)
       .maybeSingle();
     setProfile(prof as Profile | null);
     if (prof?.partner_id) {
       const { data: p } = await supabase
         .from("profiles")
-        .select("id,display_name,partner_id")
+        .select("id,display_name,partner_id,avatar_url")
         .eq("id", prof.partner_id)
         .maybeSingle();
-      setPartner(p as Profile | null);
+      const pp = p as Profile | null;
+      setPartner(pp);
+      setPartnerAvatar(await getAvatarSignedUrl(pp?.avatar_url ?? null));
     } else {
       setPartner(null);
+      setPartnerAvatar(null);
     }
     const { data: inv } = await supabase
       .from("partner_invites")
