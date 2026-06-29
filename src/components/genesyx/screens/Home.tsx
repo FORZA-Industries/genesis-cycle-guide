@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Droplets, Plus, Leaf, LogIn, User, Settings } from "lucide-react";
+import { Droplets, Plus, Leaf, LogIn, User, Settings } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useCycleSettings } from "@/hooks/use-cycle";
@@ -25,10 +25,10 @@ import homeBg from "@/assets/genesyx-home-bg-v2.jpg.asset.json";
 const WATER_TARGET_ML = 2400;
 
 export function HomeScreen({
-  onLog, onPregnancy, onProfile, onRequireAuth, quizAnswers,
+  onLog, onProfile, onRequireAuth, quizAnswers,
 }: {
   onLog: () => void;
-  onPregnancy: () => void;
+  onPregnancy?: () => void;
   onProfile?: () => void;
   onRequireAuth?: () => void;
   quizAnswers?: Record<string, string>;
