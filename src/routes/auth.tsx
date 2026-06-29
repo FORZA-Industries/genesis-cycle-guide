@@ -34,6 +34,7 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
   const [helperBusy, setHelperBusy] = useState<null | "resend" | "reset">(null);
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && user) navigate({ to: "/", replace: true });
@@ -57,7 +58,7 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        toast.success("Check your email to confirm your account.");
+        setPendingEmail(emailP.data);
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email: emailP.data,
