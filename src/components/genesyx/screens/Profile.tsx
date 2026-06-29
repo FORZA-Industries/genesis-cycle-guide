@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ScreenHeader } from "../ScreenHeader";
 import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -22,23 +21,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { profileMenu } from "../mockData";
 import { ChevronRight, LogOut, Loader2, Trash2, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "../ThemeToggle";
 import { useAuth } from "@/hooks/use-auth";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, Link } from "@tanstack/react-router";
 import { PartnerSection } from "../PartnerSection";
 import { useServerFn } from "@tanstack/react-start";
 import { updateDisplayName, deleteAccount } from "@/lib/account.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { getAvatarSignedUrl, uploadAvatar } from "@/lib/avatar";
 import { toast } from "sonner";
-import { useRef } from "react";
 
-export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => void; onSignIn?: () => void }) {
-  const [focus, setFocus] = useState<"prep" | "preg">("prep");
-  const [notif, setNotif] = useState(true);
+export function ProfileScreen({ onSignIn }: { onPregnancy?: () => void; onSignIn?: () => void }) {
   const { theme, toggle } = useTheme();
   const dark = theme === "dark";
   const { user, signOut } = useAuth();
@@ -57,7 +52,6 @@ export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => vo
   const [nameOpen, setNameOpen] = useState(false);
   const [pwOpen, setPwOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
-  const [detail, setDetail] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -130,31 +124,6 @@ export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => vo
             <p className="font-display text-[17px] font-semibold tracking-tight truncate">{displayName}</p>
             <p className="text-[13px] text-muted-foreground truncate">{emailLine}</p>
           </div>
-          {user && (
-            <Badge className="rounded-full border-none bg-[color-mix(in_oklab,var(--electric-lavender)_10%,white)] text-[10.5px] font-semibold uppercase tracking-wider text-primary">
-              Premium
-            </Badge>
-          )}
-        </div>
-
-        <div>
-          <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">Current focus</p>
-          <div className="grid grid-cols-2 gap-1.5 rounded-2xl bg-muted p-1">
-            <button
-              onClick={() => setFocus("prep")}
-              className={cn("min-h-[44px] rounded-xl text-[13px] font-medium transition-all",
-                focus === "prep" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}
-            >
-              Fertility Prep
-            </button>
-            <button
-              onClick={() => { setFocus("preg"); onPregnancy(); }}
-              className={cn("min-h-[44px] rounded-xl text-[13px] font-medium transition-all",
-                focus === "preg" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}
-            >
-              Pregnancy
-            </button>
-          </div>
         </div>
 
         <PartnerSection />
@@ -181,21 +150,24 @@ export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => vo
           </div>
         </div>
 
-        <MenuGroup title="Tracking" items={profileMenu.account} onSelect={(label: string) => user ? setDetail(label) : goSignIn()} />
-
         <div>
-          <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">Preferences</p>
+          <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">Appearance</p>
           <div className="overflow-hidden rounded-2xl bg-card gx-soft-shadow">
-            <Row label="Push Notifications">
-              <Switch checked={notif} onCheckedChange={setNotif} />
-            </Row>
             <Row label="Dark Mode" last>
               <Switch checked={dark} onCheckedChange={toggle} />
             </Row>
           </div>
         </div>
 
-        <MenuGroup title="About" items={profileMenu.about} onSelect={setDetail} />
+        <div>
+          <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">About</p>
+          <div className="overflow-hidden rounded-2xl bg-card gx-soft-shadow">
+            <LinkRow to="/privacy" label="Privacy policy" />
+            <LinkRow to="/terms" label="Terms of service" />
+            <LinkRow to="/health-disclaimer" label="Health disclaimer" />
+            <LinkRow to="/support" label="Help & support" last />
+          </div>
+        </div>
 
         <button
           onClick={async () => {
@@ -228,7 +200,6 @@ export function ProfileScreen({ onPregnancy, onSignIn }: { onPregnancy: () => vo
         onOpenChange={setPwOpen}
         email={user?.email ?? ""}
       />
-      <ProfileDetailDialog open={!!detail} title={detail ?? ""} onOpenChange={(open: boolean) => { if (!open) setDetail(null); }} />
       <AlertDialog open={delOpen} onOpenChange={setDelOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -368,7 +339,6 @@ function ChangePasswordDialog({
     }
     setSaving(true);
     try {
-      // Verify current password by re-authenticating
       const { error: signErr } = await supabase.auth.signInWithPassword({
         email,
         password: current,
@@ -444,49 +414,18 @@ function ChangePasswordDialog({
   );
 }
 
-function ProfileDetailDialog({ open, title, onOpenChange }: { open: boolean; title: string; onOpenChange: (open: boolean) => void }) {
-  const copy: Record<string, string> = {
-    "Personal Details": "Manage your display name, email sign-in, and account details from this screen.",
-    "Health Profile": "Your cycle settings, daily logs, pH readings, and partner connection shape your personalised guidance.",
-    "Tracking Preferences": "Keep notifications on and update your cycle settings any time your rhythm changes.",
-    "Privacy & Data": "Your saved data is private to your account. You can log out or delete your account from Profile.",
-    "Help & Support": "For best results, complete cycle setup, log today, and use the Track or Nutrition tabs to add pH readings.",
-  };
+function LinkRow({ to, label, last }: { to: string; label: string; last?: boolean }) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[400px]">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{copy[title] ?? "This section is ready for your saved app settings."}</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <button onClick={() => onOpenChange(false)} className="min-h-[44px] rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground">
-            Done
-          </button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function MenuGroup({ title, items, onSelect }: { title: string; items: { label: string }[]; onSelect?: (label: string) => void }) {
-  return (
-    <div>
-      <p className="mb-2 px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">{title}</p>
-      <div className="overflow-hidden rounded-2xl bg-card gx-soft-shadow">
-        {items.map((it, i) => (
-          <button
-            key={it.label}
-            type="button"
-            onClick={() => onSelect?.(it.label)}
-            className={cn("flex min-h-[52px] w-full items-center justify-between px-4 py-3 text-left", i !== items.length - 1 && "border-b border-border/50")}
-          >
-            <span className="text-[14.5px] text-foreground">{it.label}</span>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </button>
-        ))}
-      </div>
-    </div>
+    <Link
+      to={to}
+      className={cn(
+        "flex min-h-[52px] w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-muted/40",
+        !last && "border-b border-border/50",
+      )}
+    >
+      <span className="text-[14.5px] text-foreground">{label}</span>
+      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+    </Link>
   );
 }
 
@@ -498,4 +437,3 @@ function Row({ label, children, last }: { label: string; children: React.ReactNo
     </div>
   );
 }
-

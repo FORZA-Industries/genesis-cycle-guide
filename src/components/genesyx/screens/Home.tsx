@@ -241,13 +241,8 @@ export function HomeScreen({
         Log today
       </Button>
 
-      <button
-        onClick={onPregnancy}
-        className="mt-3 flex w-full items-center justify-between px-2 py-3 text-left"
-      >
-        <span className="text-[13px] text-muted-foreground">Preview pregnancy pathway</span>
-        <ArrowRight className="h-4 w-4 text-muted-foreground" />
-      </button>
+
+
 
       <CycleSettingsDialog open={cycleOpen} onOpenChange={setCycleOpen} onRequireAuth={onRequireAuth} />
     </div>
