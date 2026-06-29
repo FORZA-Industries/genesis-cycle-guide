@@ -49,7 +49,7 @@ function AuthPage() {
     setBusy(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email: emailP.data,
           password: pwP.data,
           options: {
@@ -58,6 +58,14 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        // Supabase returns success with empty identities[] when the email is already registered.
+        // Do NOT show "Check your email" in that case — no email will be sent.
+        const identities = data.user?.identities ?? [];
+        if (data.user && identities.length === 0) {
+          toast.error("This email is already registered. Try signing in instead.");
+          setMode("signin");
+          return;
+        }
         setPendingEmail(emailP.data);
       } else {
         const { error } = await supabase.auth.signInWithPassword({
