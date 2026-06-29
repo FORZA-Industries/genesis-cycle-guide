@@ -124,6 +124,42 @@ function AuthPage() {
     }
   };
 
+  if (pendingEmail) {
+    return (
+      <AppShell>
+        <div className="flex min-h-full flex-col items-center justify-center px-6 py-10">
+          <div className="w-full max-w-sm text-center">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <h1 className="font-display text-2xl font-semibold tracking-tight">Check your email</h1>
+            <p className="mt-3 text-sm text-muted-foreground">
+              We sent a confirmation link to <strong className="text-foreground">{pendingEmail}</strong>. Tap it to finish creating your account.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              It may take a minute. Don't forget to check spam.
+            </p>
+            <Button
+              onClick={handleResendConfirmation}
+              disabled={helperBusy !== null}
+              variant="outline"
+              className="mt-6 h-12 w-full rounded-xl text-sm font-medium"
+            >
+              {helperBusy === "resend" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Resend confirmation"}
+            </Button>
+            <button
+              type="button"
+              onClick={() => { setPendingEmail(null); setMode("signin"); }}
+              className="mt-4 text-xs font-medium text-muted-foreground hover:text-foreground hover:underline"
+            >
+              Back to sign in
+            </button>
+          </div>
+        </div>
+      </AppShell>
+    );
+  }
+
   return (
     <AppShell>
       <div className="flex min-h-full flex-col items-center justify-center px-6 py-10 relative">
