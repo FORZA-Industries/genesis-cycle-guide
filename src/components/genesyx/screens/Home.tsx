@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Droplets, Plus, Leaf, LogIn, User, Settings } from "lucide-react";
+import { Droplets, Plus, Leaf, LogIn, User, Settings } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useCycleSettings } from "@/hooks/use-cycle";
@@ -25,10 +25,10 @@ import homeBg from "@/assets/genesyx-home-bg-v2.jpg.asset.json";
 const WATER_TARGET_ML = 2400;
 
 export function HomeScreen({
-  onLog, onPregnancy, onProfile, onRequireAuth, quizAnswers,
+  onLog, onProfile, onRequireAuth, quizAnswers,
 }: {
   onLog: () => void;
-  onPregnancy: () => void;
+  onPregnancy?: () => void;
   onProfile?: () => void;
   onRequireAuth?: () => void;
   quizAnswers?: Record<string, string>;
@@ -241,13 +241,8 @@ export function HomeScreen({
         Log today
       </Button>
 
-      <button
-        onClick={onPregnancy}
-        className="mt-3 flex w-full items-center justify-between px-2 py-3 text-left"
-      >
-        <span className="text-[13px] text-muted-foreground">Preview pregnancy pathway</span>
-        <ArrowRight className="h-4 w-4 text-muted-foreground" />
-      </button>
+
+
 
       <CycleSettingsDialog open={cycleOpen} onOpenChange={setCycleOpen} onRequireAuth={onRequireAuth} />
     </div>

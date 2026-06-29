@@ -109,3 +109,38 @@ export const getStreak = createServerFn({ method: "GET" })
     }
     return { streak };
   });
+
+export type DailyLogRowDTO = {
+  date: string;
+  mood: string | null;
+  energy: string | null;
+  symptoms: string[];
+  waterMl: number;
+};
+
+export const listDailyLogs = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { sinceDays: number }) =>
+    z.object({ sinceDays: z.number().int().min(1).max(365) }).parse(input),
+  )
+  .handler(async ({ data, context }): Promise<DailyLogRowDTO[]> => {
+    const { supabase, userId } = context;
+    const since = new Date();
+    since.setDate(since.getDate() - data.sinceDays);
+    const sinceIso = since.toISOString().slice(0, 10);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: rows, error } = await (supabase as any)
+      .from("daily_logs")
+      .select("date, mood, energy, symptoms, water_ml")
+      .eq("user_id", userId)
+      .gte("date", sinceIso)
+      .order("date", { ascending: true });
+    if (error) safeThrow("list", error, "Could not load logs.");
+    return (rows ?? []).map((r: { date: string; mood: string | null; energy: string | null; symptoms: string[] | null; water_ml: number | null }) => ({
+      date: r.date,
+      mood: r.mood,
+      energy: r.energy,
+      symptoms: r.symptoms ?? [],
+      waterMl: r.water_ml ?? 0,
+    }));
+  });

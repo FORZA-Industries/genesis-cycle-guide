@@ -114,7 +114,6 @@ function Index() {
             <HomeScreen
               quizAnswers={quizAnswers}
               onLog={() => setFlow("log")}
-              onPregnancy={() => setFlow("pregnancy")}
               onProfile={() => setTab("profile")}
               onRequireAuth={openAuth}
             />
@@ -125,7 +124,7 @@ function Index() {
           {tab === "track" && <TrackScreen onLog={() => setFlow("log")} onRequireAuth={openAuth} />}
           {tab === "nutrition" && <NutritionScreen onRequireAuth={openAuth} />}
           {tab === "insights" && <InsightsScreen onOpenTracker={() => setTab("track")} />}
-          {tab === "profile" && <ProfileScreen onPregnancy={() => setFlow("pregnancy")} onSignIn={openAuth} />}
+          {tab === "profile" && <ProfileScreen onSignIn={openAuth} />}
         </>
       )}
     </AppShell>
