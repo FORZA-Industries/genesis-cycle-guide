@@ -28,7 +28,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useNavigate, Link } from "@tanstack/react-router";
 import { PartnerSection } from "../PartnerSection";
 import { useServerFn } from "@tanstack/react-start";
-import { updateDisplayName, deleteAccount } from "@/lib/account.functions";
+import { updateDisplayName, deleteAccount, changePassword } from "@/lib/account.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { getAvatarSignedUrl, uploadAvatar } from "@/lib/avatar";
 import { toast } from "sonner";
