@@ -327,6 +327,8 @@ function ChangePasswordDialog({
 
   const reset = () => { setCurrent(""); setNext(""); setConfirm(""); };
 
+  const changePasswordFn = useServerFn(changePassword);
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (next.length < 8) {
@@ -339,21 +341,7 @@ function ChangePasswordDialog({
     }
     setSaving(true);
     try {
-      const { error: signErr } = await supabase.auth.signInWithPassword({
-        email,
-        password: current,
-      });
-      if (signErr) {
-        toast.error("Current password is incorrect");
-        setSaving(false);
-        return;
-      }
-      const { error } = await supabase.auth.updateUser({ password: next });
-      if (error) {
-        toast.error(error.message);
-        setSaving(false);
-        return;
-      }
+      await changePasswordFn({ data: { currentPassword: current, newPassword: next } });
       toast.success("Password updated");
       reset();
       onOpenChange(false);
