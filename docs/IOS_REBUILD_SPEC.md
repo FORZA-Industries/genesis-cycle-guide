@@ -641,3 +641,59 @@ Face ID app lock recommended, clear "not medical advice" disclaimers (already pr
   uppercase tracked labels (+0.14–0.16 em).
 - Tap targets ≥44 pt (web already enforces `min-h-[44px]`).
 - Dark theme: true-black shell, `#171614` splash, cards elevated dark gray (screenshot 11).
+
+---
+
+## 11. Appendix — Reconciliation with the actual iOS build (V1.02 build 7)
+
+> Added after receiving the product inventory of the real iOS codebase
+> (`genesyx_apple.V1.02`, branch `feature/learn-parity`, ported from Android
+> `release/learn-v1` @ `ac59b3a`). The iOS app already exists; this appendix maps this
+> spec against that build and records the agreed state.
+
+### 11.1 Confirmed shipped on iOS (supersedes the "to build" framing above)
+- **Learn tab shipped** (§8 goal met): 10 bundled compile-time articles, 1 featured,
+  5 category chips, in-memory search (title/excerpt/tags), hand-authored related lists
+  that *replace* (not stack), share = title + excerpt + site root, medical disclaimer on
+  6 pinned slugs, per-article CTAs into Log/Track/Nutrition/Insights, one-time intro hint
+  (`@AppStorage("learn_intro_seen")`). Nutrition "Learn more" feeds real Learn articles
+  + "See all articles" → Learn tab (RED-1 fix).
+- **Six-tab custom bottom bar** (Home, Track, Nutrition, Insights, Learn, Profile) —
+  custom because native TabView collapses the 6th tab into "More". Bar hidden off-tab;
+  per-tab state preserved (ZStack opacity/hitTesting).
+- **Log History screen** (= "My logs" from the deployed screenshots): merges daily logs +
+  pH readings per day, newest first.
+- **Offline-first architecture**: device is source of truth; Supabase is an optional
+  mirror (no-op + mock auth when unconfigured). Per-feature sync: daily logs refuse
+  offline save; pH queues/retries, merges by id last-updated-wins, tombstoned deletes;
+  cycle settings fail quietly, server wins on next read; account deletion remote-first.
+- **Feature flags** (`FeatureFlags` in `LearnModels.swift`): `phTracking` on;
+  `partnerInvites`, `pushNotifications`, `adminClients` off. Note: the
+  `genesyx://invite/{code}` deep link stays registered even with `partnerInvites` off.
+- **Intentional parity fakes** (replicate faithfully, do not "fix" silently):
+  change-password validates then no-ops; waitlist email validated then discarded;
+  quiz answers discarded; 3 of 4 Insights charts are sample data (only pH real);
+  PREMIUM is a label; pregnancy mode is a hidden placeholder.
+
+### 11.2 Pre-submission blockers (agreed)
+1. **Quiz Q4 (baby's sex) fact** claims diet/pH influences a baby's sex — removed on
+   Android, contradicts the Learn articles and the banned-phrase scan, and is an
+   unsupported health claim App Review can reject. Remove.
+2. **Dashboard gating**: iOS enters the tabs without an account; Android requires
+   register/login, and the web build replaced the waitlist with real account creation
+   (§3.5). Decide + align (also affects account deletion journey).
+3. **Sign in with Apple**: entitlement present but wiring unverified — mandatory since
+   Google sign-in is offered.
+4. Splash egg artwork uses placeholder orbs; `egg_female`/`egg_male` assets bundled but
+   not wired.
+
+### 11.3 Spec sections upgraded by the iOS build (use iOS behaviour as truth)
+- §3.3 Quiz: iOS has **5** questions (adds baby's sex) and 2 fact modals — subject to
+  blocker #1 above.
+- §3.5: iOS "waitlist" is email capture (discarded), not account creation — subject to
+  blocker #2.
+- §3.10 Insights: iOS ships the mock-chart variant; the real-data version (pH insights,
+  hydration 7d, top symptoms, logging consistency) specified in §3.10 remains the target;
+  avoid the UTC/local date-key bug noted in §6.
+- §9 roadmap phases 0–5 are largely complete in V1.02; remaining work = blockers above +
+  dormant features (partner, push, pregnancy, premium) when their flags turn on.
