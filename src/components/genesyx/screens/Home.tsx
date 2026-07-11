@@ -21,8 +21,8 @@ import {
 } from "@/lib/cycleEngine";
 import { CycleSettingsDialog } from "../CycleSettingsDialog";
 import homeBg from "@/assets/genesyx-home-bg-v2.jpg.asset.json";
-
-const WATER_TARGET_ML = 2400;
+import { WATER_TARGET_ML } from "@/lib/constants";
+import { displayNameFor } from "@/lib/displayName";
 
 export function HomeScreen({
   onLog, onProfile, onRequireAuth, quizAnswers,
@@ -39,11 +39,7 @@ export function HomeScreen({
   const { streak } = useStreak();
   const [cycleOpen, setCycleOpen] = useState(false);
 
-  const displayName =
-    (user?.user_metadata?.full_name as string | undefined) ??
-    (user?.user_metadata?.display_name as string | undefined) ??
-    user?.email?.split("@")[0] ??
-    "Guest";
+  const displayName = displayNameFor(user);
   const initial = displayName.slice(0, 1).toUpperCase();
 
   const hour = new Date().getHours();

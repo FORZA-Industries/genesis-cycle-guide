@@ -11,9 +11,12 @@ import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { PhTrackerCard } from "../PhTrackerCard";
 import { showSignInRequired } from "@/lib/authPrompt";
-
-const WATER_TARGET = 2400;
-const WATER_STEP = 200;
+import {
+  WATER_TARGET_ML as WATER_TARGET,
+  WATER_STEP_ML as WATER_STEP,
+  WATER_MAX_ML,
+  SUPPLEMENTS,
+} from "@/lib/constants";
 
 type FoodItem = {
   name: string;
@@ -82,13 +85,18 @@ export function NutritionScreen({ onRequireAuth }: { onRequireAuth?: () => void 
       showSignInRequired("Sign in to save hydration and nutrition logs.", onRequireAuth);
       return;
     }
-    const next = Math.max(0, Math.min(10000, waterMl + delta));
+    const next = Math.max(0, Math.min(WATER_MAX_ML, waterMl + delta));
     setWaterMl(next);
     queueSave(next);
   };
 
   const pct = Math.min(100, Math.round((waterMl / WATER_TARGET) * 100));
   const remaining = Math.max(0, WATER_TARGET - waterMl);
+
+  // Real supplement intake from today's log (was a hard-coded "3 of 4").
+  const takenToday = (log?.supplements ?? []).filter((s) =>
+    (SUPPLEMENTS as readonly string[]).includes(s),
+  ).length;
 
   const headerLabel = phase
     ? `TODAY · ${phaseLabel[phase].toUpperCase()}`
@@ -218,7 +226,11 @@ export function NutritionScreen({ onRequireAuth }: { onRequireAuth?: () => void 
                     </span>
                   ))}
                 </div>
-                <span className="text-[12px] text-muted-foreground">3 of 4 taken today</span>
+                <span className="text-[12px] text-muted-foreground">
+                  {takenToday > 0
+                    ? `${takenToday} of ${SUPPLEMENTS.length} taken today`
+                    : "None logged today"}
+                </span>
               </div>
             </div>
           </div>

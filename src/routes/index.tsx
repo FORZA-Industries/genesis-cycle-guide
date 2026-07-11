@@ -15,6 +15,7 @@ import { PregnancyTransition, PregnancyHome } from "@/components/genesyx/screens
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { rememberAppEntry, showSignInRequired } from "@/lib/authPrompt";
+import { displayNameFor } from "@/lib/displayName";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -69,11 +70,7 @@ function Index() {
     toast.success("Switched to pregnancy mode");
   };
 
-  const displayName =
-    (user?.user_metadata?.full_name as string | undefined) ??
-    (user?.user_metadata?.display_name as string | undefined) ??
-    user?.email?.split("@")[0] ??
-    "Guest";
+  const displayName = displayNameFor(user);
 
   const isApp = flow === "app";
 
