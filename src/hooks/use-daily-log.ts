@@ -2,12 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getDailyLog, upsertDailyLog, getStreak, type DailyLogDTO } from "@/lib/daily-log.functions";
 import { useAuth } from "@/hooks/use-auth";
+import { formatDateOnly } from "@/lib/cycle";
 
+/** Local-timezone YYYY-MM-DD for today (delegates to the shared date helper). */
 export function todayISO(d: Date = new Date()): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
+  return formatDateOnly(d);
 }
 
 // Tiny pub/sub so screens stay in sync after a save anywhere in the app.

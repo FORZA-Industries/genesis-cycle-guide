@@ -9,6 +9,7 @@ import {
   cycleNumberFor,
   dayTypeFor,
   getCyclePhase,
+  parseDateOnly,
   phaseLabel,
   type DayType,
 } from "@/lib/cycle";
@@ -39,10 +40,28 @@ export function TrackScreen({ onLog, onRequireAuth }: { onLog: () => void; onReq
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const cells = useMemo(() => {
     if (!settings) return null;
     return buildMonthGrid(monthAnchor, settings.lastPeriodDate, settings.cycleLength, settings.periodLength);
   }, [monthAnchor, settings]);
+
+  // Tracking contract v2 — honest predictions: the calendar is bounded to
+  // [month of last recorded period, +3 months] (extended to the current month
+  // when the data is stale), nothing before the first recorded data is
+  // painted, and future days render faded as predictions.
+  const lastPeriodStart = settings ? parseDateOnly(settings.lastPeriodDate) : null;
+  const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
+  const addMonths = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth() + n, 1);
+  const minMonth = lastPeriodStart ? startOfMonth(lastPeriodStart) : null;
+  const maxMonth = lastPeriodStart
+    ? new Date(Math.max(
+        addMonths(startOfMonth(lastPeriodStart), 3).getTime(),
+        startOfMonth(today).getTime(),
+      ))
+    : null;
+  const atMinMonth = !!minMonth && monthAnchor.getTime() <= minMonth.getTime();
+  const atMaxMonth = !!maxMonth && monthAnchor.getTime() >= maxMonth.getTime();
 
   const todayInfo = settings
     ? getCyclePhase(settings.lastPeriodDate, settings.cycleLength, settings.periodLength)
@@ -84,8 +103,9 @@ export function TrackScreen({ onLog, onRequireAuth }: { onLog: () => void; onReq
             <button
               type="button"
               onClick={() => setMonthAnchor(new Date(monthAnchor.getFullYear(), monthAnchor.getMonth() - 1, 1))}
+              disabled={atMinMonth}
               aria-label="Previous month"
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground/80"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground/80 disabled:opacity-35"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -95,8 +115,9 @@ export function TrackScreen({ onLog, onRequireAuth }: { onLog: () => void; onReq
             <button
               type="button"
               onClick={() => setMonthAnchor(new Date(monthAnchor.getFullYear(), monthAnchor.getMonth() + 1, 1))}
+              disabled={atMaxMonth}
               aria-label="Next month"
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground/80"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground/80 disabled:opacity-35"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -130,16 +151,29 @@ export function TrackScreen({ onLog, onRequireAuth }: { onLog: () => void; onReq
             <div className="mt-3 grid grid-cols-7 gap-1.5">
               {(cells ?? Array.from({ length: 35 }, () => ({ kind: "empty" as const }))).map((c, idx) => {
                 if (c.kind === "empty") return <div key={idx} className="aspect-square" />;
+                // Nothing before the first recorded data is painted.
+                if (lastPeriodStart && c.date < lastPeriodStart) {
+                  return (
+                    <div
+                      key={idx}
+                      className="flex aspect-square items-center justify-center rounded-xl text-[13px] text-muted-foreground/50"
+                    >
+                      {c.date.getDate()}
+                    </div>
+                  );
+                }
                 const type = dayTypeFor(c.info);
+                const isPredicted = c.date > todayStart;
                 return (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => setSelectedDate(c.date)}
-                    aria-label={`${c.date.toDateString()} — ${phaseLabel[c.info.phase]}, day ${c.info.dayOfCycle}`}
+                    aria-label={`${c.date.toDateString()} — ${phaseLabel[c.info.phase]}, day ${c.info.dayOfCycle}${isPredicted ? " (predicted)" : ""}`}
                     className={cn(
                       "flex aspect-square items-center justify-center rounded-xl text-[13px] font-medium transition-transform active:scale-95",
                       dayClass[type],
+                      isPredicted && "opacity-55",
                       c.isToday && "ring-2 ring-foreground ring-offset-2 ring-offset-card",
                     )}
                   >
@@ -156,6 +190,11 @@ export function TrackScreen({ onLog, onRequireAuth }: { onLog: () => void; onReq
             <Legend color="primary" label="Ovulation" />
             <Legend color="baby-lavender" label="Luteal" />
           </div>
+          {settings && (
+            <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
+              Faded days are predictions — they shift as you log.
+            </p>
+          )}
         </div>
 
         <div className="mt-3 rounded-[28px] bg-card p-5 gx-card-shadow">
