@@ -230,3 +230,28 @@ Merge order: P1 → P2 → P3 into the release baseline (run `xcodegen generate`
 ## 10. ONE-LINE SUMMARY
 
 Three workstreams close the gap between the App Store promise and the code: a pure StreakEngine (daily hydration streak + 5-of-7 weekly streak + one-shot milestones), a finished local-notification system (daily smart hydration nudge + four weekly nudges + milestone celebrations, review-safe permission flow), and a real Supabase/Google-Cloud data layer written now and activated by a 12-step human checklist. Insights gains a Consistency card and deeper real-data context; the Log stays exactly as it is.
+
+---
+
+## 11. SUPERSESSION LOG — Cross-Platform Tracking Contract (July 13, 2026)
+
+The Android-authored `tracking_test_vectors.json` contract now governs tracking semantics
+on both platforms and supersedes this doc where they conflict:
+
+1. **Weekly streak**: ≥5-of-7 days (§3) → **≥4 meaningful-log days per completed ISO week**;
+   current incomplete week never breaks, may extend once ≥4.
+2. **Evening reminder**: §4's "no evening follow-up" rule is reversed — a daily check at the
+   user's reminder time (default 19:00) replaces/joins the 10:00 nudge per the Android
+   alignment (OPEN: confirm whether the 10:00 morning hydration nudge is dropped; the
+   one-hydration-notification-per-day rule must hold across both).
+3. **Best daily streak**: persisted max updated on every log write — never recomputed from a
+   truncated fetch window (was: computed from provided history).
+4. **Empty states**: "0 days" / "0 weeks" — never "—".
+5. New canon: daily ACTIVITY streak (meaningful-log days, grace) alongside the hydration LOG
+   streak (flame, labelled "N-day log streak"); "Days on goal X/7" is the goal metric;
+   rolling windows labelled "Last 7 days", never "This week"; calendars bounded to
+   [last period month, +3 months] with faded predictions.
+
+Known web-app divergences from this contract (backlog for the web repo): no streak grace
+(server getStreak), unbounded calendar predictions, cycle-setup prefills today with Save
+enabled, "—" empty states.
