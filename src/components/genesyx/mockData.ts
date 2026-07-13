@@ -53,55 +53,8 @@ export const symptoms = [
   "Headache", "Fatigue", "Cramps", "Nausea", "Bloating", "Acne", "Backache", "Tender breasts",
 ];
 
-export const nutritionFocus = [
-  {
-    title: "Leafy greens",
-    desc: "Folate-rich foods to support egg quality and early development.",
-    tone: "lavender" as const,
-  },
-  {
-    title: "Complex carbs",
-    desc: "Steady energy and balanced blood sugar through your cycle.",
-    tone: "blue" as const,
-  },
-  {
-    title: "Omega-rich foods",
-    desc: "Healthy fats to support hormone balance and inflammation.",
-    tone: "pink" as const,
-  },
-  {
-    title: "Zinc-rich foods",
-    desc: "Trace minerals that support reproductive cell health.",
-    tone: "lavender" as const,
-  },
-];
-
 export const articles = [
   { title: "Eating for your luteal phase", read: "4 min read" },
   { title: "How hydration shapes fertility", read: "3 min read" },
   { title: "A gentle guide to supplements", read: "6 min read" },
 ];
-
-export const profileMenu = {
-  account: [
-    { label: "Personal Details" },
-    { label: "Health Profile" },
-    { label: "Tracking Preferences" },
-  ],
-  about: [{ label: "Privacy & Data" }, { label: "Help & Support" }],
-};
-
-// 28-day cycle visualisation
-export type CycleDay = { day: number; type: "period" | "follicular" | "fertile" | "ovulation" | "luteal" };
-export const cycleDays: CycleDay[] = Array.from({ length: 28 }, (_, i) => {
-  const d = i + 1;
-  let type: CycleDay["type"] = "follicular";
-  if (d <= 5) type = "period";
-  else if (d >= 11 && d <= 16) type = "fertile";
-  else if (d > 16) type = "luteal";
-  if (d === 14) type = "ovulation";
-  return { day: d, type };
-});
-
-export const insightBars = [82, 78, 90, 85, 88, 80, 92];
-export const nutritionBars = [60, 75, 70, 85, 78, 90, 82];

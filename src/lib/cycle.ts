@@ -161,30 +161,3 @@ export const phaseHeroCopy: Record<Phase, { hero: string; sub: string; tags: str
   },
 };
 
-export type Food = { title: string; desc: string };
-export const phaseFoods: Record<Phase, Food[]> = {
-  period: [
-    { title: "Lentils & beans", desc: "Plant iron to replenish what's lost during menstruation." },
-    { title: "Dark leafy greens", desc: "Spinach and kale pair iron with folate for steady energy." },
-    { title: "Bone broth", desc: "Warming, mineral-rich, gentle on a tender gut." },
-    { title: "Dark chocolate", desc: "Magnesium to soften cramps and lift mood." },
-  ],
-  follicular: [
-    { title: "Sprouted grains", desc: "Steady carbs for rising estrogen and morning energy." },
-    { title: "Fermented foods", desc: "Kimchi or kefir support estrogen metabolism." },
-    { title: "Citrus & berries", desc: "Vitamin C supports collagen and egg quality." },
-    { title: "Pumpkin seeds", desc: "Zinc to fuel the building phase of your cycle." },
-  ],
-  ovulatory: [
-    { title: "Wild salmon", desc: "Omega-3s support hormone balance at ovulation." },
-    { title: "Avocado", desc: "Healthy fats help your body use estrogen well." },
-    { title: "Eggs", desc: "Choline and B12 — a complete fertility breakfast." },
-    { title: "Leafy greens", desc: "Folate supports cell division and conception." },
-  ],
-  luteal: [
-    { title: "Sweet potato", desc: "Slow carbs to steady progesterone-driven cravings." },
-    { title: "Pumpkin seeds", desc: "Magnesium to ease PMS and improve sleep." },
-    { title: "Bananas", desc: "B6 to lift mood as the luteal phase winds down." },
-    { title: "Turkey", desc: "Tryptophan helps with rest and calm." },
-  ],
-};

@@ -5,8 +5,8 @@ import { PhInsightsSection } from "../PhInsightsSection";
 import { useAuth } from "@/hooks/use-auth";
 import { useServerFn } from "@tanstack/react-start";
 import { listDailyLogs, type DailyLogRowDTO } from "@/lib/daily-log.functions";
-
-const WATER_TARGET_ML = 2400;
+import { formatDateOnly } from "@/lib/cycle";
+import { WATER_TARGET_ML } from "@/lib/constants";
 
 export function InsightsScreen({ onOpenTracker }: { onOpenTracker?: () => void }) {
   const { user } = useAuth();
@@ -32,7 +32,9 @@ export function InsightsScreen({ onOpenTracker }: { onOpenTracker?: () => void }
     for (let i = 6; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(today.getDate() - i);
-      const iso = d.toISOString().slice(0, 10);
+      // Local date key — logs are saved with local YYYY-MM-DD dates, so a UTC
+      // key here shifted the whole chart by a day for non-UTC users at night.
+      const iso = formatDateOnly(d);
       const ml = byDate.get(iso)?.waterMl ?? 0;
       out.push({
         date: iso,
