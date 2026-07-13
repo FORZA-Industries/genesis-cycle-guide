@@ -10,10 +10,7 @@ import { toast } from "sonner";
 import { useDailyLog } from "@/hooks/use-daily-log";
 import { supabase } from "@/integrations/supabase/client";
 import { showSignInRequired } from "@/lib/authPrompt";
-
-
-const SUPPLEMENTS = ["Folic acid", "Vitamin D", "Iron", "Omega-3"];
-const WATER_TARGET = 2400;
+import { SUPPLEMENTS, WATER_MAX_ML } from "@/lib/constants";
 
 export function LogScreen({ onClose, onRequireAuth }: { onClose: () => void; onRequireAuth?: () => void }) {
   const { log, loading, save } = useDailyLog();
@@ -243,11 +240,11 @@ export function LogScreen({ onClose, onRequireAuth }: { onClose: () => void; onR
       <Dialog open={waterOpen} onOpenChange={setWaterOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Water (ml)</DialogTitle></DialogHeader>
-          <Input type="number" min={0} max={10000} step={100} value={waterInput} onChange={(e) => setWaterInput(e.target.value)} />
+          <Input type="number" min={0} max={WATER_MAX_ML} step={100} value={waterInput} onChange={(e) => setWaterInput(e.target.value)} />
           <DialogFooter>
             <Button variant="ghost" onClick={() => setWaterOpen(false)}>Cancel</Button>
             <Button onClick={() => {
-              const v = Math.max(0, Math.min(10000, parseInt(waterInput || "0", 10) || 0));
+              const v = Math.max(0, Math.min(WATER_MAX_ML, parseInt(waterInput || "0", 10) || 0));
               setWaterMl(v);
               setWaterOpen(false);
             }}>Done</Button>
@@ -311,5 +308,3 @@ function MiniCard({ Icon, label, value, tone, onClick }: { Icon: typeof Moon; la
     </button>
   );
 }
-
-export { WATER_TARGET };
