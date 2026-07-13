@@ -32,6 +32,7 @@ import { updateDisplayName, deleteAccount, changePassword } from "@/lib/account.
 import { supabase } from "@/integrations/supabase/client";
 import { getAvatarSignedUrl, uploadAvatar } from "@/lib/avatar";
 import { toast } from "sonner";
+import { displayNameFor } from "@/lib/displayName";
 
 export function ProfileScreen({ onSignIn }: { onPregnancy?: () => void; onSignIn?: () => void }) {
   const { theme, toggle } = useTheme();
@@ -40,11 +41,7 @@ export function ProfileScreen({ onSignIn }: { onPregnancy?: () => void; onSignIn
   const navigate = useNavigate();
   const deleteAccountFn = useServerFn(deleteAccount);
 
-  const initialName =
-    (user?.user_metadata?.display_name as string | undefined) ??
-    (user?.user_metadata?.full_name as string | undefined) ??
-    user?.email?.split("@")[0] ??
-    "Guest";
+  const initialName = displayNameFor(user);
   const [displayName, setDisplayName] = useState(initialName);
   const emailLine = user?.email ?? "Sign in to sync your data";
   const initial = displayName.slice(0, 1).toUpperCase();

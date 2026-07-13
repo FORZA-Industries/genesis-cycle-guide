@@ -17,17 +17,20 @@ export function CycleSettingsDialog({
   const { settings, save } = useCycleSettings();
   const { user } = useAuth();
   const todayStr = formatDateOnly(new Date());
-  const [lastPeriod, setLastPeriod] = useState<string>(todayStr);
+  // Tracking contract v2: never prefill a fabricated period date. The field
+  // starts empty for new users and Save stays disabled until a date is
+  // actively chosen; editing existing settings prefills the saved value.
+  const [lastPeriod, setLastPeriod] = useState<string>("");
   const [cycleLen, setCycleLen] = useState<number>(28);
   const [periodLen, setPeriodLen] = useState<number>(5);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!open) return;
-    setLastPeriod(settings?.lastPeriodDate ?? todayStr);
+    setLastPeriod(settings?.lastPeriodDate ?? "");
     setCycleLen(settings?.cycleLength ?? 28);
     setPeriodLen(settings?.periodLength ?? 5);
-  }, [open, settings, todayStr]);
+  }, [open, settings]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,7 +121,7 @@ export function CycleSettingsDialog({
             </button>
             <button
               type="submit"
-              disabled={saving}
+              disabled={saving || !lastPeriod}
               className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60"
             >
               {saving && <Loader2 className="h-4 w-4 animate-spin" />} Save
