@@ -240,10 +240,15 @@ on both platforms and supersedes this doc where they conflict:
 
 1. **Weekly streak**: ≥5-of-7 days (§3) → **≥4 meaningful-log days per completed ISO week**;
    current incomplete week never breaks, may extend once ≥4.
-2. **Evening reminder**: §4's "no evening follow-up" rule is reversed — a daily check at the
-   user's reminder time (default 19:00) replaces/joins the 10:00 nudge per the Android
-   alignment (OPEN: confirm whether the 10:00 morning hydration nudge is dropped; the
-   one-hydration-notification-per-day rule must hold across both).
+2. **Evening reminder — RULED (July 13)**: RETIME, replace not add. The 10:00 morning nudge
+   becomes a single user-configurable evening check (default 19:00, Profile → Notifications).
+   Two branches at fire time: no meaningful log → gentle log INVITATION (never-guilt wins
+   over the spec's "You haven't logged today" wording); log exists but water < goal → gentle
+   hydration nudge; otherwise nothing. Weekly pushes + milestones stay. Global invariants
+   (test-asserted): ≤1 push/day; never two hydration-flavoured pushes on one day.
+   FLAGGED: the literal ≤1/day invariant means the evening reminder yields on
+   weekly-push days (Sun/Mon/Wed/Fri) — confirm, or relax to "one per slot-type per day".
+   Reference implementation updated in ios/App/Notifications/.
 3. **Best daily streak**: persisted max updated on every log write — never recomputed from a
    truncated fetch window (was: computed from provided history).
 4. **Empty states**: "0 days" / "0 weeks" — never "—".

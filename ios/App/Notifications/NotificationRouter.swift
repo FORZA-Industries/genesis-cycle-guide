@@ -13,6 +13,7 @@ public struct NotificationRouter {
     // Learn article CTAs; reuse it — do not add a second navigation path.
     var selectTab: (TabRouter.Tab) -> Void = { TabRouter.shared.select($0) }
     var openArticle: (String) -> Void = { TabRouter.shared.openLearnArticle(slug: $0) }
+    var openLogSheet: () -> Void = { TabRouter.shared.openLog() }
 
     public init() {}
 
@@ -26,6 +27,10 @@ public struct NotificationRouter {
             selectTab(.nutrition)
         case .insights:
             selectTab(.insights)
+        case .log:
+            // Evening log invitation lands directly in the Log sheet — the
+            // shortest path from tap to a saved entry.
+            openLogSheet()
         case .learn(let slug):
             if let slug {
                 openArticle(slug)     // Learn tab + push the article detail
