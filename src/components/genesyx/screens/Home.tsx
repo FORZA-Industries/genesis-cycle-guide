@@ -214,8 +214,9 @@ export function HomeScreen({
         <div className="rounded-[20px] bg-card p-4 gx-soft-shadow">
           <Droplets className="h-4 w-4 text-[var(--color-electric-blue)]" />
           <p className="mt-3 text-[10.5px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Hydration</p>
+          {/* Contract v2 empty states: zeros, never "—". */}
           <p className="mt-0.5 font-display text-[18px] font-semibold leading-tight">
-            {log && log.waterMl > 0 ? (log.waterMl / 1000).toFixed(1) + "L" : "—"}
+            {((log?.waterMl ?? 0) / 1000).toFixed(1)}L
             <span className="text-muted-foreground text-[12px] font-normal"> / {(WATER_TARGET_ML / 1000).toFixed(1)}L</span>
           </p>
         </div>
@@ -223,7 +224,7 @@ export function HomeScreen({
           <Leaf className="h-4 w-4 text-primary" />
           <p className="mt-3 text-[10.5px] font-medium uppercase tracking-[0.14em] text-muted-foreground">Streak</p>
           <p className="mt-0.5 font-display text-[18px] font-semibold leading-tight">
-            {streak ?? "—"} <span className="text-muted-foreground text-[12px] font-normal">days</span>
+            {streak ?? 0} <span className="text-muted-foreground text-[12px] font-normal">days</span>
           </p>
         </div>
       </div>

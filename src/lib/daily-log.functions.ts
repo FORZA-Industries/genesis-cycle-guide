@@ -100,9 +100,14 @@ export const getStreak = createServerFn({ method: "GET" })
       const day = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${day}`;
     };
-    if (!set.has(iso(today))) return { streak: 0 };
-    let streak = 0;
+    // Tracking contract v2: today-grace — an unlogged today does not break the
+    // streak; count from yesterday instead. Logging today extends it.
     const cursor = new Date(today);
+    if (!set.has(iso(cursor))) {
+      cursor.setDate(cursor.getDate() - 1);
+      if (!set.has(iso(cursor))) return { streak: 0 };
+    }
+    let streak = 0;
     while (set.has(iso(cursor))) {
       streak += 1;
       cursor.setDate(cursor.getDate() - 1);
